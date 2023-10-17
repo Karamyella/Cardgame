@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.bg {
+  background-image: url('bgToggo.jpg');
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.menu {
+  background-image: url('Toggo.png');
+  height: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  text-align: center;
+  transform: translate(70%, -105%);
+  padding-top: 33px;
+  font-size: 25px;
+  font-weight: bold;
+  width: 40%;
+  }
+
+.deckbutton {
+  background-image: url('deckbutton.png');
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  width: 80.5%;
+  height: 4.5%;
+  position: fixed;
+  top: 56.5%;
+  left: 9.5%;
+  font-weight: bold;
+  font-size: large;
+}
+
+.deckbutton:hover {
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
+
+.startbutton {
+  background-image: url('startbutton.png');
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  width: 80%;
+  position: fixed;
+  top: 62%;
+  height: 31%;
+  left: 10%;
+  font-weight: bold;
+  font-size: larger;
+}
+
+.startbutton:hover {
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
+
+</style>
+</head>
+<body>
+
+<title>Cardgame Startmenu</title>
+
+<div class="bg"></div>
+
+<div class="menu">
+    <p>Cardgame</p>
+    <button class="deckbutton">Deck</button>
+    <button class="startbutton">Start</button>
+</div>
+
+</body>
+</html>
