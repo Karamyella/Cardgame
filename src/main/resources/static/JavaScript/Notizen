@@ -1,0 +1,55 @@
+(Wenn man iwas Wissenswertes aufschreiben will, find ich ist eine zentrale Datei eine gute Idee^^)
+
+- Generelles:
+    - Die generelle Reihenfolge in der die Scripts in HTML angegeben werden ist aktuell
+      egal, nur sollte 'InitializeGame.js' als letztes geladen werden, da es sonst sein
+      kann, dass Funktionen aus den anderen Scripts nicht geladen/ausgeführt werden.
+
+    - Aktuell denke ich, dass der Spieler keine Entität sein muss, sondern nur als
+      Variablen in JavaScript wirklich existieren muss. [Any Thoughts?]
+
+    - Die Verbindung zwischen den Entitäten steht noch nicht, hab noch ein Fragen^^
+
+    - Auf der Startseite sollen, wenn die Decks ausgewählt werden, die ID der Decks &
+      die Namen der Spieler im Localstorage gespeichert werden.
+
+    - Datenbank-Infos:
+        (Ich schau mal, ob ich iwie ne feste Datenbank zum Laufen bekomme, weil in Memory etwas meh is^^)
+        URL: http://localhost:8080/h2-console
+        Name: admin
+        Password: password
+
+
+
+- Bisher umgesetzte JS-Funktionen:
+	- DrawAndDiscard.js
+	    - drawCard()
+	    - discardCard() [Nur einzeln bisher (Schau proptDiscard())]
+	    - drawStartHand()
+	- InitializeGame.js
+	    - loadGameData()
+	    - startGame()
+	- PlayerTurn.js
+	    - startPlayerNextTurn()
+
+
+
+- TODO JS-Funktionen:
+    - CoreCardFunctions.js
+        - playCard()
+        - tapCard()
+        - untapCards()
+    - DrawAndDiscard.js
+        - promptDiscard() [Frage noch zu klären]
+    - InitializeGame.js
+        - onload-Function
+    - PlayerTurn.js
+        - endPlayerTurn()
+
+
+
+- TODO Java-Entities & Relations überarbeiten
+
+
+
+- Hier könnte ihre Werbung stehen^^
