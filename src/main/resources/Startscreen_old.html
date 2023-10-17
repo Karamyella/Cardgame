@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Cardgame Startmenu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.bg {
+  background-image: url('bgToggo.jpg');
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.title {
+  position: relative;
+  top: -25px;
+}
+
+.menu {
+  background-image: url('Toggo.png');
+  height: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  text-align: center;
+  transform: translate(70%, -105%);
+  padding-top: 33px;
+  font-size: 25px;
+  font-weight: bold;
+  width: 40%;
+  }
+
+.deckbutton {
+  background-image: url('deckbutton.png');
+  filter: grayscale(100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  width: 80.5%;
+  height: 4.5%;
+  position: fixed;
+  top: 56.5%;
+  left: 9.5%;
+  font-weight: bold;
+  font-size: large;
+}
+
+.deckbutton:hover {
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
+
+.startbutton {
+  background-image: url('startbutton.png');
+  filter: grayscale(100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  width: 80%;
+  position: fixed;
+  top: 62%;
+  height: 31%;
+  left: 10%;
+  font-weight: bold;
+  font-size: larger;
+}
+
+button:hover {
+  filter: grayscale(0%);
+}
+
+.deckselect {
+  position: relative;
+  top: 450px;
+}
+
+.reddeck {
+  background-image: url('red.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.bluedeck {
+  background-image: url('blue.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.greendeck {
+  background-image: url('green.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.blackdeck {
+  background-image: url('black.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.whitedeck {
+  background-image: url('white.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.logo {
+  max-width: 25%;
+  height: auto;
+  position: absolute;
+  top: 75%;
+}
+
+.credits {
+  height: 200px;
+  width: 200px;
+  background-color: #e14a3b;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  position: absolute;
+  font-size: larger;
+  top: 70%;
+  left: 80%;
+}
+
+.menu img {
+  width: 30px;
+  left: 35%;
+  position: relative;
+  top: 8px;
+}
+
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<div class="menu">
+    <div id="red"><img src="red.png"></div>
+    <div id="blue" style="display: none"><img src="blue.png"></div>
+    <div id="green" style="display: none"><img src="green.png"></div>
+    <div id="white" style="display: none"><img src="white.png"></div>
+    <div id="black" style="display: none"><img src="black.png"></div>
+    <div id="defaultmenu" class="defaultmenu">
+        <div class="title">Cardgame</div>
+    <button onclick="deckmenu()" class="deckbutton">Deck</button>
+    <button onclick="startgame()" class="startbutton">Start</button>
+    </div>
+    <div id="deckmenu" style="display: none">
+        <div class="title">Deck Menu</div>
+        <div class="deckselect">
+            <button onclick="togglecolor(red)" class="reddeck"></button>
+            <button onclick="togglecolor(blue)" class="bluedeck"></button>
+            <button onclick="togglecolor(green)" class="greendeck"></button>
+            <button onclick="togglecolor(white)" class="whitedeck"></button>
+            <button onclick="togglecolor(black)" class="blackdeck"></button>
+        </div>
+</div>
+</div>
+<img src="logo.png" class="logo" alt="Logo">
+<div class="credits">
+    <p><br/>Made by <br/>
+    Torben Weber <br/>
+    & <br/>
+    Kara Schmidt </p>
+</div>
+
+<script>
+function deckmenu() {
+    $("#defaultmenu").hide();
+    $("#deckmenu").show();
+ }
+
+ function togglecolor(className){
+    var deck = className;
+    $("#defaultmenu").show();
+    $("#deckmenu").hide();
+    $("#red").hide();
+    $("#blue").hide();
+    $("#green").hide();
+    $("#white").hide();
+    $("#black").hide();
+    $(className).show();
+}
+
+function startgame() {
+ }
+</script>
+</body>
+</html>
