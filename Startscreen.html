@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Cardgame Startmenu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.bg {
+  background-image: url('bgToggo.jpg');
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.menu {
+  background-image: url('Toggo.png');
+  height: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  text-align: center;
+  transform: translate(70%, -105%);
+  padding-top: 33px;
+  font-size: 25px;
+  font-weight: bold;
+  width: 40%;
+  }
+
+.deckbutton {
+  background-image: url('deckbutton.png');
+  filter: grayscale(100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  width: 80.5%;
+  height: 4.5%;
+  position: fixed;
+  top: 56.5%;
+  left: 9.5%;
+  font-weight: bold;
+  font-size: large;
+}
+
+.deckbutton:hover {
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
+
+.startbutton {
+  background-image: url('startbutton.png');
+  filter: grayscale(100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  width: 80%;
+  position: fixed;
+  top: 62%;
+  height: 31%;
+  left: 10%;
+  font-weight: bold;
+  font-size: larger;
+}
+
+.startbutton:hover {
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
+
+.logo {
+  max-width: 25%;
+  height: auto;
+  position: absolute;
+  top: 75%;
+}
+
+.credits {
+  height: 200px;
+  width: 200px;
+  background-color: #e14a3b;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  position: absolute;
+  font-size: larger;
+  top: 75%;
+  left: 80%;
+}
+
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<div class="menu">
+    <p>Cardgame</p>
+    <button class="deckbutton">Deck</button>
+    <button class="startbutton">Start</button>
+</div>
+<img src="logo.png" class="logo" alt="Logo">
+<div class="credits">
+    <p><br/>Made by <br/>
+    Torben Weber <br/>
+    & <br/>
+    Kara Schmidt </p>
+</div>
+
+
+
+</body>
+</html>
