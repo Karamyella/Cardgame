@@ -24,7 +24,7 @@
 - Bisher umgesetzte JS-Funktionen:
 	- DrawAndDiscard.js
 	    - drawCard()
-	    - discardCard() [Nur einzeln bisher (Schau proptDiscard())]
+	    - discardCard() [Nur einzeln bisher (Schau promptDiscard())]
 	    - drawStartHand()
 	- InitializeGame.js
 	    - loadGameData()
