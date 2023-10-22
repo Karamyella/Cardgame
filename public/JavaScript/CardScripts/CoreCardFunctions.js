@@ -5,21 +5,25 @@ function playCard() {
 }
 
 // TODO
-function tapCard(context) {
+function tapCard(context, effect) {
     if (context === 'Attack') {
-
+        socket.emit('attack', effect);
     } else if (context === 'Effect') {
-
+        socket.emit('effect', effect);
     } else /* if (context === 'Mana') */ {
-
+        socket.emit('mana', effect);
     }
 }
 
 // TODO
 function untapCards(forPlayer) {
     if (forPlayer) {
-        $('.playerCard.tapped').each(() => { /* TODO */});
+        $('.playerCard.tapped').each((index, element) => {
+            $(element).removeClass('tapped').addClass('untapped');
+        });
     } else {
-        $('.enemyCard.tapped').each(() => { /* TODO */});
+        $('.enemyCard.tapped').each((index, element) => {
+            $(element).removeClass('tapped').addClass('untapped');
+        });
     }
 }
