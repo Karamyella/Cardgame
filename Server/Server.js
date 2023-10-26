@@ -15,69 +15,86 @@ let playerList = [];
 // Filepath für Html-Datei.
 app.use(express.static(join(__dirname, '/../public')));
 
-// Test-Seite unter 'localhost:8080/test' aufrufbar.
+
+// Seiten-Aufrufe.
 app.get('/', (req, res) => {
-    res.sendFile(join(__dirname, '/../public/index.html'));
+	res.sendFile(join(__dirname, '/../public/index.html'));
 });
+
+// TODO TESTPAGE: DELETE AFTER DONE.
 app.get('/test', (req, res) => {
-    res.sendFile(join(__dirname, '/../public/dummy.html'));
+	res.sendFile(join(__dirname, '/../public/dummy.html'));
 });
+
+// TODO URL ggf. anpassen.
+app.get('/arena', (req, res) => {
+	res.sendFile(join(__dirname, '/../public/arena.html'));
+});
+
 
 // Responses auf Aktionen der User.
 io.on('connection', (socket) => {
-    //console.log('User \'' + socket.id + '\' connected.');
-    console.log(socket);
+	// DEBUG-STUFF
+	//console.log('User \'' + socket.id + '\' connected.');
+	console.log(socket);
 
-    socket.on('playerName', (data) => {
-        playerList.push({
-            playerID: socket.id,
-            playerName: data
-        });
+	// Fügt neuen Spieler der Spielerliste hinzu.
+	socket.on('playerName', (data) => {
+		playerList.push({
+			playerID: socket.id,
+			playerName: data
+		});
 
-        console.log('playerlist: ' + playerList);
-    });
+		// DEBUG-STUFF
+		console.log('PlayerList:');
+		console.log(playerList);
+	});
 
-    socket.on('debug', (data) => {
-        socket.emit('emitDebug');
-        console.log('data: ' + data);
-    });
+	// DEBUG-STUFF
+	socket.on('debug', (data) => {
+		socket.emit('emitDebug');
+		console.log('data: ' + data);
+	});
 
-    socket.on('disconnect', () => {
-        // TODO Spieler disconnected -> aus 'playerlist' entfernen + Event an restliche Spieler senden.
-        const otherPlayerConnections = socket.server.sockets.sockets;
+	// Wenn ein Spieler aus dem Game rausgeht, bekommt der andere Spieler eine Meldung.
+	socket.on('disconnect', (data) => {
+		const otherPlayerConnections = socket.server.sockets.sockets;
 
-        otherPlayerConnections.forEach((socket) => {
-            // TODO Für jeden Socket eine Info senden, dass Spieler X disconnected ist.
-            //
-        });
+		// Der ausgeloggte Spieler.
+		let diconnectedPlayer = playerList.filter(value => value.playerID === socket.id);
+		// Wirft den ausgeloggten Spieler aus der Liste raus.
+		playerList = playerList.filter(value => value.playerID !== socket.id);
 
-    });
+		otherPlayerConnections.forEach((socket) => {
+			socket.emit('playerDisconnected', diconnectedPlayer.playerName);
+		});
+	});
 });
 
 // DEBUG-Stuff
 server.listen(port, () => {
-    console.log(`Server is up on port ${port}.`);
+	console.log(`Server is up on port ${port}.`);
 });
 
 
 // Baut Verbindung zur Datenbank auf.
 const mysql = require('mysql');
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'me',
-    password: 'yes',
-    database: 'cardgamedb'
+	host: 'localhost',
+	user: 'me',
+	password: 'yes',
+	database: 'cardgamedb'
 });
 
 // DEBUG-Stuff
 connection.connect((error) => {
-    if (error) throw error;
-    console.log('Database-Connection works.');
+	if (error) throw error;
+	console.log('Database-Connection works.');
 
-    const sql = "SELECT * FROM Card";
+	const sql = "SELECT * FROM Card";
 
-    connection.query(sql, (error, result) => {
-        if (error) throw error;
-        console.log(result[0]);
-    })
+	connection.query(sql, (error, result) => {
+		if (error) throw error;
+		console.log(result[0]);
+	});
 });

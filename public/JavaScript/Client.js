@@ -1,9 +1,16 @@
-// Initialisierung der Serverkommuniktation.
+// Initialisierung der Serverkommuniktation. (Später soll dafür initConnection() genutzt werden.)
 let socket = io();
-socket.emit('playerName', 'Steve');
 
+// DEBUG-STUFF
+socket.emit('playerName', name);
 socket.on('emitDebug', () => {
     alert('works');
+});
+
+// Wenn der Gegner austritt, wird die Partie beendet und der Spieler wird auf die Startseite weitergeleitet.
+socket.on('playerDisconnected', (disconnectedPlayerName) => {
+   alert(disconnectedPlayerName + ' ist aus der Partie ausgetreten. Sie werden auf die Startseite weitergeleitet.');
+   window.location.href = '/';
 });
 
 // Stellt Verbindung zum Server her.
@@ -21,12 +28,9 @@ deckbutton.addEventListener('click', (event) => {
     socket.emit('debug');
 });
 
-// TODO Code-Snippet für Server-Antworten rausfinden
-//socket.listen('hi', () => {console.log('oh hi mark');});
-
 // DEBUG-Stuff
-let startbutton = $('.startbutton');
-startbutton.on('click', (event) => {
+let startbutton = document.querySelector('.startbutton');
+startbutton.addEventListener('click', (event) => {
     event.preventDefault();
 
     initConnection();
