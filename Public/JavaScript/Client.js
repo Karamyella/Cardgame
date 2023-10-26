@@ -4,7 +4,7 @@ let socket = io();
 // DEBUG-STUFF
 socket.emit('playerName', name);
 socket.on('emitDebug', () => {
-    alert('works');
+    alert('Server says: Got your event, here is another event.');
 });
 
 // Wenn der Gegner austritt, wird die Partie beendet und der Spieler wird auf die Startseite weitergeleitet.
