@@ -18,17 +18,17 @@ app.use(express.static(join(__dirname, '/../public')));
 
 // Seiten-Aufrufe.
 app.get('/', (req, res) => {
-	res.sendFile(join(__dirname, '/../public/index.html'));
+	res.sendFile(join(__dirname, '/../public/Startscreen.html'));
 });
 
 // TODO TESTPAGE: DELETE AFTER DONE.
 app.get('/test', (req, res) => {
-	res.sendFile(join(__dirname, '/../public/dummy.html'));
+	res.sendFile(join(__dirname, '/../public/Dummy.html'));
 });
 
 // TODO URL ggf. anpassen.
 app.get('/arena', (req, res) => {
-	res.sendFile(join(__dirname, '/../public/arena.html'));
+	res.sendFile(join(__dirname, '/../public/Arena.html'));
 });
 
 
@@ -77,7 +77,8 @@ server.listen(port, () => {
 });
 
 
-// Baut Verbindung zur Datenbank auf.
+// Aktuell auskommentiert, da Datenbank lokal noch aufgesetzt werden muss.
+/*// Baut Verbindung zur Datenbank auf.
 const mysql = require('mysql');
 const connection = mysql.createConnection({
 	host: 'localhost',
@@ -97,4 +98,4 @@ connection.connect((error) => {
 		if (error) throw error;
 		console.log(result[0]);
 	});
-});
+});*/
