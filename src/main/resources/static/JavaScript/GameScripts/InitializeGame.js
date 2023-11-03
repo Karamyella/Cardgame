@@ -1,14 +1,16 @@
 // Alles in dieser Funktion wird beim Laden der Seite aufgerufen.
 $(() => {
-    // TODO UI-Stuff (Erst wenn HTML steht.)
+    // TODO UI-Stuff
     //$('#playerName').html(localStorage.getItem('PlayerName'));
     //$('#enemyName').html(localStorage.getItem('EnemyName'));
-    //$('#playerHP').html('40');
-    //$('#enemyHP').html('40');
+    $('#playerHP').html('40');
+    $('#enemyHP').html('40');
+    $('#playerMana').html('0');
+    $('#enemyMana').html('0');
 
-    // TODO Onclick-Events für die UI/Buttons (Erst wenn HTML steht.)
+    // TODO Onclick-Events für die UI/Buttons
 
-    loadGameData();
+    //loadGameData();
 })
 
 /*

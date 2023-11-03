@@ -16,6 +16,6 @@ function botTurn() {
 
     //end turn
     while (botHand.length > 7) {
-        botHand.pop();
+        discardCard(false,0);
     }
 }

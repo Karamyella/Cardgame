@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Cardgame Arena</title>
     <link rel='stylesheet' href='../Stylesheets/game.css'>
     <script src='../JavaScript/BotScripts/BotLogic.js'></script>
@@ -13,23 +14,28 @@
     <script src='../JavaScript/TurnScripts/PlayerTurn.js'></script>
     <script src='../JavaScript/GameScripts/InitializeGame.js'></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
   </head>
   <body>
   <hr />
 
   <div class="playerInfo">
     <h4>Player Info:</h4>
-    Mana: <br/>
-    Leben:
+    Mana: <span id="playerMana"></span> <br/>
+    HP: <span id="playerHP"></span>
   </div>
   <div class="EnemyInfo">
     <h4>Enemy Info:</h4>
-    Mana: <br/>
-    Leben: $('#enemyHP');
+    Mana: <span id="enemyMana"></span> <br/>
+    HP: <span id="enemyHP"></span>
+  </div>
+  <div class="enemyDrawPile piles">enemyDrawPile</div>
+  <div class="enemyGraveyard piles">enemyGraveyard</div>
+
+  <div class="playerDrawPile piles">playerDrawPile</div>
+  <div class="playerGraveyard piles">playerGraveyard
   </div>
 
-  <button class="endPhase">End Phase</button>
+  <button class="endPhase" onclick="endPhase()">End Current Phase</button>
 
   </body>
 </html>

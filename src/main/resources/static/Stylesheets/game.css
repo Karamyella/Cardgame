@@ -64,3 +64,29 @@ float: right;
 top: 90%;
 left: 15%;
 }
+
+.piles{
+border: 0.2em solid black;
+position: fixed;
+height: 20%;
+width: 8%;
+margin: 1em;
+}
+
+.enemyDrawPile{
+top: 17%;
+}
+
+.enemyGraveyard{
+top: 17%;
+left: 90%;
+}
+
+.playerDrawPile{
+top: 65%;
+left: 90%;
+}
+
+.playerGraveyard{
+top: 65%;
+}
