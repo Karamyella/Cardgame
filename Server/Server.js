@@ -78,12 +78,12 @@ server.listen(port, () => {
 
 
 // Aktuell auskommentiert, da Datenbank lokal noch aufgesetzt werden muss.
-/*// Baut Verbindung zur Datenbank auf.
+// Baut Verbindung zur Datenbank auf.
 const mysql = require('mysql');
 const connection = mysql.createConnection({
 	host: 'localhost',
-	user: 'me',
-	password: 'yes',
+	user: 'cardgameAdmin',
+	password: 'cardgamePassword',
 	database: 'cardgamedb'
 });
 
@@ -98,4 +98,4 @@ connection.connect((error) => {
 		if (error) throw error;
 		console.log(result[0]);
 	});
-});*/
+});
