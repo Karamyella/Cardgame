@@ -101,6 +101,10 @@ button:hover {
     border-radius: 50%;
     width: 50px;
     height: 50px;
+    filter: brightness(50%);
+}
+.deck:hover {
+    filter: brightness(100%);
 }
 
 .reddeck {
