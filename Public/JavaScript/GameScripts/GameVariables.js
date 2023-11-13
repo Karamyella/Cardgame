@@ -1,5 +1,5 @@
-let pOneDeck;
-let pTwoDeck;
+let pOneDeck = [];
+let pTwoDeck = [];
 let pOneHP = 40;
 let pTwoHP = 40;
 let pOneTurn = true;
@@ -12,24 +12,20 @@ let pTwoField = [];
 let pOneGraveyard = [];
 let pTwoGraveyard = [];
 
-function updatePlayerMana(pOne,increase,cost) {
-    if(pOne){
-        if (increase) {
-            pOneMana++;
-        }
-        else {
-            pOneMana - cost;
-        }
-        let pOneManaQ = document.querySelector('#pOneMana');
-        pOneManaQ.innerHTML = pOneMana.toString();
-    } else{
-        if (increase) {
-            pTwoMana++;
-        }
-        else {
-            pTwoMana - cost;
-        }
-        let pTwoManaQ = document.querySelector('#pTwoMana');
-        pTwoManaQ.innerHTML = pTwoMana.toString();
-    }
+function updatePlayerMana(pOne, increase, cost) {
+	if (pOne) {
+		if (increase) {
+			pOneMana++;
+		} else {
+			pOneMana = pOneMana - cost;
+		}
+		document.querySelector('#pOneMana').innerHTML = pOneMana.toString();
+	} else {
+		if (increase) {
+			pTwoMana++;
+		} else {
+			pTwoMana = pTwoMana - cost;
+		}
+		document.querySelector('#pTwoMana').innerHTML = pTwoMana.toString();
+	}
 }

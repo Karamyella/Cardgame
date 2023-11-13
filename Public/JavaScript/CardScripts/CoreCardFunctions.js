@@ -1,11 +1,26 @@
 // TODO
-function playCard() {
-    updatePlayerMana(pOneTurn,false,cost);
-    // Try to pay Mana
-    // Has enough? -> put card on board.
+function playCard(pOneTurn, cardData) {
+    let cardCost = cardData.manaCost;
+
+    if (pOneTurn) {
+        if (pOneMana >= cardCost) {
+            updatePlayerMana(pOneTurn, false, cardCost);
+            // TODO Karte aufs Feld legen.
+            // ...();
+        } else {
+            // TODO Meldung, dass nicht möglich ist.
+        }
+    } else {
+        if (pTwoMana >= cardCost) {
+            updatePlayerMana(pOneTurn, false, cardCost);
+            // TODO Karte aufs Feld legen.
+            // ...();
+        } else {
+            // TODO Meldung, dass nicht möglich ist.
+        }
+    }
 }
 
-// TODO
 function tapCard(context, effect) {
     if (context === 'Attack') {
         socket.emit('attack', effect);
@@ -18,13 +33,13 @@ function tapCard(context, effect) {
 }
 
 // TODO
-function untapCards(forPlayer) {
-    if (forPlayer) {
-        $('.playerCard.tapped').each((index, element) => {
+function untapCards(forPOne) {
+    if (forPOne) {
+        $('.pOneCard.tapped').each((index, element) => {
             $(element).removeClass('tapped').addClass('untapped');
         });
     } else {
-        $('.enemyCard.tapped').each((index, element) => {
+        $('.pTwoCard.tapped').each((index, element) => {
             $(element).removeClass('tapped').addClass('untapped');
         });
     }

@@ -6,9 +6,9 @@
 * 2. Spieler zieht Karte.
 * 3. Nächste Aktionen über UI verfügbar.
 * */
-function startNextPlayerTurn() {
-    untapCards(true);
-    drawCard(true);
+function startNextPlayerTurn(forPOne) {
+    untapCards(forPOne);
+    drawCard(forPOne);
 }
 
 // TODO

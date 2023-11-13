@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>Cardgame Arena</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel='stylesheet' href='/Stylesheets/Game.css'>
     <script src='/JavaScript/BotScripts/BotLogic.js'></script>
     <script src='/JavaScript/CardScripts/CardEffects.js'></script>
@@ -19,16 +20,16 @@
 <hr/>
 
 <div class="playerInfo">
-    <h4>Player Info:</h4>
-    Mana: <i id="pOneMana"></i>
-    <br/>
+    <h4>Player: <i id="pOneName"></i></h4>
     HP: <i id="pOneHP"></i>
+    <br/>
+    Mana: <i id="pOneMana"></i>
 </div>
 <div class="EnemyInfo">
-    <h4>Enemy Info:</h4>
-    Mana: <i id="pTwoMana"></i>
-    <br/>
+    <h4>Player: <i id="pTwoName"></i></h4>
     HP: <i id="pTwoHP"></i>
+    <br/>
+    Mana: <i id="pTwoMana"></i>
 </div>
 
 <button class="endPhase">End Phase</button>

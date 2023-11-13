@@ -1,33 +1,33 @@
-function drawCard(forPlayer) {
+function drawCard(forPOne) {
     // Zufällige Zahl zwischen [0 - Decksize], die bestimmt, welche Karte aus dem Deck gezogen wird.
-    let drawPosition = Math.floor(Math.random() * playerDeck.length);
-    if (forPlayer) {
+    let drawPosition = Math.floor(Math.random() * pOneDeck.length);
+    if (forPOne) {
         // .splice entfernt die Karte aus dem Deck und .push fügt diese der Hand hinzu.
-        pOneHand.push(playerDeck.splice(drawPosition, 1)[0]);
+        pOneHand.push(pOneDeck.splice(drawPosition, 1)[0]);
     } else {
-        pTwoHand.push(enemyDeck.splice(drawPosition, 1)[0]);
+        pTwoHand.push(pTwoDeck.splice(drawPosition, 1)[0]);
     }
 }
 
-function discardCard(forPlayer, cardPosition) {
-    if (forPlayer) {
+function discardCard(forPOne, cardPosition) {
+    if (forPOne) {
         // Wirft ausgewählte Karte d. Spielers ab.
         pOneGraveyard.push(pOneHand.splice(cardPosition, 1)[0]);
     } else {
         // Wirft automatisch die 1. Karte d. Bots ab.
-        pTwoGraveyard.push(pTwoHand.splice(0, 1)[0]);
+        pTwoGraveyard.push(pTwoHand.splice(cardPosition, 1)[0]);
     }
 }
 
-function drawStartHand(forPlayer) {
+function drawStartHand(forPOne) {
     for (let i = 0; i < 7; i++) {
-        drawCard(forPlayer);
+        drawCard(forPOne);
     }
 
-    if (forPlayer) {
+    if (forPOne) {
         if (!confirm('Möchten Sie diese Hand behalten?')) {
             // Wenn Spieler nicht halten will, fügt es die aktuelle Hand wieder dem Deck hinzu und leert die Hand.
-            playerDeck = playerDeck.concat(pOneHand);
+            pOneDeck = pOneDeck.concat(pOneHand);
             pOneHand = [];
 
             // Zieht erneut.
