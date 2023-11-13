@@ -113,3 +113,171 @@
 2023-11-05 19:15:02 0 [Note] InnoDB: Loading buffer pool(s) from D:\XAMPP\mysql\data\ib_buffer_pool
 2023-11-05 19:15:02 0 [Note] Plugin 'FEEDBACK' is disabled.
 2023-11-05 19:15:02 0 [Note] Server socket created on IP: '::'.
+2023-11-05 21:40:42 0 [Note] mysqld.exe: Aria engine: starting recovery
+recovered pages: 0% 10% 26% 38% 48% 59% 79% 91% 100% (0.0 seconds); tables to flush: 2 1 0
+ (0.0 seconds); 
+2023-11-05 21:40:42 0 [Note] mysqld.exe: Aria engine: recovery done
+2023-11-05 21:40:42 0 [Note] InnoDB: Mutexes and rw_locks use Windows interlocked functions
+2023-11-05 21:40:42 0 [Note] InnoDB: Uses event mutexes
+2023-11-05 21:40:42 0 [Note] InnoDB: Compressed tables use zlib 1.2.12
+2023-11-05 21:40:42 0 [Note] InnoDB: Number of pools: 1
+2023-11-05 21:40:42 0 [Note] InnoDB: Using SSE2 crc32 instructions
+2023-11-05 21:40:42 0 [Note] InnoDB: Initializing buffer pool, total size = 16M, instances = 1, chunk size = 16M
+2023-11-05 21:40:42 0 [Note] InnoDB: Completed initialization of buffer pool
+2023-11-05 21:40:42 0 [Note] InnoDB: Starting crash recovery from checkpoint LSN=4313916
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\abgabe_bool_pie\books.ibd' OS error: 203
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-05 21:40:42 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``abgabe_bool_pie`.`books``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-05 21:40:42 0 [Warning] InnoDB: Ignoring tablespace for `abgabe_bool_pie`.`books` because it could not be opened.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\fahrradarten.ibd' OS error: 203
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-05 21:40:42 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`fahrradarten``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-05 21:40:42 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`fahrradarten` because it could not be opened.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\fahrraeder.ibd' OS error: 203
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-05 21:40:42 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`fahrraeder``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-05 21:40:42 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`fahrraeder` because it could not be opened.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\hersteller.ibd' OS error: 203
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-05 21:40:42 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`hersteller``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-05 21:40:42 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`hersteller` because it could not be opened.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\kunden.ibd' OS error: 203
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-05 21:40:42 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`kunden``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-05 21:40:42 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`kunden` because it could not be opened.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\modelle.ibd' OS error: 203
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-05 21:40:42 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`modelle``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-05 21:40:42 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`modelle` because it could not be opened.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\orte.ibd' OS error: 203
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-05 21:40:42 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`orte``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-05 21:40:42 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`orte` because it could not be opened.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\vermietungen.ibd' OS error: 203
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-05 21:40:42 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-05 21:40:42 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`vermietungen``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-05 21:40:42 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`vermietungen` because it could not be opened.
+2023-11-05 21:40:43 0 [Note] InnoDB: 128 out of 128 rollback segments are active.
+2023-11-05 21:40:43 0 [Note] InnoDB: Removed temporary tablespace data file: "ibtmp1"
+2023-11-05 21:40:43 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+2023-11-05 21:40:43 0 [Note] InnoDB: Setting file 'C:\Users\kaschmid\xamp\mysql\data\ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2023-11-05 21:40:43 0 [Note] InnoDB: File 'C:\Users\kaschmid\xamp\mysql\data\ibtmp1' size is now 12 MB.
+2023-11-05 21:40:43 0 [Note] InnoDB: Waiting for purge to start
+2023-11-05 21:40:43 0 [Note] InnoDB: 10.4.27 started; log sequence number 4313925; transaction id 371
+2023-11-05 21:40:43 0 [Note] InnoDB: Loading buffer pool(s) from C:\Users\kaschmid\xamp\mysql\data\ib_buffer_pool
+2023-11-05 21:40:43 0 [Note] Plugin 'FEEDBACK' is disabled.
+2023-11-05 21:40:43 0 [Note] Server socket created on IP: '::'.
+2023-11-13  8:56:39 0 [Note] InnoDB: Mutexes and rw_locks use Windows interlocked functions
+2023-11-13  8:56:39 0 [Note] InnoDB: Uses event mutexes
+2023-11-13  8:56:39 0 [Note] InnoDB: Compressed tables use zlib 1.2.12
+2023-11-13  8:56:39 0 [Note] InnoDB: Number of pools: 1
+2023-11-13  8:56:39 0 [Note] InnoDB: Using SSE2 crc32 instructions
+2023-11-13  8:56:39 0 [Note] InnoDB: Initializing buffer pool, total size = 16M, instances = 1, chunk size = 16M
+2023-11-13  8:56:39 0 [Note] InnoDB: Completed initialization of buffer pool
+2023-11-13  8:56:39 0 [Note] InnoDB: Starting crash recovery from checkpoint LSN=4314251
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\abgabe_bool_pie\books.ibd' OS error: 203
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-13  8:56:39 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``abgabe_bool_pie`.`books``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-13  8:56:39 0 [Warning] InnoDB: Ignoring tablespace for `abgabe_bool_pie`.`books` because it could not be opened.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\fahrradarten.ibd' OS error: 203
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-13  8:56:39 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`fahrradarten``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-13  8:56:39 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`fahrradarten` because it could not be opened.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\fahrraeder.ibd' OS error: 203
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-13  8:56:39 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`fahrraeder``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-13  8:56:39 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`fahrraeder` because it could not be opened.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\hersteller.ibd' OS error: 203
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-13  8:56:39 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`hersteller``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-13  8:56:39 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`hersteller` because it could not be opened.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\kunden.ibd' OS error: 203
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-13  8:56:39 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`kunden``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-13  8:56:39 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`kunden` because it could not be opened.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\modelle.ibd' OS error: 203
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-13  8:56:39 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`modelle``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-13  8:56:39 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`modelle` because it could not be opened.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\orte.ibd' OS error: 203
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-13  8:56:39 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`orte``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-13  8:56:39 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`orte` because it could not be opened.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 3 in a file operation.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: The error means the system cannot find the path specified.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: If you are installing InnoDB, remember that you must create directories yourself, InnoDB does not create them.
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Cannot open datafile for read-only: '.\biketogo\vermietungen.ibd' OS error: 203
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Operating system error number 203 in a file operation.
+2023-11-13  8:56:39 0 [Note] InnoDB: Some operating system error numbers are described at https://mariadb.com/kb/en/library/operating-system-error-codes/
+2023-11-13  8:56:39 0 [ERROR] InnoDB: Could not find a valid tablespace file for ``biketogo`.`vermietungen``. Please refer to https://mariadb.com/kb/en/innodb-data-dictionary-troubleshooting/ for how to resolve the issue.
+2023-11-13  8:56:39 0 [Warning] InnoDB: Ignoring tablespace for `biketogo`.`vermietungen` because it could not be opened.
+2023-11-13  8:56:39 0 [Note] InnoDB: 128 out of 128 rollback segments are active.
+2023-11-13  8:56:40 0 [Note] InnoDB: Removed temporary tablespace data file: "ibtmp1"
+2023-11-13  8:56:40 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+2023-11-13  8:56:40 0 [Note] InnoDB: Setting file 'C:\Users\kaschmid\xamp\mysql\data\ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2023-11-13  8:56:40 0 [Note] InnoDB: File 'C:\Users\kaschmid\xamp\mysql\data\ibtmp1' size is now 12 MB.
+2023-11-13  8:56:40 0 [Note] InnoDB: Waiting for purge to start
+2023-11-13  8:56:40 0 [Note] InnoDB: 10.4.27 started; log sequence number 4314260; transaction id 394
+2023-11-13  8:56:40 0 [Note] InnoDB: Loading buffer pool(s) from C:\Users\kaschmid\xamp\mysql\data\ib_buffer_pool
+2023-11-13  8:56:40 0 [Note] Plugin 'FEEDBACK' is disabled.
+2023-11-13  8:56:40 0 [Note] Server socket created on IP: '::'.
