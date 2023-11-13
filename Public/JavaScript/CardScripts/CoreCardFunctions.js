@@ -1,5 +1,6 @@
 // TODO
 function playCard() {
+    updatePlayerMana(pOneTurn,false,cost);
     // Try to pay Mana
     // Has enough? -> put card on board.
 }
@@ -12,6 +13,7 @@ function tapCard(context, effect) {
         socket.emit('effect', effect);
     } else /* if (context === 'Mana') */ {
         socket.emit('mana', effect);
+        updatePlayerMana(pOneTurn,true,0);
     }
 }
 

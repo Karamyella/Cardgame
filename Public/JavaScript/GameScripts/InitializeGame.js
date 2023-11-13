@@ -23,14 +23,14 @@ function loadGameData() {
         type: 'GET',
         url: '/deck/getDeck/' + localStorage.getItem("playerDeckId"),
         success: function (response) {
-            playerDeck = response;
+            pOneDeck = response;
 
             // Wenn Spielerdeck fertig geladen, holt Gegnerdeck über selbe Logik wie oben.
             $.ajax({
                 type: 'GET',
                 url: '/deck/getDeck/' + localStorage.getItem("enemyDeckId"),
                 success: function (response) {
-                    enemyDeck = response;
+                    pTwoDeck = response;
 
                     // Wenn alle Daten geladen wurden, wird Spiel gestartet.
                     yey();
@@ -51,8 +51,8 @@ function yey() {
     drawStartHand(false);
 
     // Generiert wer anfängt. (Math.round(Math.random()) generiert "1" oder "0", wobei 1 = true & 0 = false ist.)
-    let doesPlayerStart = Math.round(Math.random()) === true;
-    if (doesPlayerStart) {
+    let doesPlayerOneStart = Math.round(Math.random()) === true;
+    if (doesPlayerOneStart) {
         startNextPlayerTurn();
     } else {
         startNextBotTurn();
