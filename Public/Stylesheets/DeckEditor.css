@@ -1,0 +1,90 @@
+body,
+html {
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+    background-color: #1e3d2d;
+}
+
+.deck-container {
+    background-color: #23573d;
+    width: 70%;
+    height: 97%;
+    margin: 1em;
+    float: left;
+    position: relative;
+}
+
+.deckform {
+    box-shadow: 0 4px 10px 0 orange;
+    padding: 0.01em 16px;
+    width: 50%;
+    border-radius: 32px;
+    margin: 0 0 0 1em;
+    float: left;
+    position: relative;
+}
+
+#pName {
+    float: left;
+    border-color: orange;
+    color: lightgrey;
+    border-style: solid;
+    border-radius: 32px;
+    border-width: 0.1em;
+    padding: 8px;
+    margin: 1em 1em 0 0.5em;
+    width: 40%;
+    position: relative;
+}
+
+.name {
+    border-radius: 32px;
+    background-color: #1e3d2d;
+    color: lightgrey;
+    border-color: orange;
+    padding: 8px;
+    display: block;
+    width: 50%;
+    margin: 1em 0 1em 0;
+    position: relative;
+}
+
+.deckbox {}
+
+.card-container {
+    background-color: #23573d;
+    width: 26%;
+    height: 97%;
+    margin: 1em 1em 1em 0;
+    float: right;
+    position: relative;
+
+}
+
+.color {
+    float: left;
+    border-color: orange;
+    background-color: #1e3d2d;
+    color: lightgrey;
+    border-style: solid;
+    border-radius: 32px;
+    border-width: 0.1em;
+    padding: 8px;
+    margin: 1em 1em 0 0.5em;
+    width: 30%;
+    position: relative;
+}
+
+.cardsearch {
+    box-shadow: 0 4px 10px 0 orange;
+    color: lightgrey;
+    padding: 0.01em 16px;
+    border-radius: 32px;
+    margin: 0 1em 0 1em;
+    width: 85%;
+    float: right;
+    position: relative;
+}
+
+.cardbox {}

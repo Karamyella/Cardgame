@@ -22,8 +22,8 @@ app.get('/', (req, res) => {
 });
 
 // TODO TESTPAGE: DELETE AFTER DONE.
-app.get('/test', (req, res) => {
-	res.sendFile(join(__dirname, '/../public/Dummy.html'));
+app.get('/DeckEditor', (req, res) => {
+	res.sendFile(join(__dirname, '/../public/DeckEditor.html'));
 });
 
 // TODO URL ggf. anpassen.
@@ -79,12 +79,12 @@ server.listen(port, () => {
 
 // Aktuell auskommentiert, da Datenbank lokal noch aufgesetzt werden muss.
 // Baut Verbindung zur Datenbank auf.
-const mysql = require('mysql');
+/* const mysql = require('mysql');
 const connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'cardgameAdmin',
 	password: 'cardgamePassword',
-	database: 'cardgamedb'
+	database: 'cardgame'
 });
 
 // DEBUG-Stuff
@@ -92,10 +92,11 @@ connection.connect((error) => {
 	if (error) throw error;
 	console.log('Database-Connection works.');
 
-	const sql = "SELECT * FROM Card";
+	const sql = "SELECT * FROM Cards";
 
 	connection.query(sql, (error, result) => {
 		if (error) throw error;
 		console.log(result[0]);
 	});
 });
+ */
