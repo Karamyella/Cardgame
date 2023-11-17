@@ -11,8 +11,7 @@ const io = new Server(server);
 const port = process.env.PORT || 8080;
 
 // Öffnet Server-Port.
-server.listen(port, () => {
-});
+server.listen(port, () => {});
 
 let playerList = [];
 
@@ -24,13 +23,9 @@ app.use(express.static(join(__dirname, '/../public')));
 app.get('/', (req, res) => {
 	res.sendFile(join(__dirname, '/../public/Startscreen.html'));
 });
-
-// TODO TESTPAGE: DELETE AFTER DONE.
-app.get('/DeckEditor', (req, res) => {
+app.get('/deckEditor', (req, res) => {
 	res.sendFile(join(__dirname, '/../public/DeckEditor.html'));
 });
-
-// TODO URL ggf. anpassen.
 app.get('/arena', (req, res) => {
 	res.sendFile(join(__dirname, '/../public/Arena.html'));
 });
@@ -42,7 +37,8 @@ io.on('connection', (socket) => {
 		playerList.push({
 			playerID: socket.id,
 			playerName: playerInfo.playerName,
-			deckID: playerInfo.deckID
+			deckID: playerInfo.deckID,
+			playerDeck: undefined
 		});
 
 		// DEBUG-STUFF
@@ -53,14 +49,15 @@ io.on('connection', (socket) => {
 			allPlayers.forEach((socket) => {
 				// Sagt den Clients, dass sie auf die neue Seite laden sollen.
 				socket.emit('loadArena');
-				app.
-
-				// Nach 5 Sekunden werden die Spielerdaten wieder an die Clients gesendet.
-				setTimeout(() => {
-					socket.emit('gameStart', playerList);
-				}, 1000);
-			})
+			});
 		}
+	});
+
+	socket.on('arenaLoaded', () => {
+		for (let i = 0; i < playerList.length; i++) {
+			playerList[i].playerDeck = getPlayerDeck(playerList[i].deckID);
+		}
+		socket.emit('gameStart', playerList);
 	});
 
 	/*
@@ -87,8 +84,9 @@ const connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'cardgameAdmin',
 	password: 'cardgamePW',
-	database: 'cardgamedb'
+	database: 'cardgame'
 });
+
 
 connection.connect((error) => {
 	if (error) throw error;
@@ -97,7 +95,7 @@ connection.connect((error) => {
 
 	connection.query(sql, (error, result) => {
 		if (error) throw error;
-		//console.log(result[0]);
+		console.log(result[0]);
 	});
 });
 */
