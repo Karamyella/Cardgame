@@ -1,9 +1,12 @@
+socket = io();
+setSocketEvents();
+socket.emit('arenaLoaded');
+
 function initializeGame(data) {
-    alert('aaa')
     console.log(data);
 
-    $('#pOneName').html(localStorage.getItem('PlayerName'));
-    $('#pTwoName').html(localStorage.getItem('EnemyName'));
+    $('#pOneName').html(data[0].playerName);
+    $('#pTwoName').html(data[0].playerName);
     $('#pOneHP').html(pOneHP.toString());
     $('#pTwoHP').html(pTwoHP.toString());
 
@@ -19,8 +22,6 @@ function initializeGame(data) {
 * 3. Spielstart. (startGame())
 * */
 function loadGameData() {
-
-
     /*
     // Holt Spielerdeck über entsprechende ID aus LocalStorage (Wurde gesetzt als das Deck auf Startseite ausgewählt wurde.)
     $.ajax({
