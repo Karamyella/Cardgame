@@ -50,8 +50,6 @@ html {
     position: relative;
 }
 
-.deckbox {}
-
 .card-container {
     background-color: #23573d;
     width: 26%;
@@ -86,5 +84,3 @@ html {
     float: right;
     position: relative;
 }
-
-.cardbox {}

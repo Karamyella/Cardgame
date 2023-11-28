@@ -146,3 +146,55 @@ button:hover {
     top: 70%;
     left: 80%;
 }
+
+.start-game {
+    position: fixed;
+    display: none;
+    width: 170%;
+    text-align: center;
+    background-color: #e14a3b;
+    border-radius: 10px;
+    font-size: 20px;
+    height: 70%;
+    transition: opacity .2s ease-out;
+    left: -35%;
+    top: 20%;
+    color: white;
+    font-weight: bold;
+}
+
+.waiting {
+    position: fixed;
+    display: none;
+    width: 170%;
+    text-align: center;
+    background-color: #e14a3b;
+    border-radius: 10px;
+    font-size: 20px;
+    height: 70%;
+    transition: opacity .2s ease-out;
+    left: -35%;
+    top: 20%;
+    color: white;
+    font-weight: bold;
+}
+
+.name {
+    position: fixed;
+    border-radius: 32px;
+    padding: 8px;
+    display: block;
+    width: 50%;
+    margin: 1em 0 1em 0;
+    position: relative;
+    left: 22%;
+}
+
+.start-game-button{
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    background-color: white;
+    height: 3em;
+    width: 6em;
+}

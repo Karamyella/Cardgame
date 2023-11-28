@@ -1,5 +1,5 @@
-
-body, html {
+body,
+html {
     overflow: hidden;
     height: 100%;
     margin: 0;
@@ -29,6 +29,7 @@ hr {
 
 .playerInfo {
     background-color: black;
+    border-radius: 10px;
     color: white;
     position: relative;
     height: 10em;
@@ -42,6 +43,7 @@ hr {
 
 .EnemyInfo {
     background-color: black;
+    border-radius: 10px;
     color: white;
     position: relative;
     height: 10em;
@@ -53,14 +55,90 @@ hr {
     float: left;
 }
 
-.endPhase {
+.currentPhase {
+    color: white;
+    position: absolute;
+    top: 48%;
+    background-color: black;
+    width: 16em;
+    height: 3.2%;
+    left: 41%;
+    border-radius: 0.6em;
+    text-align: center;
+    padding-top: 1em;
+}
+
+.buttons {
     background-color: black;
     color: white;
     position: relative;
+    border-radius: 0.6em;
     height: 5em;
     width: 10em;
     margin-right: 1em;
     float: right;
     top: 90%;
-    left: 15%;
+    right: -15%;
+}
+
+.showHand {
+    display: none;
+}
+
+.demoCard {
+    display: block;
+    background-color: black;
+    height: 15%;
+    width: 10%;
+    position: relative;
+}
+
+.playerHand {
+    top: 70%;
+    position: relative;
+    height: 20%;
+    left: 30%;
+}
+
+ul {
+    list-style: none;
+}
+
+.context-menu {
+    position: absolute;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    border-radius: 0.6em;
+    box-shadow: 0 10px 20px rgb(64 64 64 / 5%);
+    padding: 10px 0;
+}
+
+.menu>li>a {
+    font: inherit;
+    border: 0;
+    padding: 10px 30px 10px 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    text-decoration: unset;
+    color: white;
+    font-weight: 500;
+    transition: 0.5s linear;
+    -webkit-transition: 0.5s linear;
+    -moz-transition: 0.5s linear;
+    -ms-transition: 0.5s linear;
+    -o-transition: 0.5s linear;
+}
+
+.menu>li>a:hover {
+    background: #f1f3f7;
+    color: red;
+}
+
+.menu>li>a>i {
+    padding-right: 10px;
 }

@@ -18,11 +18,10 @@
                 <option value="new">New</option>
             </datalist>
         </form>
-        <div class="deckbox"></div>
     </div>
     <div class="card-container">
         <form class="cardsearch">
-            <select name="color" class="color">
+            <select name="color" class="color" id="color">
                 <option value="red">Red</option>
                 <option value="blue">Blue</option>
                 <option value="green">Green</option>
@@ -30,12 +29,31 @@
                 <option value="white">White</option>
             </select>
             <input class="name" type="text"></p>
-            <div class="cardbox"></div>
         </form>
     </div>
 
     <script>
         document.querySelector('#pName').innerHTML(localStorage.getItem('pName'));
+
+        function showCards() {
+            db.transaction(function (tx) {
+                var e = document.getElementById('color');
+                var value = e.value;
+                tx.executeSql('SELECT image FROM cards WHERE color = ' + value, [],
+                    function () {
+                        var data = result.rows;
+                        var html = '';
+
+                        for (var i = 0; i < dataset.length; i++) {
+                            var row = data.item(i);
+                            html += row.grandTotal;
+
+                            document.getElementById('results').innerHTML += html;
+                        }
+                    }
+                );
+            });
+        }
     </script>
 </body>
 
