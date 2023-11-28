@@ -8,6 +8,11 @@ function initConnection() {
 }
 
 function setSocketEvents() {
+	socket.on('dataOfOtherPlayer', (dataOfOpponent) => {
+		console.log(dataOfOpponent);
+		//alert('');
+	});
+
 	socket.on('loadArena', (data) => {
 		window.location.href = '/arena';
 	});
@@ -19,7 +24,7 @@ function setSocketEvents() {
 	// Wenn der Gegner austritt, wird die Partie beendet und der Spieler wird auf die Startseite weitergeleitet.
 	socket.on('playerDisconnected', (disconnectedPlayerName) => {
 		alert(disconnectedPlayerName + ' ist aus der Partie ausgetreten. Sie werden auf die Startseite weitergeleitet.');
-		window.location.href = '/';
+		//window.location.href = '/';
 	});
 }
 
@@ -34,6 +39,6 @@ $('.start-button').on('click', (event) => {
 
 	initConnection();
 
-	socket.emit('playerConnecting', playerData);
+	socket.emit('initMatchmaking', playerData);
 	$('.start-button').off('click');
 });
