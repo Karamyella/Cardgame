@@ -44,21 +44,6 @@ function setSocketEvents() {
 	});
 }
 
-let playerData = {
-	playerName: 'Jeff',
-	deckID: 'aaa'
-}
-
-// DEBUG-Stuff
-$('.start-game-button').on('click', (event) => {
-	event.preventDefault();
-
-	initConnection();
-
-	socket.emit('initMatchmaking', playerData);
-	$('.start-game-button').off('click');
-});
-
 function submitName() {
 	let playerName = $('input.playerName').val();
 	if (playerName != "") {
