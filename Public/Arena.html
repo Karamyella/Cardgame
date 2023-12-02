@@ -12,13 +12,13 @@
 <body>
     <hr />
 
-    <div class="playerInfo">
+    <div class="pOneInfo">
         <h4>Player: <i id="pOneName"></i></h4>
         HP: <i id="pOneHP"></i>
         <br />
         Mana: <i id="pOneMana"></i>
     </div>
-    <div class="EnemyInfo">
+    <div class="pTwoInfo">
         <h4>Player: <i id="pTwoName"></i></h4>
         HP: <i id="pTwoHP"></i>
         <br />
@@ -26,7 +26,7 @@
     </div>
     <div class="currentPhase">
         Current Phase: <i id="currentPhase"></i>
-    </div> 
+    </div>
 
     <button class="buttons">End Phase</button>
     <button onclick="toggleHand()" class="buttons">
@@ -60,6 +60,7 @@
     <script src='/JavaScript/GameScripts/InitializeGame.js'></script>
 
     <script>
+
         function toggleHand() {
             $('.showHand').toggle();
             $('.hideHand').toggle();

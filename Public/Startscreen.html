@@ -32,6 +32,7 @@
                 </div>
             </div>
         </div>
+
         <div id="defaultmenu" class="default-menu-buttons">
             <button onclick="deckmenu()" class="deck-button">
                 <span class="menu-button-title">Deckauswahl</span>
@@ -40,18 +41,42 @@
                 <span class="menu-button-title">Start</span>
             </button>
         </div>
-        <form class="start-game">
+
+        <div class="start-game">
             <br />
-            Name: <input name="name" class="name" list="names">
-            </input>
-            <br />
-            <button onclick="startgame()" class="start-game-button">
+            <span class="name">Name:</span>
+            <input type="text" class="playerName" />
+            <span class="info"> Please enter your name to continue</span>
+            <br /><br />
+            <button type="button" onclick="submitName()" class="start-game-button">
                 <span>Start</span>
             </button>
-        </form>
-        <div class="waiting">
-            <br />Waiting for Player two
         </div>
+
+        <div class="waiting">
+            <div id="waitingGrid">
+                <div class="leftGrid">
+                    <br />Player 1:
+                    <br /><br /><i id="pOneName"></i>
+                    <br /><br /><i id="pOneDeck"></i>
+                </div>
+
+                <div class="middleGrid">
+                    <button onclick="enterArena()" class="enterArena">
+                        <span class="enterArenaButton">Enter the Arena</span>
+                    </button>
+                    <br /><br /><span class="foundText">Opponent <i id="pTwoName"></i> found</span>
+                </div>
+
+                <div class="rightGrid">
+                    <br />Player 2:
+                    <br /><br /><i id="pTwoName">Waiting for second player</i>
+                    <br /><br /><i id="pTwoDeck"></i>
+                </div>
+            </div>
+        </div>
+
+
         <div id="deckmenu" class="deck-menu" style="display: none">
             <span class="deck-menu-title">Deck Menu</span>
             <div class="deck-menu-select">
@@ -63,6 +88,7 @@
             </div>
         </div>
     </div>
+
     <img src="/Images/logo.png" class="logo" alt="Logo">
     <div class="credits">
         <p><br />Made by <br />
@@ -74,28 +100,7 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/JavaScript/Client.js"></script>
-    <script>
-        function deckmenu() {
-            $("#defaultmenu").hide();
-            $("#deckmenu").show();
-        }
 
-        function togglecolor(className) {
-            $("#defaultmenu").show();
-            $("#deckmenu").hide();
-            $(".menu-color").children().hide(); //hide all icons
-            $(`#${className}`).show();  //show only the right color
-        }
-
-        function startselection() {
-            $('.start-game').toggle();
-        }
-
-        function startgame() {
-            $('.start-game').toggle();
-            $('.waiting').toggle();
-        }
-    </script>
 </body>
 
 </html>

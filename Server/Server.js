@@ -226,14 +226,14 @@ io.on('connection', (socket) => {
 			room.gameState.boardState.p1Data.playerName = player.playerName;
 			room.gameState.boardState.p1Data.library = getPlayerDeck(playerInfo.deckID);
 
-			socket.emit('isP1', true);
+			socket.emit('isPOne', true);
 			socket.emit('roomData', room);
 		} else if (room.playerTwo === undefined) {
 			room.playerTwo = socket.id;
 			room.gameState.boardState.p2Data.playerName = player.playerName;
 			room.gameState.boardState.p2Data.library = getPlayerDeck(playerInfo.deckID);
 
-			socket.emit('isP1', false);
+			socket.emit('isPOne', false);
 			sendDataToBothPlayers(socket, 'roomData', room);
 		} else {
 			// Errorhandler.

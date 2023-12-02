@@ -11,6 +11,7 @@ let pOneField = [];
 let pTwoField = [];
 let pOneGraveyard = [];
 let pTwoGraveyard = [];
+let isPOne;
 
 function updatePlayerMana(pOne, increase, cost) {
 	if (pOne) {
