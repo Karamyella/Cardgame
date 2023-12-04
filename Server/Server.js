@@ -1,8 +1,8 @@
 // Imports
 const express = require('express');
-const {createServer} = require('node:http');
-const {join} = require('node:path');
-const {Server} = require('socket.io');
+const { createServer } = require('node:http');
+const { join } = require('node:path');
+const { Server } = require('socket.io');
 const crypto = require('crypto');
 
 // Initialisierung d. Servers
@@ -12,7 +12,7 @@ const io = new Server(server);
 const port = process.env.PORT || 8080;
 
 // Öffnet Server-Port.
-server.listen(port, () => {});
+server.listen(port, () => { });
 
 // Filepath für Html-Datei.
 app.use(express.static(join(__dirname, '/../public')));
@@ -284,7 +284,7 @@ io.on('connection', (socket) => {
 				let roomPlayers = currentRoom.gameState.boardState;
 				// Der Spieler muss nur noch die Namen beider Spieler richtig eingeben, dann darf er beitreten.
 				if ((authorizationInfo.myName === roomPlayers.p1Data.playerName ||
-						authorizationInfo.myName === roomPlayers.p2Data.playerName) &&
+					authorizationInfo.myName === roomPlayers.p2Data.playerName) &&
 					(authorizationInfo.enemyName === roomPlayers.p1Data.playerName ||
 						authorizationInfo.enemyName === roomPlayers.p2Data.playerName)) {
 					foundRoom = currentRoom;
@@ -319,15 +319,10 @@ io.on('connection', (socket) => {
 	});
 
 	// Gibt alle Karten zurück, auf die die Farbe und ggf. den Namen passen.
-	socket.on('editorGetCards', (filter) => {
-		let resultSet;
-		if (filter.cardName !== undefined) {
-			// TODO getCardsForColorAndName(color, cardName);
-			resultSet = getCardsForColorAndName(filter.color, filter.cardName);
-		} else {
-			resultSet = getCardsForColor(filter.color);
-		}
-		socket.emit('editorCardResult', resultSet);
+	socket.on('cardRequest', (filter) => {
+		getCardsForColorAndName(filter.color, filter.cardName).then((result) => {
+			socket.emit('editorCardResult', result);
+		});
 	});
 
 	socket.on('editorGetAllPlayerDecks', (playerName) => {
@@ -457,9 +452,10 @@ io.on('connection', (socket) => {
 	});
 });
 
-/*
+
 // Baut Verbindung zur Datenbank auf.
 const mysql = require('mysql');
+const { rejects } = require('node:assert');
 const connection = mysql.createConnection({
 	host: '127.0.0.1',
 	user: 'root',
@@ -467,6 +463,7 @@ const connection = mysql.createConnection({
 	database: 'cardgame'
 });
 
+/*
 // DEBUG
 connection.connect((error) => {
 	if (error) throw error;
@@ -496,35 +493,32 @@ function getPlayerDeck(deckId) {
 	});
 }
 
-function getCardsForColor(color) {
-	return connection.connect((error) => {
-		if (error) throw error;
-
-		let statement;
-		switch (color) {
-			case 'red':
-				statement = "SELECT * FROM cards WHERE color = 'red'";
-				break;
-			case 'blue':
-				statement = "SELECT * FROM cards WHERE color = 'blue'";
-				break;
-			case 'green':
-				statement = "SELECT * FROM cards WHERE color = 'green'";
-				break;
-			case 'black':
-				statement = "SELECT * FROM cards WHERE color = 'black'";
-				break;
-			case 'white':
-				statement = "SELECT * FROM cards WHERE color = 'white'";
-				break;
-			default:
-				statement = "SELECT * FROM cards";
-				break;
-		}
-
-		return connection.query(statement, (error, result) => {
-			if (error) throw error;
-			return result;
+function queryResolver(statement) {
+	return promise = new Promise((resolve, reject) => {
+		connection.connect();
+		connection.query(statement, (error, result) => {
+			if (error) {
+				reject();
+			} else {
+				resolve(result);
+			}
 		});
+		connection.end();
 	});
+}
+
+function getCardsForColorAndName(color, name) {
+	let query;
+	if (color) {
+		if (name) {
+			query = 'SELECT * FROM cards WHERE color = "' + color + '" AND name like "%' + name + '%";';
+		} else {
+			query = 'SELECT * FROM cards WHERE color = "' + color + '";';
+		}
+	}
+	else {
+		query = 'SELECT * FROM cards;';
+	}
+
+	return queryResolver(query);
 }

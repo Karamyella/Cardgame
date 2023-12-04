@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Cardgame Arena</title>
     <link rel='stylesheet' href='/Stylesheets/DeckEditor.css'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,17 +11,17 @@
 
 <body>
     <div class="deck-container">
-        <form class="deckform">
+        <div class="deckform">
             <i id="pName">asd</i>
             <input name="name" class="name" list="names">
             </input>
             <datalist id="names">
                 <option value="new">New</option>
             </datalist>
-        </form>
+        </div>
     </div>
     <div class="card-container">
-        <form class="cardsearch">
+        <div class="cardsearch">
             <select name="color" class="color" id="color">
                 <option value="red">Red</option>
                 <option value="blue">Blue</option>
@@ -29,11 +30,15 @@
                 <option value="white">White</option>
             </select>
             <input class="name" type="text"></p>
-        </form>
+            <button type="button" onclick="sendCardRequest()"></button>
+        </div>
+        <div class="generatedCards">
+
+        </div>
     </div>
 
     <script>
-        document.querySelector('#pName').innerHTML(localStorage.getItem('pName'));
+        //document.querySelector('#pName').innerHTML(localStorage.getItem('pName'));
 
         function showCards() {
             db.transaction(function (tx) {
@@ -54,7 +59,13 @@
                 );
             });
         }
+
+        
+
     </script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/JavaScript/Client.js"></script>
 </body>
 
 </html>

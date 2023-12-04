@@ -2,9 +2,11 @@ let socket;
 
 // Stellt Verbindung zum Server her.
 function initConnection() {
-	socket = io();
+	if (socket === undefined) {
+		socket = io();
 
-	setSocketEvents();
+		setSocketEvents();
+	}
 }
 
 function setSocketEvents() {
@@ -38,9 +40,25 @@ function setSocketEvents() {
 		$('#pOneName').html(pOne.playerName);
 		if (pTwo.playerName != undefined) {
 			$('#pTwoName').html(pTwo.playerName);
-		} 
+		}
 		$('.start-game').hide();
 		$('.waiting').show();
+
+		if (pOne.playerName != undefined && pTwo.playerName != undefined) {
+			$(".enterArena").show();
+		}
+	});
+
+	socket.on('startGame', () => {
+		window.location.href = "/Arena";
+	});
+
+	socket.on('editorCardResult', (data) => {
+		let mainDiv = $('.generatedCards');
+		mainDiv.html('');
+		for(let i = 0; i < data.length; i++) {
+			$('<img>').attr('src', data[i].image).appendTo(mainDiv);
+		}
 	});
 }
 
@@ -48,7 +66,7 @@ function submitName() {
 	let playerName = $('input.playerName').val();
 	if (playerName != "") {
 		let playerInfo = {
-			playerName: playerName, 
+			playerName: playerName,
 			playerDeck: undefined
 		};
 		socket.emit('initMatchmaking', playerInfo);
@@ -73,5 +91,15 @@ function startselection() {
 }
 
 function enterArena() {
-	socket.emit("start");
+	socket.emit("playerIsReady");
+}
+
+function sendCardRequest() {
+	initConnection();
+
+	let data = {
+		cardName: $('.name').val(),
+		color: $('.color').val()
+	}
+	socket.emit("cardRequest", data);
 }

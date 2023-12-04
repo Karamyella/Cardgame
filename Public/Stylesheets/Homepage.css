@@ -211,6 +211,7 @@ button:hover {
 .enterArena {
     border-radius: 8px;
     border-style: none;
+    display: none;
     box-sizing: border-box;
     background-color: white;
     height: 4em;
