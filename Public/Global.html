@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Cardgame Startmenu</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel='stylesheet' href='/Stylesheets/Global.css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div id="index">
+    <div id="index-bg"></div>
+    <div id="index-menu-container">
+        <div class="menu-top">
+            <span class="menu-title">Cardgame</span>
+            <div class="menu-color">
+                <div id="red">
+                    <img src="/Images/red.png" alt="red mana logo">
+                </div>
+                <div id="blue" style="display: none">
+                    <img src="/Images/blue.png" alt="blue mana logo">
+                </div>
+                <div id="green" style="display: none">
+                    <img src="/Images/green.png" alt="green mana logo">
+                </div>
+                <div id="white" style="display: none">
+                    <img src="/Images/white.png" alt="white mana logo">
+                </div>
+                <div id="black" style="display: none">
+                    <img src="/Images/black.png" alt="black mana logo">
+                </div>
+            </div>
+        </div>
+
+        <div id="default-menu" class="default-menu-buttons">
+            <button onclick="deckmenu();" class="deck-button">
+                <span class="menu-button-title">Deckauswahl</span>
+            </button>
+            <button onclick="startselection();" class="start-button">
+                <span class="menu-button-title">Start</span>
+            </button>
+        </div>
+
+        <div class="start-game-menu">
+            <br/>
+            <span id="player-name-input">Name:</span>
+            <input type="text" class="playerName"/>
+            <span class="info"> Please enter your name to continue</span>
+            <br/><br/>
+            <button type="button" onclick="submitName();" class="start-game-button">Start</button>
+        </div>
+
+        <div class="waiting-menu">
+            <div id="waitingGrid">
+                <div class="leftGrid">
+                    <br/>Player 1:
+                    <br/><br/><i class="pOneName"></i>
+                    <br/><br/><i id="pOneDeck"></i>
+                </div>
+                <div class="middleGrid">
+                    <i id="enemy-ready-text">Other Player is ready.</i>
+                    <i id="player-ready-text">Waiting for other Player to be ready..</i>
+                    <button id="enter-arena-btn" onclick="enterArena();">Enter the Arena</button>
+                </div>
+                <div class="rightGrid">
+                    <br/>Player 2:
+                    <br/><br/><i class="pTwoName">Waiting for second player</i>
+                    <br/><br/><i id="pTwoDeck"></i>
+                </div>
+            </div>
+        </div>
+
+        <div id="deckmenu" class="deck-menu" style="display: none">
+            <span class="deck-menu-title">Deck Menu</span>
+            <div class="deck-menu-select">
+                <button onclick="togglecolor('red');" class="deck reddeck"></button>
+                <button onclick="togglecolor('blue');" class="deck bluedeck"></button>
+                <button onclick="togglecolor('green');" class="deck greendeck"></button>
+                <button onclick="togglecolor('white');" class="deck whitedeck"></button>
+                <button onclick="togglecolor('black');" class="deck blackdeck"></button>
+            </div>
+        </div>
+    </div>
+
+    <img src="/Images/logo.png" class="logo" alt="Logo">
+    <div class="credits">
+        <p><br/>Made by <br/>
+            Torben Weber <br/>
+            & <br/>
+            Kara Schmidt
+        </p>
+    </div>
+</div>
+
+<div id="arena" style="display: none">
+    <hr/>
+    <div id="arena-ui-elements">
+        <div class="pOneInfo">
+            <h4>Player: <i class="pOneName"></i></h4>
+            HP: <i id="pOneHP"></i><br/>
+            Mana: <i id="pOneMana"></i>
+        </div>
+        <div class="pTwoInfo">
+            <h4>Player: <i class="pTwoName"></i></h4>
+            HP: <i id="pTwoHP"></i><br/>
+            Mana: <i id="pTwoMana"></i>
+        </div>
+        <div class="currentPhase">
+            Current Phase: <i id="currentPhase"></i>
+        </div>
+
+        <!-- TODO -->
+        <button class="buttons" type="button" onclick="nextPhase();">Next Phase</button>
+        <button class="buttons" type="button" onclick="toggleHand();">
+            <span class="showHand">Show Hand</span>
+            <span class="hideHand">Hide Hand</span>
+        </button>
+    </div>
+
+    <!-- TODO -->
+    <div id="pOneHand" class="playerHand">
+        <img id="test" class="demoCard"/>
+    </div>
+    <div id="pTwoHand" class="playerHand"></div>
+
+    <!-- TODO -->
+    <div id="pOneField" class="playerField"></div>
+    <div id="pTwoField" class="playerName"></div>
+
+    <!-- TODO -->
+    <div id="pOneLibrary" class="playerLibrary"></div>
+    <div id="pTwoLibrary" class="playerLibrary"></div>
+
+    <!-- TODO -->
+    <div id="pOneGraveyard" class="playerGraveyard"></div>
+    <div id="pTwoGraveyard" class="playerGraveyard"></div>
+
+    <!-- TODO -->
+    <div id="contextMenu" class="context-menu" style="display: none">
+        <ul class="menu">
+            <li class="play"><a href="#"><i aria-hidden="true"></i> Play Card</a></li>
+            <li class="attack"><a href="#"><i aria-hidden="true"></i> Attack</a></li>
+            <li class="block"><a href="#"><i aria-hidden="true"></i> Block</a></li>
+            <li class="effect"><a href="#"><i aria-hidden="true"></i> Activate Effect</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="editor" style="display: none">
+    <div class="deck-container">
+        <div class="deck-form">
+            <i id="pName">asd</i>
+            <input name="name" class="name" list="names"/>
+            <datalist id="names">
+                <option value="new">New</option>
+            </datalist>
+        </div>
+    </div>
+    <div class="card-container">
+        <div class="card-search">
+            <select id="color" name="color">
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="black">Black</option>
+                <option value="white">White</option>
+            </select>
+            <input id="search-input" class="name" type="text"></p>
+            <button type="button" onclick="sendCardRequest()"></button>
+        </div>
+        <div id="card-result-container">
+            <!-- TODO -->
+        </div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/JavaScript/Client.js"></script>
+<script src="/JavaScript/GameScripts/SocketEvents.js"></script>
+<script src='/JavaScript/BotScripts/BotLogic.js'></script>
+<script src='/JavaScript/CardScripts/CardEffects.js'></script>
+<script src='/JavaScript/CardScripts/CoreCardFunctions.js'></script>
+<script src='/JavaScript/GameScripts/DrawAndDiscard.js'></script>
+<script src='/JavaScript/GameScripts/GameVariables.js'></script>
+<script src='/JavaScript/GameScripts/Graveyard.js'></script>
+<script src='/JavaScript/TurnScripts/CombatStep.js'></script>
+<script src='/JavaScript/TurnScripts/PlayerTurn.js'></script>
+<script src='/JavaScript/GameScripts/CoreGameFunctions.js'></script>
+</body>
+</html>

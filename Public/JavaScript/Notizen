@@ -2,7 +2,7 @@
 
 - Generelles:
     - Die generelle Reihenfolge in der die Scripts in HTML angegeben werden ist aktuell
-      egal, nur sollte 'InitializeGame.js' als letztes geladen werden, da es sonst sein
+      egal, nur sollte 'CoreGameFunctions.js' als letztes geladen werden, da es sonst sein
       kann, dass Funktionen aus den anderen Scripts nicht geladen/ausgeführt werden.
 
     - Aktuell denke ich, dass der Spieler keine Entität sein muss, sondern nur als
@@ -25,7 +25,7 @@
 	    - drawCard()
 	    - discardCard() [Nur einzeln bisher (Schau promptDiscard())]
 	    - drawStartHand()
-	- InitializeGame.js
+	- CoreGameFunctions.js
 	    - loadGameData()
 	    - startGame()
 	- PlayerTurn.js
@@ -40,7 +40,7 @@
         - untapCards()
     - DrawAndDiscard.js
         - promptDiscard() [Frage noch zu klären]
-    - InitializeGame.js
+    - CoreGameFunctions.js
         - onload-Function
     - PlayerTurn.js
         - endPlayerTurn()

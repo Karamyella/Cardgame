@@ -1,0 +1,471 @@
+body {
+    height: 100%;
+    margin: 0;
+    background-color: black;
+}
+
+#index {
+    height: 100%;
+    width: 100%;
+}
+
+#index-bg {
+    background: url('../Images/bgToggo.jpg') center/cover no-repeat;
+    filter: blur(8px);
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+
+#index-menu-container {
+    background: url('../Images/Toggo.png') center/cover no-repeat;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 30em;
+    height: 42em;
+    padding: 20px;
+    text-align: center;
+}
+
+.menu-top {
+    color: black;
+    width: 30em;
+    height: 3em;
+    margin-top: 1em;
+}
+
+.menu-title {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.menu-color img {
+    width: 30px;
+    position: absolute;
+    top: 2.1em;
+    right: 2.5em;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+.menu-button-title {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.deck-menu {
+    position: absolute;
+    width: 30em;
+    top: 28em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 3;
+}
+
+.deck-menu-title {
+    font-size: larger;
+    font-weight: bold;
+    margin-bottom: 2em;
+}
+
+.deck-button {
+    background: url('../Images/deckbutton.png') center/cover no-repeat;
+    filter: grayscale(100%);
+    border: none;
+    cursor: pointer;
+    width: 33.4em;
+    height: 2.5em;
+    position: absolute;
+    top: 30.2em;
+    left: 2.7em;
+}
+
+.start-button {
+    background: url('../Images/startbutton.png') center/cover no-repeat;
+    filter: grayscale(100%);
+    border: none;
+    cursor: pointer;
+    width: 33.4em;
+    height: 15.8em;
+    position: absolute;
+    top: 34.2em;
+    left: 2.7em;
+}
+
+button:hover {
+    filter: grayscale(0%);
+}
+
+.deck-menu-select {
+    align-self: center;
+}
+
+.deck {
+    background-size: cover;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    filter: brightness(50%);
+}
+
+.deck:hover {
+    filter: brightness(100%);
+}
+
+.reddeck {
+    background-image: url('../Images/red.png');
+}
+
+.bluedeck {
+    background-image: url('../Images/blue.png');
+}
+
+.greendeck {
+    background-image: url('../Images/green.png');
+}
+
+.blackdeck {
+    background-image: url('../Images/black.png');
+}
+
+.whitedeck {
+    background-image: url('../Images/white.png');
+}
+
+.logo {
+    max-width: 25%;
+    height: auto;
+    position: absolute;
+    top: 75%;
+}
+
+.credits {
+    height: 200px;
+    width: 200px;
+    background-color: #e14a3b;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    position: absolute;
+    font-size: larger;
+    top: 70%;
+    left: 80%;
+}
+
+.start-game-menu {
+    background-image: url('../Images/Textbox.png');
+    position: fixed;
+    display: none;
+    height: 423px;
+    width: 775px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 20px;
+    transition: opacity .2s ease-out;
+    left: -24%;
+    top: 20%;
+    color: white;
+}
+#player-name-input {
+    position: relative;
+    top: -2%;
+    font-weight: bold;
+}
+
+.playerName {
+    position: relative;
+    left: 22%;
+    width: 50%;
+    margin: 1em 0;
+    padding: 8px;
+    display: block;
+    border-radius: 32px;
+}
+
+.start-game-button {
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    background-color: white;
+    height: 3em;
+    width: 6em;
+}
+
+.waiting-menu {
+    position: fixed;
+    display: none;
+    width: 170%;
+    text-align: center;
+    background-color: #e14a3b;
+    border-radius: 10px;
+    font-size: 20px;
+    height: 70%;
+    transition: opacity .2s ease-out;
+    left: -35%;
+    top: 20%;
+    color: white;
+    font-weight: bold;
+}
+
+.middleGrid > * {
+    display: none;
+}
+
+#waitingGrid {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas: ". . .";
+}
+
+#enemy-ready-text {
+    position: absolute;
+    top: 73%;
+    transform: translate(-20px);
+}
+
+#enter-arena-btn, #player-ready-text {
+    position: relative;
+    top: 80%;
+    height: 4em;
+    width: 10em;
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+}
+
+#player-name-input {
+    font-weight: bold;
+}
+
+.foundText {
+    display: none;
+}
+
+
+html, #arena {
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+}
+#arena {
+    opacity: 0;
+    background-color: #54c06a;
+}
+#arena:after {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    position: absolute;
+    background-color: #c05456;
+    content: "";
+}
+#arena > * {
+    z-index: 1;
+}
+
+hr {
+    position: relative;
+    top: 49%;
+    height: 0.5em;
+    background-color: black;
+}
+
+.pOneInfo, .pTwoInfo {
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+    position: relative;
+    height: 10em;
+    width: 15em;
+    margin: 0 1em;
+    padding: 1em;
+    top: 38%;
+    z-index: 2;
+}
+.pOneInfo {
+    float: right;
+}
+.pTwoInfo {
+    float: left;
+}
+
+.currentPhase {
+    position: absolute;
+    top: 48%;
+    left: 41%;
+    height: 3.2%;
+    width: 16em;
+    padding: 10px 0;
+    color: white;
+    background-color: black;
+    border-radius: 0.6em;
+    text-align: center;
+}
+
+.buttons {
+    background-color: black;
+    color: white;
+    position: relative;
+    border-radius: 0.6em;
+    height: 5em;
+    width: 10em;
+    margin-right: 1em;
+    float: right;
+    top: 90%;
+    right: -15%;
+}
+
+.showHand {
+    display: none;
+}
+
+.demoCard {
+    display: block;
+    background-color: black;
+    height: 15%;
+    width: 10%;
+    position: relative;
+}
+
+.playerHand {
+    top: 70%;
+    position: relative;
+    height: 20%;
+    left: 30%;
+}
+
+ul {
+    list-style: none;
+}
+
+.context-menu {
+    position: absolute;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    border-radius: 0.6em;
+    box-shadow: 0 10px 20px rgb(64 64 64 / 5%);
+    padding: 10px 0;
+}
+
+.menu > li > a {
+    font: inherit;
+    border: 0;
+    padding: 10px 30px 10px 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    text-decoration: unset;
+    color: white;
+    font-weight: 500;
+    transition: 0.5s linear;
+    -webkit-transition: 0.5s linear;
+    -moz-transition: 0.5s linear;
+    -ms-transition: 0.5s linear;
+    -o-transition: 0.5s linear;
+}
+
+.menu > li > a:hover {
+    background: #f1f3f7;
+    color: red;
+}
+
+.menu > li > a > i {
+    padding-right: 10px;
+}
+
+
+#editor {
+    background-color: #1e3d2d;
+}
+
+.deck-container {
+    background-color: #23573d;
+    width: 70%;
+    height: 97%;
+    margin: 1em;
+    float: left;
+    position: relative;
+}
+
+.deckform {
+    box-shadow: 0 4px 10px 0 orange;
+    padding: 0.01em 16px;
+    width: 50%;
+    border-radius: 32px;
+    margin: 0 0 0 1em;
+    float: left;
+    position: relative;
+}
+
+#pName {
+    float: left;
+    border-color: orange;
+    color: lightgrey;
+    border-style: solid;
+    border-radius: 32px;
+    border-width: 0.1em;
+    padding: 8px;
+    margin: 1em 1em 0 0.5em;
+    width: 40%;
+    position: relative;
+}
+
+#search-input {
+    border-radius: 32px;
+    background-color: #1e3d2d;
+    color: lightgrey;
+    border-color: orange;
+    padding: 8px;
+    display: block;
+    width: 50%;
+    margin: 1em 0 1em 0;
+    position: relative;
+}
+
+.card-container {
+    background-color: #23573d;
+    width: 26%;
+    height: 97%;
+    margin: 1em 1em 1em 0;
+    float: right;
+    position: relative;
+
+}
+
+.color {
+    float: left;
+    border-color: orange;
+    background-color: #1e3d2d;
+    color: lightgrey;
+    border-style: solid;
+    border-radius: 32px;
+    border-width: 0.1em;
+    padding: 8px;
+    margin: 1em 1em 0 0.5em;
+    width: 30%;
+    position: relative;
+}
+
+.cardsearch {
+    box-shadow: 0 4px 10px 0 orange;
+    color: lightgrey;
+    padding: 0.01em 16px;
+    border-radius: 32px;
+    margin: 0 1em 0 1em;
+    width: 85%;
+    float: right;
+    position: relative;
+}

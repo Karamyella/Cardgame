@@ -1,8 +1,8 @@
 // Imports
 const express = require('express');
-const { createServer } = require('node:http');
-const { join } = require('node:path');
-const { Server } = require('socket.io');
+const {createServer} = require('node:http');
+const {join} = require('node:path');
+const {Server} = require('socket.io');
 const crypto = require('crypto');
 
 // Initialisierung d. Servers
@@ -12,7 +12,7 @@ const io = new Server(server);
 const port = process.env.PORT || 8080;
 
 // Öffnet Server-Port.
-server.listen(port, () => { });
+server.listen(port, () => {});
 
 // Filepath für Html-Datei.
 app.use(express.static(join(__dirname, '/../public')));
@@ -20,11 +20,13 @@ app.use(express.static(join(__dirname, '/../public')));
 
 // Seiten-Aufrufe.
 app.get('/', (req, res) => {
-	res.sendFile(join(__dirname, '/../public/Startscreen.html'));
+	res.sendFile(join(__dirname, '/../public/Global.html'));
 });
+// DEBUG
 app.get('/deckEditor', (req, res) => {
 	res.sendFile(join(__dirname, '/../public/DeckEditor.html'));
 });
+// DEBUG
 app.get('/arena', (req, res) => {
 	res.sendFile(join(__dirname, '/../public/Arena.html'));
 });
@@ -98,7 +100,7 @@ function findAvailableRoom() {
 	if (roomList.length > 0) {
 		// Schaut solange durch alle Räume, bis ein Raum mit einem freien Platz gefunden wurde.
 		roomList.forEach((room) => {
-			if (foundRoomId === undefined && (room.playerOne === undefined || room.playerTwo === undefined)) {
+			if (foundRoomId === undefined && !room.playerReady && (room.playerOne === undefined || room.playerTwo === undefined)) {
 				foundRoomId = room.roomID;
 			}
 		});
@@ -121,7 +123,7 @@ function findAvailableRoom() {
 				boardState: {
 					p1Data: {
 						playerName: undefined,
-						life: 40,
+						life: 20,
 						maxMana: 0,
 						currentMana: 0,
 						library: undefined,
@@ -131,7 +133,7 @@ function findAvailableRoom() {
 					},
 					p2Data: {
 						playerName: undefined,
-						life: 40,
+						life: 20,
 						maxMana: 0,
 						currentMana: 0,
 						library: undefined,
@@ -182,11 +184,12 @@ function sendDataToOtherPlayer(socket, eventName, data) {
 	let playerRoom = findRoomByID(currentPlayer.roomID);
 	// Aus dem ermittelten Raum wird der zweite Spieler ermittelt.
 	let otherPlayerID;
-	if (playerRoom.playerOne === socket.id) {
+	if (playerRoom.playerOne === socket.id || playerRoom.playerOne === undefined) {
 		otherPlayerID = playerRoom.playerTwo;
 	} else {
 		otherPlayerID = playerRoom.playerOne;
 	}
+
 
 	// TODO Könnte ggf. optimiert werden, dass nicht immer alle durch alle Sockets gegangen werden muss.
 	// Geht durch alle Sockets durch und nur beim Socket des "playerTwo" wird das mitgegebene Event ausgeführt.
@@ -227,7 +230,11 @@ io.on('connection', (socket) => {
 			room.gameState.boardState.p1Data.library = getPlayerDeck(playerInfo.deckID);
 
 			socket.emit('isPOne', true);
-			socket.emit('roomData', room);
+			if (room.playerTwo === undefined) {
+				socket.emit('roomData', room);
+			} else {
+				sendDataToBothPlayers(socket, 'roomData', room);
+			}
 		} else if (room.playerTwo === undefined) {
 			room.playerTwo = socket.id;
 			room.gameState.boardState.p2Data.playerName = player.playerName;
@@ -243,34 +250,52 @@ io.on('connection', (socket) => {
 		}
 	});
 
-	socket.on('disconnect', (reason, description) => {
+	socket.on('disconnect', () => {
 		let disconnectedPlayer = findPlayerObjectByID(socket.id);
 		// Wenn der Spieler in der Spielerliste gefunden wurde, dann war er in einem Match.
 		// Falls nicht, war er im Deckbau-Modus, was keinerlei Reaktion benötigt.
 		if (disconnectedPlayer !== undefined) {
 			let room = findRoomByID(disconnectedPlayer.roomID);
 
-			// Das Spieler-Objekt wird gelöscht.
-			playerList.splice(playerList.indexOf(disconnectedPlayer), 1);
+			// Wenn das Spiel bereits begonnen hat..
+			if (room.gameState.currentPhase !== 'PreGame - Player 1') {
+				// ..und wenn im Raum noch ein zweiter Spieler war, wird dieser benachrichtigt und das Spiel pausiert..
+				if (room.playerOne !== undefined && room.playerTwo !== undefined) {
+					room.gameState.lastPhase = room.gameState.currentPhase;
+					room.gameState.currentPhase = 'PAUSED';
 
-			// Wenn im Raum noch ein zweiter Spieler war, wird dieser benachrichtigt und das Spiel pausiert.
-			if (room.playerOne !== undefined && room.playerTwo !== undefined) {
-				room.gameState.lastPhase = room.gameState.currentPhase;
-				room.gameState.currentPhase = 'PAUSED';
+					// Entfernt Spieler aus Raum.
+					if (room.playerOne === socket.id) {
+						room.playerOne = undefined;
+					} else {
+						room.playerTwo = undefined;
+					}
 
-				// TODO Könnte erweitert werden, dass der Grund des Disconnects noch genauer angezeigt wird.
-				sendDataToOtherPlayer(socket, 'enemyDisconnected', reason);
-
-				// Entfernt Spieler aus Raum.
-				if (room.playerOne === socket.id) {
-					room.playerOne = undefined;
+					// Sendet ein Meldung und den aktuellen Raum an den übrigen Spieler.
+					// TODO Man könnte auch statt des Raums ein Disconnect-Grund senden und einfach durch den Event-Trigger das Spiel pausieren..
+					sendDataToOtherPlayer(socket, 'enemyDisconnected', room);
 				} else {
-					room.playerTwo = undefined;
+					// ..aber wenn der Spieler der einzige im Raum war oder noch kein Spiel am Laufen war, wird der Raum auch gelöscht.
+					roomList.splice(roomList.indexOf(room), 1);
 				}
 			} else {
-				// Wenn der Spieler der einzige im Raum war, wird der Raum auch gelöscht.
-				roomList.splice(roomList.indexOf(room), 1);
+				// Aber wenn das Spiel noch nicht begonnen hat, muss der andere Spieler darauf aufmerksam gemacht werden.
+				if (room.playerOne === socket.id) {
+					room.playerOne = undefined;
+					room.gameState.boardState.p1Data.playerName = undefined;
+					room.gameState.boardState.p1Data.library = undefined
+				} else {
+					room.playerTwo = undefined;
+					room.gameState.boardState.p2Data.playerName = undefined;
+					room.gameState.boardState.p2Data.library = undefined
+				}
+				room.playerReady = false;
+
+				sendDataToOtherPlayer(socket, 'roomData', room);
 			}
+
+			// Das Spieler-Objekt wird immmer gelöscht.
+			playerList.splice(playerList.indexOf(disconnectedPlayer), 1);
 		}
 	});
 
@@ -284,7 +309,7 @@ io.on('connection', (socket) => {
 				let roomPlayers = currentRoom.gameState.boardState;
 				// Der Spieler muss nur noch die Namen beider Spieler richtig eingeben, dann darf er beitreten.
 				if ((authorizationInfo.myName === roomPlayers.p1Data.playerName ||
-					authorizationInfo.myName === roomPlayers.p2Data.playerName) &&
+						authorizationInfo.myName === roomPlayers.p2Data.playerName) &&
 					(authorizationInfo.enemyName === roomPlayers.p1Data.playerName ||
 						authorizationInfo.enemyName === roomPlayers.p2Data.playerName)) {
 					foundRoom = currentRoom;
@@ -300,7 +325,11 @@ io.on('connection', (socket) => {
 			// .. und das Spiel an der letzten Stelle fortgesetzt werden.
 			foundRoom.gameState.currentPhase = foundRoom.gameState.lastPhase;
 			foundRoom.gameState.lastPhase = undefined;
+
+			// Der beigetretende Spieler muss das komplette Board laden.
 			socket.emit('loadGameState', foundRoom);
+
+			// Der andere Spieler bekommt nur die Info, dass sein Spiel wieder vorgesetzt wird.
 			sendDataToOtherPlayer(socket, 'resumeGame');
 		} else {
 			socket.emit('roomNotFound');
@@ -314,7 +343,7 @@ io.on('connection', (socket) => {
 			room.playerReady = true;
 			sendDataToOtherPlayer(socket, 'otherPlayerIsReady');
 		} else {
-			sendDataToBothPlayers(socket, 'startGame');
+			sendDataToBothPlayers(socket, 'startGame', room);
 		}
 	});
 
@@ -322,7 +351,7 @@ io.on('connection', (socket) => {
 	socket.on('cardRequest', (filter) => {
 		getCardsForColorAndName(filter.color, filter.cardName).then((result) => {
 			socket.emit('editorCardResult', result);
-		});
+		}).finally(connection.end());
 	});
 
 	socket.on('editorGetAllPlayerDecks', (playerName) => {
@@ -455,7 +484,8 @@ io.on('connection', (socket) => {
 
 // Baut Verbindung zur Datenbank auf.
 const mysql = require('mysql');
-const { rejects } = require('node:assert');
+// FIXME Was ist das?^^
+const {rejects} = require('node:assert');
 const connection = mysql.createConnection({
 	host: '127.0.0.1',
 	user: 'root',
@@ -463,27 +493,14 @@ const connection = mysql.createConnection({
 	database: 'cardgame'
 });
 
-/*
-// DEBUG
-connection.connect((error) => {
-	if (error) throw error;
-
-	const sql = "SELECT * FROM cards";
-
-	connection.query(sql, (error, result) => {
-		if (error) throw error;
-		console.log(result[0]);
-	});
-});
-*/
-
 function getPlayerDeck(deckId) {
 	// DEBUG
 	return '';
 	return connection.connect((error) => {
 		if (error) throw error;
 
-		const statement = "SELECT c.* FROM deckcards dc inner join cards c on c.id = cd.card where cd.deck = " + deckId;
+		const statement = "SELECT pd.name, c.* FROM deckcards dc inner join cards c on c.id = dc.card " +
+			"inner join playerdeck pd on pd.id = deckcards.deck where cd.deck = " + deckId;
 
 		return connection.query(statement, (error, result) => {
 			if (error) throw error;
@@ -503,7 +520,6 @@ function queryResolver(statement) {
 				resolve(result);
 			}
 		});
-		connection.end();
 	});
 }
 
@@ -515,8 +531,7 @@ function getCardsForColorAndName(color, name) {
 		} else {
 			query = 'SELECT * FROM cards WHERE color = "' + color + '";';
 		}
-	}
-	else {
+	} else {
 		query = 'SELECT * FROM cards;';
 	}
 

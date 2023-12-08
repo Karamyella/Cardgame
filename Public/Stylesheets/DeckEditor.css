@@ -15,7 +15,7 @@ html {
     position: relative;
 }
 
-.deckform {
+.deck-form {
     box-shadow: 0 4px 10px 0 orange;
     padding: 0.01em 16px;
     width: 50%;
@@ -74,7 +74,7 @@ html {
     position: relative;
 }
 
-.cardsearch {
+.card-search {
     box-shadow: 0 4px 10px 0 orange;
     color: lightgrey;
     padding: 0.01em 16px;

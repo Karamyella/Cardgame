@@ -1,17 +1,4 @@
-let pOneDeck = [];
-let pTwoDeck = [];
-let pOneHP = 40;
-let pTwoHP = 40;
-let pOneTurn = true;
-let pOneMana = 0;
-let pTwoMana = 0;
-let pOneHand = [];
-let pTwoHand = [];
-let pOneField = [];
-let pTwoField = [];
-let pOneGraveyard = [];
-let pTwoGraveyard = [];
-let isPOne;
+
 
 function updatePlayerMana(pOne, increase, cost) {
 	if (pOne) {

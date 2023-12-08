@@ -149,7 +149,7 @@ button:hover {
     left: 80%;
 }
 
-.start-game {
+.start-game-menu {
     position: fixed;
     display: none;
     width: 170%;
@@ -164,7 +164,7 @@ button:hover {
     color: white;
 }
 
-.waiting {
+.waiting-menu {
     position: fixed;
     display: none;
     width: 170%;
