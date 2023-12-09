@@ -10,15 +10,37 @@ function initConnection() {
 	}
 }
 
+// Nimmt den Namen an und sendet eine Request an den Server, welche Decks dem angegebenen Spielernamen gehören und
+// fordert ihn gleich dazu auf, ein Deck auszuwählen. Der Name und die DeckID wird dann später nochmals zum Server gesendet.
 function submitName() {
 	let playerName = $('input.playerName').val();
 	if (playerName !== '') {
-		let playerInfo = {
-			playerName: playerName,
-			playerDeck: undefined
-		};
-		socket.emit('initMatchmaking', playerInfo);
+		socket.emit('askForPlayerDecks', playerName);
 	}
+}
+
+// Sendet Spielernamen und DeckID an den Server zum Matchmaking.
+function submitNameAndDeck() {
+	let deckID = undefined;
+	let selectedStandartDeck = $('.basic-deck-menu input:checked');
+	let selectedOwnDeck = $('#own-deck-selector').val();
+
+	// Ermittelt, welches der Decks ausgewählt wurde. (Gibt vllt. noch ne schönere Lösung aber was solls^^)
+	if (selectedStandartDeck.length > 0) {
+		deckID = selectedStandartDeck.val();
+	} else if (selectedOwnDeck !== '') {
+		deckID = selectedOwnDeck;
+	} else {
+		alert('Fehler: Es wurde kein Deck ausgewählt.');
+		return;
+	}
+
+	let playerInfo = {
+		playerName: $('input.playerName').val(),
+		playerDeck: deckID
+	};
+
+	socket.emit('initMatchmaking', playerInfo);
 }
 
 function deckmenu() {
@@ -33,9 +55,9 @@ function togglecolor(className) {
 	$(`#${className}`).show();  //show only the right color
 }
 
-function startselection() {
+function startSelection() {
 	initConnection();
-	$('.start-game-menu').show();
+	$('#start-game-menu').show();
 }
 
 function enterArena() {
@@ -61,7 +83,7 @@ function pageTransition(hideElement, showElement, toWhatPage) {
 	if (toWhatPage === 'Arena') {
 		$('#enemy-ready-text').hide();
 		$('#player-ready-text').hide();
-	} else if (toWhatPage === 'DeckBuilder') {
+	} else if (toWhatPage === 'Editor') {
 		initConnection();
 	}
 

@@ -54,7 +54,7 @@ function initSocketEvents() {
 			pTwoDeckElement.html('');
 		}
 
-		$('.start-game-menu').hide();
+		$('#start-game-menu').hide();
 		$('.waiting-menu').show();
 
 		// Wenn beide Spieler anwesend sind, wird der "Bereit"-Button für beide angezeigt.
@@ -70,12 +70,38 @@ function initSocketEvents() {
 		initGame(roomData);
 	});
 
-	socket.on()
+	// Hängt Spielerdecks und Events an Elemente, damit die Deckauswahl reibungslos funktioniert.
+	socket.on('receivePlayerDecks', (decks) => {
+		// Wenn für den Spieler eigene Decks gefunden wurden, werden diese als weitere <Option> in "Meine Decks" hinzugefügt.
+		if (decks.size > 0) {
+			let standardOption = $('#own-deck-selector option');
+			for (let deck in decks) {
+				standardOption.after($('<option value="' + deck.id + '">').html(deck.name));
+			}
+		}
+
+		/* Wir wollen nur ein Deck mitsenden, also wählen die Radios und die Select-Options sich
+		* gegenseitig ab, damit nur ein einziges Deck übergeben werden kann. Der 'deck-submit-button'
+		* wird erst freigeschaltet, sobald eine der Optionen ausgewählt wurden. */
+		$(document).on('click', '.basic-deck-selector input', () => {
+			// Ändert bei "Meine Decks" die ausgewählte Option auf die 'null'-Option.
+			$('#null-deck-option').prop('selected', true);
+			$('#deck-submit-button').prop('disabled', false);
+		});
+		$(document).on('change', '#own-deck-selector', () => {
+			// Ändert bei "Standartdecks", dass keines der Decks mehr ausgewählt ist.
+			$('.basic-deck-menu input:checked').prop('checked', false);
+			$('#deck-submit-button').prop('disabled', false);
+		});
+
+		$('#start-game-menu').hide();
+		$('#choose-deck-menu').show();
+	});
 
 	socket.on('editorCardResult', (data) => {
 		let mainDiv = $('#card-result-container');
 		mainDiv.html('');
-		for(let i = 0; i < data.length; i++) {
+		for (let i = 0; i < data.length; i++) {
 			$('<img>').attr('src', data[i].image).appendTo(mainDiv);
 		}
 	});

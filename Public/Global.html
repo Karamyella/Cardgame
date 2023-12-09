@@ -32,21 +32,65 @@
         </div>
 
         <div id="default-menu" class="default-menu-buttons">
-            <button onclick="deckmenu();" class="deck-button">
-                <span class="menu-button-title">Deckauswahl</span>
+            <button onclick="pageTransition($('#index'), $('#editor'), 'Editor');" class="deck-button">
+                <span class="menu-button-title">Deckeditor</span>
             </button>
-            <button onclick="startselection();" class="start-button">
+            <button onclick="startSelection();" class="start-button">
                 <span class="menu-button-title">Start</span>
             </button>
         </div>
 
-        <div class="start-game-menu">
-            <br/>
-            <span id="player-name-input">Name:</span>
+        <div id="start-game-menu">
+            <span class="menu-header">Name</span>
             <input type="text" class="playerName"/>
             <span class="info"> Please enter your name to continue</span>
             <br/><br/>
             <button type="button" onclick="submitName();" class="start-game-button">Start</button>
+        </div>
+
+        <div id="choose-deck-menu">
+            <span class="menu-header">Deckauswahl</span>
+            <div id="deck-main-container">
+                <div class="basic-deck-menu">
+                    <span>Standartdecks</span><br/><br/><br/>
+                    <label class="basic-deck-selector">
+                        <!-- TODO value="[standardDeckID]" -->
+                        <input value="" name="deck" type="radio">
+                        <img src="/Images/white.png" alt="Weiß">
+                    </label>
+                    <label class="basic-deck-selector">
+                        <!-- TODO value="[standardDeckID]" -->
+                        <input value="" name="deck" type="radio">
+                        <img src="/Images/blue.png" alt="Blau">
+                    </label>
+                    <label class="basic-deck-selector">
+                        <!-- TODO value="[standardDeckID]" -->
+                        <input value="" name="deck" type="radio">
+                        <img src="/Images/red.png" alt="Rot">
+                    </label>
+                    <label class="basic-deck-selector">
+                        <!-- TODO value="[standardDeckID]" -->
+                        <input value="" name="deck" type="radio">
+                        <img src="/Images/green.png" alt="Grün">
+                    </label>
+                    <label class="basic-deck-selector">
+                        <!-- TODO value="[standardDeckID]" -->
+                        <input value="" name="deck" type="radio">
+                        <img src="/Images/black.png" alt="Schwarz">
+                    </label>
+                </div>
+                <div></div>
+                <div>
+                    <div class="own-deck-menu">
+                        <span>Meine Decks</span><br/><br/><br/>
+                        <select id="own-deck-selector" name="deck">
+                            <option id="null-deck-option" value="">-----</option>
+                            <option value="tst">Test</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button id="deck-submit-button" type="button" onclick="submitNameAndDeck()" disabled>Deck auswählen</button>
         </div>
 
         <div class="waiting-menu">

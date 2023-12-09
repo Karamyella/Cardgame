@@ -4,9 +4,11 @@ body {
     background-color: black;
 }
 
-#index {
+html, #index, #arena, #editor {
+    overflow: hidden;
     height: 100%;
     width: 100%;
+    margin: 0;
 }
 
 #index-bg {
@@ -101,8 +103,51 @@ button:hover {
     filter: grayscale(0%);
 }
 
-.deck-menu-select {
+.basic-deck-menu {
+    position: relative;
+    height: 75%;
+    width: 86%;
+    left: 14%;
+    padding-top: 2em;
     align-self: center;
+}
+
+/* Um die Radios zu als Bilder anzuzeigen, werden die Radios unsichtbar gemacht und die <img> übernehmen die Radio-Funktionen. */
+.basic-deck-menu > label > [type=radio] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.basic-deck-menu > label > [type=radio] + img {
+    cursor: pointer;
+}
+
+.basic-deck-menu > label > img {
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background-size: cover;
+    filter: brightness(50%);
+}
+
+.basic-deck-menu > label > [type=radio]:checked + img {
+    filter: brightness(100%);
+}
+
+.own-deck-menu {
+    position: relative;
+    height: 75%;
+    width: 86%;
+    padding-top: 53px;
+}
+
+#own-deck-selector, #deck-submit-button {
+    height: 2em;
+    width: 10em;
+    margin-top: 1em;
 }
 
 .deck {
@@ -157,11 +202,12 @@ button:hover {
     left: 80%;
 }
 
-.start-game-menu {
-    background-image: url('../Images/Textbox.png');
+#start-game-menu, #choose-deck-menu {
+    background-image: url(../Images/Textbox.png);
     position: fixed;
+    padding-top: 1em;
     display: none;
-    height: 423px;
+    height: 403px;
     width: 775px;
     text-align: center;
     border-radius: 10px;
@@ -171,7 +217,8 @@ button:hover {
     top: 20%;
     color: white;
 }
-#player-name-input {
+
+.menu-header {
     position: relative;
     top: -2%;
     font-weight: bold;
@@ -194,6 +241,20 @@ button:hover {
     background-color: white;
     height: 3em;
     width: 6em;
+}
+
+#deck-main-container {
+    height: 65%;
+    margin-top: 4px;
+    display: grid;
+    grid-template-columns: 1fr 3px 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+}
+
+#deck-main-container > *:nth-child(2) {
+    background-color: black;
 }
 
 .waiting-menu {
@@ -241,24 +302,17 @@ button:hover {
     box-sizing: border-box;
 }
 
-#player-name-input {
-    font-weight: bold;
-}
-
 .foundText {
     display: none;
 }
 
+/*####################################################################################################################*/
 
-html, #arena {
-    overflow: hidden;
-    height: 100%;
-    margin: 0;
-}
 #arena {
     opacity: 0;
     background-color: #54c06a;
 }
+
 #arena:after {
     top: 0;
     left: 0;
@@ -268,6 +322,7 @@ html, #arena {
     background-color: #c05456;
     content: "";
 }
+
 #arena > * {
     z-index: 1;
 }
@@ -291,9 +346,11 @@ hr {
     top: 38%;
     z-index: 2;
 }
+
 .pOneInfo {
     float: right;
 }
+
 .pTwoInfo {
     float: left;
 }
@@ -386,6 +443,7 @@ ul {
     padding-right: 10px;
 }
 
+/*####################################################################################################################*/
 
 #editor {
     background-color: #1e3d2d;

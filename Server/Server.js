@@ -258,6 +258,8 @@ io.on('connection', (socket) => {
 			let room = findRoomByID(disconnectedPlayer.roomID);
 
 			// Wenn das Spiel bereits begonnen hat..
+			/* TODO (BUG) Aktuell ist der Fall nicht abgedeckt, wo das Spiel grade gestartet hat und
+			 * TODO ein Spieler in der ersten Phase 'disconnected'. Hier ändert sich der Name des Spielers inkorrekt. */
 			if (room.gameState.currentPhase !== 'PreGame - Player 1') {
 				// ..und wenn im Raum noch ein zweiter Spieler war, wird dieser benachrichtigt und das Spiel pausiert..
 				if (room.playerOne !== undefined && room.playerTwo !== undefined) {
@@ -347,11 +349,17 @@ io.on('connection', (socket) => {
 		}
 	});
 
+	socket.on('askForPlayerDecks', (playerName) => {
+		getAllPlayerDecks(playerName).then((result) => {
+			socket.emit('receivePlayerDecks', result);
+		})
+	});
+
 	// Gibt alle Karten zurück, auf die die Farbe und ggf. den Namen passen.
 	socket.on('cardRequest', (filter) => {
 		getCardsForColorAndName(filter.color, filter.cardName).then((result) => {
 			socket.emit('editorCardResult', result);
-		}).finally(connection.end());
+		});
 	});
 
 	socket.on('editorGetAllPlayerDecks', (playerName) => {
@@ -492,6 +500,7 @@ const connection = mysql.createConnection({
 	password: 'cardgamePW',
 	database: 'cardgame'
 });
+connection.connect();
 
 function getPlayerDeck(deckId) {
 	// DEBUG
@@ -512,7 +521,6 @@ function getPlayerDeck(deckId) {
 
 function queryResolver(statement) {
 	return promise = new Promise((resolve, reject) => {
-		connection.connect();
 		connection.query(statement, (error, result) => {
 			if (error) {
 				reject();
@@ -536,4 +544,8 @@ function getCardsForColorAndName(color, name) {
 	}
 
 	return queryResolver(query);
+}
+
+function getAllPlayerDecks(playerName) {
+	return queryResolver('SELECT * FROM playerdeck WHERE player = "' + playerName + '" ORDER BY name DESC;');
 }
