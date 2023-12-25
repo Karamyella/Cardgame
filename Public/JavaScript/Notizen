@@ -5,46 +5,11 @@
       egal, nur sollte 'CoreGameFunctions.js' als letztes geladen werden, da es sonst sein
       kann, dass Funktionen aus den anderen Scripts nicht geladen/ausgeführt werden.
 
-    - Aktuell denke ich, dass der Spieler keine Entität sein muss, sondern nur als
-      Variablen in JavaScript wirklich existieren muss. [Any Thoughts?]
-
-    - Auf der Startseite sollen, wenn die Decks ausgewählt werden, die ID der Decks &
-      die Namen der Spieler im Localstorage gespeichert werden.
-
     - Datenbank-Infos:
-        Datenbank über XAMPP/PhpMyAdmin erstellen & Login-Infos ergänzen.
-        Host:
-        Username:
-        Password:
-        Database-Name:
-
-
-
-- Bisher umgesetzte JS-Funktionen:
-	- DrawAndDiscard.js
-	    - drawCard()
-	    - discardCard() [Nur einzeln bisher (Schau promptDiscard())]
-	    - drawStartHand()
-	- CoreGameFunctions.js
-	    - loadGameData()
-	    - startGame()
-	- PlayerTurn.js
-	    - startPlayerNextTurn()
-
-
-
-- TODO JS-Funktionen:
-    - CoreCardFunctions.js
-        - playCard()
-        - tapCard()
-        - untapCards()
-    - DrawAndDiscard.js
-        - promptDiscard() [Frage noch zu klären]
-    - CoreGameFunctions.js
-        - onload-Function
-    - PlayerTurn.js
-        - endPlayerTurn()
-
-
+        Datenbank per MySQL & Management über MySQL Workbench.
+        host: '127.0.0.1',
+	    user: 'root',
+	    password: 'cardgamePW',
+	    database: 'cardgame'
 
 - Hier könnte ihre Werbung stehen^^
