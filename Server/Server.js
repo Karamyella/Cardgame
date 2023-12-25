@@ -208,6 +208,7 @@ function sendDataToBothPlayers(socket, eventName, data) {
 
 // Responses auf Aktionen des Users.
 io.on('connection', (socket) => {
+
 	// Wenn Spieler spielen mag, wird ein freier Raum gesucht, der Spieler wird hinzugefügt.
 	// Wenn ein zweiter Spieler für einem Raum gefunden wurde, dann startet für Beide das Spiel.
 	socket.on('initMatchmaking', (playerInfo) => {
@@ -345,31 +346,45 @@ io.on('connection', (socket) => {
 			room.playerReady = true;
 			sendDataToOtherPlayer(socket, 'otherPlayerIsReady');
 		} else {
-			sendDataToBothPlayers(socket, 'startGame', room);
+			sendDataToBothPlayers(socket, 'loadGame', room);
 		}
 	});
 
 	socket.on('askForPlayerDecks', (playerName) => {
 		getAllPlayerDecks(playerName).then((result) => {
 			socket.emit('receivePlayerDecks', result);
-		})
+		});
+	});
+	// Ist theoretisch redundant, macht aber die Lesbarkeit und Übersichtlichkeit an anderen Stellen leichter..
+	socket.on('editorGetAllPlayerDecks', (playerName) => {
+		getAllPlayerDecks(playerName).then((result) => {
+			socket.emit('editorDeckResults', result);
+		});
 	});
 
 	// Gibt alle Karten zurück, auf die die Farbe und ggf. den Namen passen.
 	socket.on('cardRequest', (filter) => {
 		getCardsForColorAndName(filter.color, filter.cardName).then((result) => {
-			socket.emit('editorCardResult', result);
+			socket.emit('editorCardResults', result);
 		});
 	});
 
-	socket.on('editorGetAllPlayerDecks', (playerName) => {
-		// TODO getAllDecksOfPlayer(playerName);
-		socket.emit('editorAllDecksResult', getAllDecksOfPlayer(playerName));
+	socket.on('askForNewDeckID', () => {
+		socket.emit('receiveNewDeckId', crypto.randomUUID());
 	});
 
-	socket.on('editorSaveDeck', (deckData) => {
+	socket.on('editorSaveDeckViaPrompt', (deckData) => {
 		// TODO saveDeckToDatabase(deckData);
-		saveDeckToDatabase(deckData);
+		saveDeckToDatabase(deckData).then((saved) => {
+			socket.emit('deckSavedFromPrompt', saved);
+		});
+	});
+	// Ist theoretisch redundant, aber durch das andere Event kann nicht auf die Startseite geladen werden.. TODO Ggf. Zusammenfassen..
+	socket.on('editorSaveDeckViaButton', (deckData) => {
+		// TODO saveDeckToDatabase(deckData);
+		saveDeckToDatabase(deckData).then((saved) => {
+			socket.emit('deckSavedFromButton', saved);
+		});
 	});
 
 	/* TODO Testen, ob Änderungen am Raum per REF bereits übernommen werden oder ob manuelles Speichern erforderlich ist.
@@ -437,6 +452,7 @@ io.on('connection', (socket) => {
 				updateInfo.gameState.isP1Turn = !gameState.isP1Turn;
 				break;
 			case 'Combatphase - Damage Step':
+				resolveDamageStep(gameState.boardState, gameState.attackingCreatures)
 				let newBoardState; // TODO = resolveDamageStep(gameState.boardState, gameState.attackingCreatures, gameState.blockingCreatures);
 				gameState.boardState = newBoardState;
 				updateInfo.gameState.boardState = newBoardState;
@@ -520,7 +536,7 @@ function getPlayerDeck(deckId) {
 }
 
 function queryResolver(statement) {
-	return promise = new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		connection.query(statement, (error, result) => {
 			if (error) {
 				reject();
@@ -548,4 +564,12 @@ function getCardsForColorAndName(color, name) {
 
 function getAllPlayerDecks(playerName) {
 	return queryResolver('SELECT * FROM playerdeck WHERE player = "' + playerName + '" ORDER BY name DESC;');
+}
+
+// TODO Bitte das JSON in das ein richtiges SQL-Statement umwandeln.
+function saveDeckToDatabase(deckData) {
+	return new Promise((resolve) => resolve(true));
+
+	let statement = 'INSERT ...';
+	return queryResolver(statement);
 }

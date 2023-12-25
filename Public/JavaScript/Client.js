@@ -1,3 +1,8 @@
+// Wenn die Seite vollständig geladen ist, wird die Index-Seite eingefaded.
+$(() => {
+	pageTransition($('#empty-page'), $('#index'), 'Index');
+});
+
 let socket;
 
 // Stellt Verbindung zum Server her und wartet auf Anweisungen vom Server.
@@ -22,12 +27,12 @@ function submitName() {
 // Sendet Spielernamen und DeckID an den Server zum Matchmaking.
 function submitNameAndDeck() {
 	let deckID = undefined;
-	let selectedStandartDeck = $('.basic-deck-menu input:checked');
+	let selectedStandardDeck = $('.basic-deck-menu input:checked');
 	let selectedOwnDeck = $('#own-deck-selector').val();
 
 	// Ermittelt, welches der Decks ausgewählt wurde. (Gibt vllt. noch ne schönere Lösung aber was solls^^)
-	if (selectedStandartDeck.length > 0) {
-		deckID = selectedStandartDeck.val();
+	if (selectedStandardDeck.length > 0) {
+		deckID = selectedStandardDeck.val();
 	} else if (selectedOwnDeck !== '') {
 		deckID = selectedOwnDeck;
 	} else {
@@ -55,9 +60,14 @@ function togglecolor(className) {
 	$(`#${className}`).show();  //show only the right color
 }
 
-function startSelection() {
+function startRegistration() {
 	initConnection();
 	$('#start-game-menu').show();
+
+	// Setzt für den Button das Event, den Spieler zu einem Spiel anzumelden.
+	$('.start-game-button').on('click', () => {
+		submitName();
+	});
 }
 
 function enterArena() {
@@ -69,7 +79,7 @@ function enterArena() {
 function sendCardRequest() {
 	let cardData = {
 		cardName: $('#search-input').val(),
-		color: $('#color').val()
+		color: $('#editor-color-picker').val()
 	}
 	socket.emit('cardRequest', cardData);
 }
@@ -81,10 +91,15 @@ function nextPhase() {
 // Handler für den Übergang zwischen Index und Arena.
 function pageTransition(hideElement, showElement, toWhatPage) {
 	if (toWhatPage === 'Arena') {
+		// Versteckt die beiden Elemente, damit diese ein paar Frames weniger während der Transition zu sehen sind..
 		$('#enemy-ready-text').hide();
 		$('#player-ready-text').hide();
+
+		document.title = 'Cardgame Arena';
 	} else if (toWhatPage === 'Editor') {
-		initConnection();
+		document.title = 'Cardgame Deckeditor';
+	} else /* if (toWhatPage === 'Index') */ {
+		document.title = 'Cardgame Startmenu';
 	}
 
 	showElement.show();

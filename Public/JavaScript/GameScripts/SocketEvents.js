@@ -13,8 +13,6 @@ function initSocketEvents() {
 			let pOne = roomData.gameState.boardState.p1Data;
 			let pTwo = roomData.gameState.boardState.p2Data;
 
-			console.log(pOne);
-
 			if (pOne.playerName === undefined) {
 				$('#pOneName').html('Waiting for second player');
 			}
@@ -30,6 +28,7 @@ function initSocketEvents() {
 	socket.on('isPOne', (bool) => {
 		isPOne = bool;
 	});
+	// Updatet die Infos der Spieler im Warteraum, wenn einer in die Lobby reingeht oder verlässt.
 	socket.on('roomData', (roomData) => {
 		// TODO Wenn Decks exisieren, dann soll der Deckname auch angezeigt werden..
 		let pOne = roomData.gameState.boardState.p1Data;
@@ -65,7 +64,7 @@ function initSocketEvents() {
 	socket.on('otherPlayerIsReady', () => {
 		$('#enemy-ready-text').show();
 	});
-	socket.on('startGame', (roomData) => {
+	socket.on('loadGame', (roomData) => {
 		pageTransition($('#index'), $('#arena'), 'Arena');
 		initGame(roomData);
 	});
@@ -78,31 +77,104 @@ function initSocketEvents() {
 			for (let deck in decks) {
 				standardOption.after($('<option value="' + deck.id + '">').html(deck.name));
 			}
-		}
 
-		/* Wir wollen nur ein Deck mitsenden, also wählen die Radios und die Select-Options sich
-		* gegenseitig ab, damit nur ein einziges Deck übergeben werden kann. Der 'deck-submit-button'
-		* wird erst freigeschaltet, sobald eine der Optionen ausgewählt wurden. */
-		$(document).on('click', '.basic-deck-selector input', () => {
-			// Ändert bei "Meine Decks" die ausgewählte Option auf die 'null'-Option.
-			$('#null-deck-option').prop('selected', true);
-			$('#deck-submit-button').prop('disabled', false);
-		});
-		$(document).on('change', '#own-deck-selector', () => {
-			// Ändert bei "Standartdecks", dass keines der Decks mehr ausgewählt ist.
-			$('.basic-deck-menu input:checked').prop('checked', false);
-			$('#deck-submit-button').prop('disabled', false);
-		});
+			/* Wir wollen nur ein Deck mitsenden, also wählen die Radios und die Select-Options sich
+			* gegenseitig ab, damit nur ein einziges Deck übergeben werden kann. Der 'deck-submit-button'
+			* wird erst freigeschaltet, sobald eine der Optionen ausgewählt wurden. */
+			$(document).on('click', '.basic-deck-selector input', () => {
+				// Ändert bei "Meine Decks" die ausgewählte Option auf die 'null'-Option.
+				$('#null-deck-option').prop('selected', true);
+				$('#deck-submit-button').prop('disabled', false);
+			});
+			$(document).on('change', '#own-deck-selector', () => {
+				// Ändert bei "Standartdecks", dass keines der Decks mehr ausgewählt ist.
+				$('.basic-deck-menu input:checked').prop('checked', false);
+
+				// Wenn das ausgewählte eigene Deck die 'null'-Option ist, soll der Submit-Button wieder disabled werden.
+				if ($('#own-deck-selector').val() !== '') {
+					$('#deck-submit-button').prop('disabled', false);
+				} else {
+					$('#deck-submit-button').prop('disabled', true);
+				}
+			});
+		} else {
+			// Versteckt die eigene Deckauswahl und zeigt Meldung an, dass der Spieler keine eigenen Decks hat.
+			$('.own-deck-menu').hide();
+			$('.no-own-deck').show();
+
+			// Enabled nach Auswahl eines Standarddecks den Submit-Button.
+			$(document).on('click', '.basic-deck-selector input', () => {
+				$('#deck-submit-button').prop('disabled', false);
+			});
+		}
 
 		$('#start-game-menu').hide();
 		$('#choose-deck-menu').show();
 	});
 
-	socket.on('editorCardResult', (data) => {
-		let mainDiv = $('#card-result-container');
-		mainDiv.html('');
-		for (let i = 0; i < data.length; i++) {
-			$('<img>').attr('src', data[i].image).appendTo(mainDiv);
+	// Fügt der Deckauswahl im Editor alle Decks des Spielers als Option hinzu, wobei die Deck-ID das Value ist.
+	socket.on('editorDeckResults', (decks) => {
+		let lastDeckSelectorOption = $('#editor-deck-selector').children().last();
+		if (decks.size > 0) {
+			for (let deck in decks) {
+				lastDeckSelectorOption.after($('<option value="' + deck.id + '">').html(deck.name));
+			}
 		}
 	});
+
+	// Erstellt ein neues Deck für den Spieler. Damit es in der Datenbank existiert, muss aber zuerst gespeichert werden.
+	socket.on('receiveNewDeckId', (uuid) => {
+		let deckSelector = $('#editor-deck-selector');
+		let newDeckNameInput = $('#deck-name');
+
+		deckHasBeenChanged = false;
+		newDeck = {
+			id: uuid,
+			name: newDeckNameInput.val(),
+			player: $('#pName').html(),
+			cards: []
+		};
+
+		// Erstellt eine neue Option mit dem neuen Deck als letzte verfügbare Option.
+		deckSelector.children().last().after($('<option value="' + uuid + '">').html(newDeckNameInput.val()));
+
+		// Wählt die neu erstellte Option aus.
+		deckSelector.val(uuid);
+
+		// Leert den Inhalt des Inputs für den Decknamen für erneuten gebrauch.
+		newDeckNameInput.val('');
+	});
+
+	// Fügt im Editor alle Karten rechts in die Auswahl ein.
+	socket.on('editorCardResults', (cards) => {
+		console.log(cards);
+		let mainDiv = $('#card-result-container');
+		mainDiv.html('');
+		for (let i = 0; i < cards.length; i++) {
+			$('<img>').attr('src', cards[i].image)
+				.data('cardID', cards[i].id)
+				.data('cardName', cards[i].name)
+				.appendTo(mainDiv);
+		}
+	});
+
+	// Wird ausgeführt, wenn man sein Deck wechseln wollte, aber seine Änderungen aber erst per Prompt speichern lässt.
+	socket.on('deckSavedFromPrompt', (saved) => {
+		if (saved) {
+			changeToOtherDeck($('#editor-deck-selector').val());
+		} else {
+			// TODO Warnung/Info anzeigen, dass Decks nicht gespeichert werden konnten..
+		}
+	});
+
+	// Nachdem man auf Speichern geklickt hat und das Speichern erfolgreich war, kommt eine Prompt um auf die Startseite zurückkehren.
+	socket.on('deckSavedFromButton', (saved) => {
+		if (saved) {
+			if (confirm('Your deck has been saved successfully.\nDo you want to return to the starting-page?')) {
+				window.location.reload();
+			}
+		} else {
+			// TODO Warnung/Info anzeigen, dass Decks nicht gespeichert werden konnten..
+		}
+	})
 }

@@ -4,7 +4,7 @@ body {
     background-color: black;
 }
 
-html, #index, #arena, #editor {
+html, #empty-page ,#index, #arena, #editor {
     overflow: hidden;
     height: 100%;
     width: 100%;
@@ -143,6 +143,11 @@ button:hover {
     width: 86%;
     padding-top: 53px;
 }
+.no-own-deck {
+    position: relative;
+    width: 92%;
+    padding-top: 100px;
+}
 
 #own-deck-selector, #deck-submit-button {
     height: 2em;
@@ -202,7 +207,7 @@ button:hover {
     left: 80%;
 }
 
-#start-game-menu, #choose-deck-menu {
+#start-game-menu, #choose-deck-menu, #new-deck-menu {
     background-image: url(../Images/Textbox.png);
     position: fixed;
     padding-top: 1em;
@@ -224,7 +229,7 @@ button:hover {
     font-weight: bold;
 }
 
-.playerName {
+.playerName, #deck-name {
     position: relative;
     left: 22%;
     width: 50%;
@@ -234,7 +239,7 @@ button:hover {
     border-radius: 32px;
 }
 
-.start-game-button {
+.start-game-button, #submit-deck-name {
     border-radius: 8px;
     border-style: none;
     box-sizing: border-box;
@@ -282,7 +287,7 @@ button:hover {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
-    gap: 0px 0px;
+    gap: 0 0;
     grid-template-areas: ". . .";
 }
 
@@ -328,10 +333,17 @@ button:hover {
 }
 
 hr {
-    position: relative;
-    top: 49%;
+    width: 100%;
     height: 0.5em;
+    top: 48%;
+    position: absolute;
     background-color: black;
+}
+
+#arena-ui-elements {
+    height: 100%;
+    z-index: 2;
+    position: relative;
 }
 
 .pOneInfo, .pTwoInfo {
@@ -348,16 +360,16 @@ hr {
 }
 
 .pOneInfo {
-    float: right;
+    float: left;
 }
 
 .pTwoInfo {
-    float: left;
+    float: right;
 }
 
 .currentPhase {
     position: absolute;
-    top: 48%;
+    top: 47%;
     left: 41%;
     height: 3.2%;
     width: 16em;
@@ -405,6 +417,7 @@ ul {
 }
 
 .context-menu {
+    z-index: 5 !important;
     position: absolute;
 }
 
@@ -468,29 +481,31 @@ ul {
     position: relative;
 }
 
-#pName {
-    float: left;
-    border-color: orange;
-    color: lightgrey;
-    border-style: solid;
-    border-radius: 32px;
-    border-width: 0.1em;
-    padding: 8px;
-    margin: 1em 1em 0 0.5em;
-    width: 40%;
-    position: relative;
-}
-
 #search-input {
     border-radius: 32px;
-    background-color: #1e3d2d;
+    background: none;
     color: lightgrey;
     border-color: orange;
     padding: 8px;
     display: block;
-    width: 50%;
+    width: 42%;
     margin: 1em 0 1em 0;
     position: relative;
+    float: left;
+}
+
+#editor-search-card {
+    width: 75px;
+    color: lightgrey;
+    background: none;
+    position: relative;
+    height: 37px;
+    margin: 13px 0 0 10px;
+    border-color: orange;
+    border-style: solid;
+    border-radius: 32px;
+    border-width: 2px;
+    float: left;
 }
 
 .card-container {
@@ -526,4 +541,111 @@ ul {
     width: 85%;
     float: right;
     position: relative;
+}
+
+#card-result-container > img {
+    height: 242px;
+    padding: 5px 10px;
+}
+
+.deck-form {
+    height: 72px;
+}
+
+#card-counter-div {
+    position: relative;
+    width: 35px;
+    float: left;
+    padding: 26px 79px;
+}
+
+#new-deck-menu {
+    left: 24%;
+}
+
+#pName {
+    float: left;
+    border-color: orange;
+    color: lightgrey;
+    border-style: solid;
+    border-radius: 32px;
+    border-width: 0.1em;
+    padding: 8px;
+    margin: 1em;
+    width: 40%;
+    position: relative;
+}
+
+#editor-deck-selector {
+    float: right;
+    border-color: orange;
+    color: lightgrey;
+    border-style: solid;
+    border-radius: 32px 0 0 32px;
+    border-width: 2px 0 2px 2px;
+    padding: 10px;
+    margin: 15px 0 0 0.5em;
+    width: 20%;
+    position: relative;
+    background: none;
+    z-index: 1;
+}
+#editor-deck-selector > option {
+    color: black;
+}
+#editor-deck-selector-addition {
+    width: 25px;
+    float: right;
+    background: none;
+    position: relative;
+    height: 37px;
+    margin: 15px 10px 0 0;
+    border-color: orange;
+    border-style: solid;
+    border-radius: 0 32px 32px 0;
+    border-width: 2px 2px 2px 0;
+    left: -10px;
+}
+
+#editor-save-button {
+    width: 100px;
+    color: lightgrey;
+    background: none;
+    position: relative;
+    height: 39px;
+    margin: 15px 10px 0 0;
+    border-color: orange;
+    border-style: solid;
+    border-radius: 32px;
+    border-width: 2px;
+    float: right;
+    right: 5px;
+}
+#editor-save-button:hover, #search-input:hover, #search-input:focus, #editor-search-card:hover {
+    background-color: #1e3d2d;
+}
+
+#editor-color-picker {
+    width: 79px;
+    color: lightgrey;
+    background: none;
+    position: relative;
+    height: 36px;
+    border-color: orange;
+    border-style: solid;
+    border-width: 2px;
+    float: left;
+    padding: 0 5px;
+    margin: 14px 14px 0;
+}
+#editor-color-picker > option {
+    color: black;
+}
+
+#editor-deck-container {
+    padding: 0 1em;
+}
+#editor-deck-container > img {
+    height: 216px;
+    padding: 7px;
 }

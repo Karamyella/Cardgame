@@ -30,7 +30,7 @@ function drawStartHand(forPOne) {
 
 	// Wenn man Spieler 1 ist und Spieler 1 am Zug ist, wird man gefragt, ob man die Hand behalten will. (Gilt auch für Spieler 2!)
 	if (forPOne === isPOne) {
-		if (!confirm('Möchten Sie diese Hand behalten?')) {
+		if (!confirm('Do you want to keep your starting-hand?')) {
 			redrawStartHand(forPOne);
 
 			// Teilt dem Gegner mit, dass man eine neue Hand zieht.

@@ -22,11 +22,13 @@ function initGame(room) {
     // Setzt alle globalen Variablen/Daten die für das Spiel benötigt wurden und noch nicht gesetzt wurden.
     pOneHP = pOne.life;
     pTwoHP = pTwo.life;
-    pOneDeck = pOne.library; // TODO Nicht den Namen, sondern nur die Karten..
+    pOneDeck = pOne.library; // TODO Nicht den Namen des Decks, sondern nur die Karten..
     pTwoDeck = pTwo.library; // ^
     $('#currentPhase').html(room.gameState.currentPhase);
 
     // TODO Onclick-Events für die UI/Buttons (Erst wenn HTML steht.)
+    document.onclick = hideMenu;
+    document.oncontextmenu = rightClick;
 
     // Startet die PreGame-Phase 1.
     initPreGamePhaseOne(room);
@@ -46,4 +48,26 @@ function determineStartingPlayer() {
 
 function initPreGamePhaseOne(room) {
     drawStartHand(isPOne, room);
+}
+
+function toggleHand() {
+    $('.showHand').toggle();
+    $('.hideHand').toggle();
+    $('.playerHand').toggle();
+}
+
+function hideMenu() {
+    document.getElementById("contextMenu").style.display = "none";
+}
+
+function rightClick(e) {
+    e.preventDefault();
+    if (document.getElementById("contextMenu").style.display === "block") {
+        hideMenu();
+    } else {
+        let menu = document.getElementById("contextMenu");
+        menu.style.display = 'block';
+        menu.style.left = e.pageX + "px";
+        menu.style.top = e.pageY + "px";
+    }
 }

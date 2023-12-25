@@ -7,7 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<div id="index">
+<div id="empty-page"></div>
+<div id="index" style="display: none">
+    <button onclick="testArena();">TEST-ARENA-PAGE</button>
     <div id="index-bg"></div>
     <div id="index-menu-container">
         <div class="menu-top">
@@ -32,10 +34,10 @@
         </div>
 
         <div id="default-menu" class="default-menu-buttons">
-            <button onclick="pageTransition($('#index'), $('#editor'), 'Editor');" class="deck-button">
+            <button onclick="registerForEditor();" class="deck-button">
                 <span class="menu-button-title">Deckeditor</span>
             </button>
-            <button onclick="startSelection();" class="start-button">
+            <button onclick="startRegistration();" class="start-button">
                 <span class="menu-button-title">Start</span>
             </button>
         </div>
@@ -45,14 +47,15 @@
             <input type="text" class="playerName"/>
             <span class="info"> Please enter your name to continue</span>
             <br/><br/>
-            <button type="button" onclick="submitName();" class="start-game-button">Start</button>
+            <!-- Der Button bekommt sein onclick durch JS, da die Box für den Namesubmit für Arena und Editor genutzt wird. -->
+            <button type="button" class="start-game-button">Start</button>
         </div>
 
         <div id="choose-deck-menu">
-            <span class="menu-header">Deckauswahl</span>
+            <span class="menu-header">Deckselection</span>
             <div id="deck-main-container">
                 <div class="basic-deck-menu">
-                    <span>Standartdecks</span><br/><br/><br/>
+                    <span>Standarddecks</span><br/><br/><br/>
                     <label class="basic-deck-selector">
                         <!-- TODO value="[standardDeckID]" -->
                         <input value="" name="deck" type="radio">
@@ -79,18 +82,23 @@
                         <img src="/Images/black.png" alt="Schwarz">
                     </label>
                 </div>
+                <!-- Seperator -->
                 <div></div>
                 <div>
                     <div class="own-deck-menu">
-                        <span>Meine Decks</span><br/><br/><br/>
+                        <span>My Decks</span><br/><br/><br/>
                         <select id="own-deck-selector" name="deck">
                             <option id="null-deck-option" value="">-----</option>
                             <option value="tst">Test</option>
                         </select>
                     </div>
+                    <div class="no-own-deck" style="display: none">
+                        <span>No available decks</span><br/>
+                        <span>have been found.</span>
+                    </div>
                 </div>
             </div>
-            <button id="deck-submit-button" type="button" onclick="submitNameAndDeck()" disabled>Deck auswählen</button>
+            <button id="deck-submit-button" type="button" onclick="submitNameAndDeck()" disabled>Choose Deck</button>
         </div>
 
         <div class="waiting-menu">
@@ -113,6 +121,7 @@
             </div>
         </div>
 
+        <!-- Zurzeit ungenutzt..
         <div id="deckmenu" class="deck-menu" style="display: none">
             <span class="deck-menu-title">Deck Menu</span>
             <div class="deck-menu-select">
@@ -123,6 +132,7 @@
                 <button onclick="togglecolor('black');" class="deck blackdeck"></button>
             </div>
         </div>
+        -->
     </div>
 
     <img src="/Images/logo.png" class="logo" alt="Logo">
@@ -192,30 +202,57 @@
 <div id="editor" style="display: none">
     <div class="deck-container">
         <div class="deck-form">
-            <i id="pName">asd</i>
-            <input name="name" class="name" list="names"/>
-            <datalist id="names">
-                <option value="new">New</option>
-            </datalist>
+            <i id="pName"></i>
+            <div id="card-counter-div">
+                <i id="card-counter">00</i>/60
+            </div>
+            <!-- Is nur für ne dumme Css Regel da. -->
+            <span id="editor-deck-selector-addition"></span>
+            <select id="editor-deck-selector" name="editor-deck-selector">
+                <option value="-">[No Deck]</option>
+                <option value="">---------</option>
+                <option value="new">New Deck</option>
+                <option value="">---------</option>
+            </select>
+            <button id="editor-save-button" onclick="saveDeck(true);" type="button">Save Deck</button>
         </div>
+        <div id="editor-deck-container"></div>
     </div>
+
     <div class="card-container">
         <div class="card-search">
-            <select id="color" name="color">
+            <select id="editor-color-picker" name="color">
                 <option value="red">Red</option>
                 <option value="blue">Blue</option>
                 <option value="green">Green</option>
                 <option value="black">Black</option>
                 <option value="white">White</option>
             </select>
-            <input id="search-input" class="name" type="text"></p>
-            <button type="button" onclick="sendCardRequest()"></button>
+            <input id="search-input" class="name" type="text" placeholder="All...">
+            <button id="editor-search-card" type="button" onclick="sendCardRequest()">Search</button>
         </div>
         <div id="card-result-container">
             <!-- TODO -->
         </div>
     </div>
+
+    <div id="new-deck-menu">
+        <span class="menu-header">Deck-Name</span>
+        <input id="deck-name" type="text"/>
+        <span class="info">Please enter your deck name to continue</span>
+        <br/><br/>
+        <button id="submit-deck-name" type="button" onclick="createNewDeck();">Start</button>
+    </div>
 </div>
+
+<script>
+    // DEBUG
+    function testArena() {
+		// Man könnte noch mehr Tests, wie Starthand ziehen einfügen..
+		pageTransition($('#index'), $('#arena'), 'Arena');
+		$('#currentPhase').html('PreGame - Player 1');
+    }
+</script>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/JavaScript/Client.js"></script>
@@ -229,5 +266,6 @@
 <script src='/JavaScript/TurnScripts/CombatStep.js'></script>
 <script src='/JavaScript/TurnScripts/PlayerTurn.js'></script>
 <script src='/JavaScript/GameScripts/CoreGameFunctions.js'></script>
+<script src='/JavaScript/GameScripts/CoreEditorFunctions.js'></script>
 </body>
 </html>
