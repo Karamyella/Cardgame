@@ -122,7 +122,7 @@ function changeToOtherDeck(selectedValue) {
 		if (selectedValue === 'new') {
 			promptNewDeckCreation();
 		} else {
-			editorLoadSelectedDeck();
+			editorLoadSelectedDeck(selectedValue);
 		}
 	} else {
 		newDeck = {};
@@ -141,8 +141,8 @@ function createNewDeck() {
 	}
 }
 
-function editorLoadSelectedDeck() {
-	// TODO
+function editorLoadSelectedDeck(deckName) {
+	socket.emit('loadSelectedDeck', deckName);
 }
 
 function saveDeck(viaButton) {

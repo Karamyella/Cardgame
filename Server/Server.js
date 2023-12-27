@@ -312,7 +312,7 @@ io.on('connection', (socket) => {
 				let roomPlayers = currentRoom.gameState.boardState;
 				// Der Spieler muss nur noch die Namen beider Spieler richtig eingeben, dann darf er beitreten.
 				if ((authorizationInfo.myName === roomPlayers.p1Data.playerName ||
-						authorizationInfo.myName === roomPlayers.p2Data.playerName) &&
+					authorizationInfo.myName === roomPlayers.p2Data.playerName) &&
 					(authorizationInfo.enemyName === roomPlayers.p1Data.playerName ||
 						authorizationInfo.enemyName === roomPlayers.p2Data.playerName)) {
 					foundRoom = currentRoom;
@@ -384,6 +384,12 @@ io.on('connection', (socket) => {
 		// TODO saveDeckToDatabase(deckData);
 		saveDeckToDatabase(deckData).then((saved) => {
 			socket.emit('deckSavedFromButton', saved);
+		});
+	});
+
+	socket.on('loadSelectedDeck', (deckName) => {
+		loadSelectedDeck(deckName).then((result) => {
+			socket.emit('editorCardResults', result);
 		});
 	});
 
@@ -566,10 +572,21 @@ function getAllPlayerDecks(playerName) {
 	return queryResolver('SELECT * FROM playerdeck WHERE player = "' + playerName + '" ORDER BY name DESC;');
 }
 
-// TODO Bitte das JSON in das ein richtiges SQL-Statement umwandeln.
 function saveDeckToDatabase(deckData) {
-	return new Promise((resolve) => resolve(true));
+	console.log('test');
+	const obj = deckData;
+	console.log(deckData);
+	let query;
+	for (var i = 0; i < obj.cards.length; i++) {
+		console.log(obj.cards[i].id);
+		console.log(obj.id);
+		query += (' INSERT INTO deckcards (deck, card) VALUES(' + obj.id + ',' + obj.cards[i].id + ');');
+	}
+	console.log(query);
+	return queryResolver(query);
+}
 
-	let statement = 'INSERT ...';
-	return queryResolver(statement);
+function loadSelectedDeck(deckName) {
+	let query = 'SELECT * FROM deck WHERE name like \'%' & deckName & '%\'';
+	return queryResolver(query);
 }
