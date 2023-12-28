@@ -1,8 +1,8 @@
 // Imports
 const express = require('express');
-const {createServer} = require('node:http');
-const {join} = require('node:path');
-const {Server} = require('socket.io');
+const { createServer } = require('node:http');
+const { join } = require('node:path');
+const { Server } = require('socket.io');
 const crypto = require('crypto');
 
 // Initialisierung d. Servers
@@ -12,7 +12,7 @@ const io = new Server(server);
 const port = process.env.PORT || 8080;
 
 // Öffnet Server-Port.
-server.listen(port, () => {});
+server.listen(port, () => { });
 
 // Filepath für Html-Datei.
 app.use(express.static(join(__dirname, '/../public')));
@@ -515,7 +515,7 @@ io.on('connection', (socket) => {
 // Baut Verbindung zur Datenbank auf.
 const mysql = require('mysql');
 // FIXME Was ist das?^^
-const {rejects} = require('node:assert');
+const { rejects } = require('node:assert');
 const connection = mysql.createConnection({
 	host: '127.0.0.1',
 	user: 'root',
@@ -573,20 +573,23 @@ function getAllPlayerDecks(playerName) {
 }
 
 function saveDeckToDatabase(deckData) {
-	console.log('test');
 	const obj = deckData;
-	console.log(deckData);
-	let query;
-	for (var i = 0; i < obj.cards.length; i++) {
-		console.log(obj.cards[i].id);
-		console.log(obj.id);
-		query += (' INSERT INTO deckcards (deck, card) VALUES(' + obj.id + ',' + obj.cards[i].id + ');');
+	let query = 'INSERT INTO playerdeck (id, name, player) VALUES(\'' + obj.id + '\',\'' + obj.name + '\',\'' + obj.player + '\');\n';
+	for (const add of obj.additions) {
+		query += ('INSERT INTO deckcards (deck, card) VALUES(\'' + obj.id + '\',' + add.id + ');\n');
 	}
-	console.log(query);
+	for (const sub of obj.subtractions) {
+		query += ('DELETE FROM deckcards WHERE deck = ' + obj.id + ' AND card = ' + sub.id + ';\n');
+	}
 	return queryResolver(query);
 }
 
 function loadSelectedDeck(deckName) {
 	let query = 'SELECT * FROM deck WHERE name like \'%' & deckName & '%\'';
+	return queryResolver(query);
+}
+
+function getAllValidDecks() {
+	let query = 'SELECT d.* FROM playerdeck d INNER JOIN (SELECT count(card) as count, deck FROM deckcards group by 2) as dc ON d.id = dc.deck WHERE dc.count = 60;';
 	return queryResolver(query);
 }
