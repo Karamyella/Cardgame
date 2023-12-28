@@ -572,9 +572,12 @@ function getAllPlayerDecks(playerName) {
 
 function saveDeckToDatabase(deckData) {
 	const obj = deckData;
-	let query = 'INSERT INTO playerdeck (id, name, player) VALUES(\'' + obj.id + '\',\'' + obj.name + '\',\'' + obj.player + '\');\n';
+	console.log(obj);
+	if (queryResolver('SELECT id FROM playerdeck WHERE id = "' + obj.id + '";') === "") {
+		let query = 'INSERT INTO playerdeck (id, name, player) VALUES("' + obj.id + '","' + obj.name + '","' + obj.player + '");\n';
+	}
 	for (const add of obj.additions) {
-		query += ('INSERT INTO deckcards (deck, card) VALUES(\'' + obj.id + '\',' + add.id + ');\n');
+		query += ('INSERT INTO deckcards (deck, card) VALUES("' + obj.id + '",' + add.id + ');\n');
 	}
 	for (const sub of obj.subtractions) {
 		query += ('DELETE FROM deckcards WHERE deck = ' + obj.id + ' AND card = ' + sub.id + ';\n');
@@ -583,7 +586,7 @@ function saveDeckToDatabase(deckData) {
 }
 
 function loadSelectedDeck(deckName) {
-	let query = 'SELECT * FROM deck WHERE name like \'%' & deckName & '%\'';
+	let query = 'SELECT * FROM deck WHERE name like "%' & deckName & '%"';
 	return queryResolver(query);
 }
 
