@@ -127,14 +127,6 @@ function initSocketEvents() {
 		let deckSelector = $('#editor-deck-selector');
 		let newDeckNameInput = $('#deck-name');
 
-		deckHasBeenChanged = false;
-		newDeck = {
-			id: uuid,
-			name: newDeckNameInput.val(),
-			player: $('#pName').html(),
-			cards: []
-		};
-
 		// Erstellt eine neue Option mit dem neuen Deck als letzte verfügbare Option.
 		deckSelector.children().last().after($('<option value="' + uuid + '">').html(newDeckNameInput.val()));
 
