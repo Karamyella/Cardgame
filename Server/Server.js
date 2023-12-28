@@ -374,14 +374,12 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('editorSaveDeckViaPrompt', (deckData) => {
-		// TODO saveDeckToDatabase(deckData);
 		saveDeckToDatabase(deckData).then((saved) => {
 			socket.emit('deckSavedFromPrompt', saved);
 		});
 	});
 	// Ist theoretisch redundant, aber durch das andere Event kann nicht auf die Startseite geladen werden.. TODO Ggf. Zusammenfassen..
 	socket.on('editorSaveDeckViaButton', (deckData) => {
-		// TODO saveDeckToDatabase(deckData);
 		saveDeckToDatabase(deckData).then((saved) => {
 			socket.emit('deckSavedFromButton', saved);
 		});

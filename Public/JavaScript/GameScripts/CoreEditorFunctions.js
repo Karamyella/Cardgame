@@ -1,3 +1,6 @@
+let deckAdditions = []
+let deckSubtractions = []
+
 $(() => {
 	// Wenn man per $(document).on() Events an Elemente anhängt, werden auch alle zukünftigen Elemente passen
 	// auf den Descriptor berücksichtig. Bei $('#abc').on() wird nur dieses Element berücksichtigt.
@@ -14,8 +17,10 @@ $(() => {
 			let cardID = clickedCardCopy.data('cardID');
 			let cardName = clickedCardCopy.data('cardName');
 			let amountOfTimesInDeck = 0;
+
+			// Schaut durch die Liste der Elemente in der .HTML-Seite und findet heraus,
+			// wie oft die angeklickte Karte bereits im Deck ist.
 			for (let i = 0; i < cardsInDeck.length; i++) {
-				// Wenn die ID der i'ten Karte gleich der ID der angeklickten Karte ist, dann wird der Counter erhöht.
 				if (cardsInDeck.eq(i).data('cardID') === cardID) {
 					amountOfTimesInDeck++;
 				}
@@ -26,12 +31,28 @@ $(() => {
 				cardName !== 'Forest' || cardName !== 'Mountain' || cardName !== 'Swamp')) {
 				alert('You can only select this card up to 4 times.');
 			} else {
+				let subtractionFound = false;
+
+				// Geht solange durch alle Subtractions durch, und sucht nach der zu entfernende Karte, bis etwas gefunden wurde.
+				for (let i = 0; i < deckSubtractions.length; i++) {
+					if (deckSubtractions[i].id === cardID) {
+						subtractionFound = true;
+						// Entfernt diese dann aus den Subtractions und endet die Schleife.
+						deckSubtractions.splice(i, 1);
+						i = deckSubtractions.length;
+					}
+				}
+
+				// Wenn die Karte nicht in den Subtractions gefunden wurde, dann wird diese in die Additions eingetragen.
+				if (!subtractionFound) {
+					deckAdditions.push({
+						id: cardID
+					});
+				}
+
 				// Fügt die neue Karte dem Frontend hinzu.
 				clickedCardCopy.appendTo(deckContainer);
-				// Fügt die neue Karte im Hintergrund der Liste hinzu.
-				newDeck.cards.push({
-					id: cardID
-				});
+
 				// Updatet den Karten-Counter im Frontend.
 				let cardCounter = $('#card-counter');
 				cardCounter.html(Number(cardCounter.html()) + 1);
@@ -45,28 +66,33 @@ $(() => {
 	$(document).on('dblclick', '#editor-deck-container > img', (event) => {
 		let removeCard = $(event.currentTarget);
 		let removeCardID = removeCard.data('cardID');
-		// Entfernt Karte aus dem Frontend.
-		removeCard.remove();
+		let additionFound = false;
 
-		// Entfernt aus den Hintergrund-Daten die grade entfernte Karte.
-		for (let i = 0; i < newDeck.cards.length; i++) {
-			if (newDeck.cards[i].id === removeCardID) {
-				newDeck.cards.splice(i, 1);
-				i = newDeck.cards.length;
+		// Geht solange durch alle Additions durch, und sucht nach der zu entfernenden Karte, bis etwas gefunden wurde.
+		for (let i = 0; i < deckAdditions.length; i++) {
+			if (deckAdditions[i].id === removeCardID) {
+				additionFound = true;
+				// Entfernt diese dann aus den Additions und endet die Schleife.
+				deckAdditions.splice(i, 1);
+				i = deckAdditions.length;
 			}
 		}
+
+		// Wenn die Karte nicht in den Additions gefunden wurde, dann wird diese in die Subtractions eingetragen.
+		if (!additionFound) {
+			deckSubtractions.push({
+				id: removeCardID
+			});
+		}
+
+		// Entfernt Karte aus dem Frontend.
+		removeCard.remove();
 
 		// Updatet den Karten-Counter im Frontend.
 		let cardCounter = $('#card-counter');
 		cardCounter.html(Number(cardCounter.html()) - 1);
 	});
 });
-
-/* newDeck ist ein Vermerk im Hintergrund, welche Karten nach den Änderungen im aktuellen Deck
-* befinden, damit beim Speichern nicht alle Karten nochmal neu ausgelesen werden müssen. */
-let newDeck = {};
-// Aktuell ungenutzt..
-let deckHasBeenChanged = false;
 
 function registerForEditor() {
 	$('#start-game-menu').show();
@@ -99,20 +125,14 @@ function enterEditor() {
 
 		// Setzt Events, wenn bei der Deckauswahl eine Änderung vorkommt.
 		$('#editor-deck-selector').on('change', () => {
-			// TODO Die Kommentare sind für falls man vor dem Speichern überprüfen möchte, ob Änderungen an einem Deck gemacht wurden.
-			//if (deckHasBeenChanged) {
 			if (confirm('Do you want to save your changes to the current deck?\nYour unsaved changed will be lost!')) {
 				saveDeck(false);
 
-				// Hier wird das Ausführen der Funktion gestoppt, und nach dem Speichern wird changeToOtherDeck() wieder ausgeführt.
+				// Ausführen der Funktion wird gestoppt und nach dem Speichern wird changeToOtherDeck() via "deckSavedFromPrompt" in SocketEvents.js ausgeführt.
 				return;
 			} else {
-				//newDeck = {};
 				changeToOtherDeck($('#editor-deck-selector').val());
 			}
-			//}
-
-			//changeToOtherDeck($('#editor-deck-selector').val());
 		});
 	}
 }
@@ -124,8 +144,6 @@ function changeToOtherDeck(selectedValue) {
 		} else {
 			editorLoadSelectedDeck(selectedValue);
 		}
-	} else {
-		newDeck = {};
 	}
 }
 
@@ -138,17 +156,35 @@ function createNewDeck() {
 		$('#new-deck-menu').hide();
 		// Wir brauchen eine UUID für unser neues Deck. Diese UUID lassen wir von unserem Server generieren, da wir ein Modul dafür haben.
 		socket.emit('askForNewDeckID');
+
+		deckAdditions = [];
+		deckSubtractions = [];
 	}
 }
 
 function editorLoadSelectedDeck(deckName) {
 	socket.emit('loadSelectedDeck', deckName);
+
+	deckAdditions = [];
+	deckSubtractions = [];
 }
 
 function saveDeck(viaButton) {
-	if (viaButton) {
-		socket.emit('editorSaveDeckViaButton', newDeck);
-	} else {
-		socket.emit('editorSaveDeckViaPrompt', newDeck);
+	let deckInfo = $('#editor-deck-selector option:selected');
+	let deckData = {
+		playerName: $('#pName').html(),
+		deckId: deckInfo.val(),
+		deckName: deckInfo.text(),
+		additions: deckAdditions,
+		subtractions: deckSubtractions
 	}
+
+	if (viaButton) {
+		socket.emit('editorSaveDeckViaButton', deckData);
+	} else {
+		socket.emit('editorSaveDeckViaPrompt', deckData);
+	}
+
+	deckAdditions = [];
+	deckSubtractions = [];
 }
