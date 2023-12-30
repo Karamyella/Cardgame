@@ -72,10 +72,11 @@ function initSocketEvents() {
 	// Hängt Spielerdecks und Events an Elemente, damit die Deckauswahl reibungslos funktioniert.
 	socket.on('receivePlayerDecks', (decks) => {
 		// Wenn für den Spieler eigene Decks gefunden wurden, werden diese als weitere <Option> in "Meine Decks" hinzugefügt.
-		if (decks.size > 0) {
+			console.log(decks);
+		if (decks.length > 0) {
 			let standardOption = $('#own-deck-selector option');
-			for (let deck in decks) {
-				standardOption.after($('<option value="' + deck.id + '">').html(deck.name));
+			for (let i = 0; i < decks.length; i++) {
+				standardOption.after($('<option value="' + decks[i].id + '">').html(decks[i].name));
 			}
 
 			/* Wir wollen nur ein Deck mitsenden, also wählen die Radios und die Select-Options sich
@@ -115,9 +116,9 @@ function initSocketEvents() {
 	// Fügt der Deckauswahl im Editor alle Decks des Spielers als Option hinzu, wobei die Deck-ID das Value ist.
 	socket.on('editorDeckResults', (decks) => {
 		let lastDeckSelectorOption = $('#editor-deck-selector').children().last();
-		if (decks.size > 0) {
-			for (let deck in decks) {
-				lastDeckSelectorOption.after($('<option value="' + deck.id + '">').html(deck.name));
+		if (decks.length > 0) {
+			for (let i = 0; i < decks.length; i++) {
+				lastDeckSelectorOption.after($('<option value="' + decks[i].id + '">').html(decks[i].name));
 			}
 		}
 	});
@@ -139,7 +140,6 @@ function initSocketEvents() {
 
 	// Fügt im Editor alle Karten rechts in die Auswahl ein.
 	socket.on('editorCardResults', (cards) => {
-		console.log(cards);
 		let mainDiv = $('#card-result-container');
 		mainDiv.html('');
 		for (let i = 0; i < cards.length; i++) {
@@ -147,7 +147,7 @@ function initSocketEvents() {
 				.data('cardID', cards[i].id)
 				.data('cardName', cards[i].name)
 				.appendTo(mainDiv);
-		}
+		};
 	});
 
 	// Wird ausgeführt, wenn man sein Deck wechseln wollte, aber seine Änderungen aber erst per Prompt speichern lässt.
@@ -168,5 +168,16 @@ function initSocketEvents() {
 		} else {
 			// TODO Warnung/Info anzeigen, dass Decks nicht gespeichert werden konnten..
 		}
-	})
+	});
+
+	socket.on('editorLoadSelectedDeck', (cards) => {
+		let mainDiv = $('#editor-deck-container');
+		mainDiv.html('');
+		for (let i = 0; i < cards.length; i++) {
+			$('<img>').attr('src', cards[i].image)
+				.data('cardID', cards[i].id)
+				.data('cardName', cards[i].name)
+				.appendTo(mainDiv);
+		};
+	});
 }

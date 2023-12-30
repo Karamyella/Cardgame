@@ -351,7 +351,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('askForPlayerDecks', (playerName) => {
-		getAllPlayerDecks(playerName).then((result) => {
+		getAllValidDecks(playerName).then((result) => {
 			socket.emit('receivePlayerDecks', result);
 		});
 	});
@@ -382,12 +382,14 @@ io.on('connection', (socket) => {
 	socket.on('editorSaveDeckViaButton', (deckData) => {
 		saveDeckToDatabase(deckData).then((saved) => {
 			socket.emit('deckSavedFromButton', saved);
+		}).catch((err) => {
+			console.log(err);
 		});
 	});
 
-	socket.on('loadSelectedDeck', (deckName) => {
-		loadSelectedDeck(deckName).then((result) => {
-			socket.emit('editorCardResults', result);
+	socket.on('loadSelectedDeck', (deckId) => {
+		getPlayerDeck(deckId).then((playerDeck) => {
+			socket.emit('editorLoadSelectedDeck', playerDeck);
 		});
 	});
 
@@ -523,27 +525,14 @@ const connection = mysql.createConnection({
 connection.connect();
 
 function getPlayerDeck(deckId) {
-	// DEBUG
-	return '';
-	return connection.connect((error) => {
-		if (error) throw error;
-
-		const statement = "SELECT pd.name, c.* FROM deckcards dc inner join cards c on c.id = dc.card " +
-			"inner join playerdeck pd on pd.id = deckcards.deck where cd.deck = " + deckId;
-
-		return connection.query(statement, (error, result) => {
-			if (error) throw error;
-
-			return result;
-		});
-	});
+	return queryResolver('SELECT pd.name as deckname, c.* FROM deckcards dc inner join cards c on c.id = dc.card inner join playerdeck pd on pd.id = dc.deck where dc.deck = "' + deckId + '";');
 }
 
 function queryResolver(statement) {
 	return new Promise((resolve, reject) => {
 		connection.query(statement, (error, result) => {
 			if (error) {
-				reject();
+				reject(error);
 			} else {
 				resolve(result);
 			}
@@ -571,26 +560,33 @@ function getAllPlayerDecks(playerName) {
 }
 
 function saveDeckToDatabase(deckData) {
-	const obj = deckData;
-	console.log(obj);
-	if (queryResolver('SELECT id FROM playerdeck WHERE id = "' + obj.id + '";') === "") {
-		let query = 'INSERT INTO playerdeck (id, name, player) VALUES("' + obj.id + '","' + obj.name + '","' + obj.player + '");\n';
-	}
-	for (const add of obj.additions) {
-		query += ('INSERT INTO deckcards (deck, card) VALUES("' + obj.id + '",' + add.id + ');\n');
-	}
-	for (const sub of obj.subtractions) {
-		query += ('DELETE FROM deckcards WHERE deck = ' + obj.id + ' AND card = ' + sub.id + ';\n');
-	}
-	return queryResolver(query);
+	let query = '';
+	return queryResolver('SELECT id FROM playerdeck WHERE id = "' + deckData.deckId + '";').then((deckId) => {
+		if (deckId.length === 0) {
+			query = 'INSERT INTO playerdeck (id, name, player) VALUES("' + deckData.deckId + '","' + deckData.deckName + '","' + deckData.playerName + '");';
+			return queryResolver(query).then(() => {
+				return saveDeckChanges(deckData);
+			}).catch((err) => {
+				return(err);
+			})
+				;
+		} else {
+			return saveDeckChanges(deckData);
+		}
+	}).catch((err) => {
+		console.log(err);
+	});
 }
 
-function loadSelectedDeck(deckName) {
-	let query = 'SELECT * FROM deck WHERE name like "%' & deckName & '%"';
-	return queryResolver(query);
+function saveDeckChanges(deckData) {
+	for (let add of deckData.additions) {
+		queryResolver('INSERT INTO deckcards (deck, card) VALUES("' + deckData.deckId + '",' + add.id + ');');
+	}
+	for (let sub of deckData.subtractions) {
+		queryResolver('DELETE FROM deckcards WHERE deck = "' + deckData.deckId + '" AND card = ' + sub.id + ' LIMIT 1;');
+	}
 }
 
-function getAllValidDecks() {
-	let query = 'SELECT d.* FROM playerdeck d INNER JOIN (SELECT count(card) as count, deck FROM deckcards group by 2) as dc ON d.id = dc.deck WHERE dc.count = 60;';
-	return queryResolver(query);
+function getAllValidDecks(playerName) {
+	return queryResolver('SELECT d.* FROM playerdeck d INNER JOIN (SELECT count(card) as count, deck FROM deckcards group by 2) as dc ON d.id = dc.deck WHERE d.player = "' + playerName + '" AND dc.count = 60;');
 }
