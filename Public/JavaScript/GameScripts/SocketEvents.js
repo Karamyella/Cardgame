@@ -14,10 +14,10 @@ function initSocketEvents() {
 			let pTwo = roomData.gameState.boardState.p2Data;
 
 			if (pOne.playerName === undefined) {
-				$('#pOneName').html('Waiting for second player');
+				$('#pOneName').html('Searching...');
 			}
 			if (pTwo.playerName === undefined) {
-				$('#pTwoName').html('Waiting for second player');
+				$('#pTwoName').html('Searching...');
 			}
 			$('#enemy-ready-text').hide();
 			$('#player-ready-text').hide();
@@ -42,19 +42,19 @@ function initSocketEvents() {
 			pOneNameElement.html(pOne.playerName);
 			pOneDeckElement.html(pOne.library);
 		} else {
-			pOneNameElement.html('Waiting for other player');
+			pOneNameElement.html('Searching...');
 			pOneDeckElement.html('');
 		}
 		if (pTwo.playerName !== undefined) {
 			pTwoNameElement.html(pTwo.playerName);
 			pTwoDeckElement.html(pTwo.library)
 		} else {
-			pTwoNameElement.html('Waiting for second player');
+			pTwoNameElement.html('Searching...');
 			pTwoDeckElement.html('');
 		}
 
 		$('#start-game-menu').hide();
-		$('.waiting-menu').show();
+		$('#waiting-menu').show();
 
 		// Wenn beide Spieler anwesend sind, wird der "Bereit"-Button für beide angezeigt.
 		if (pOne.playerName !== undefined && pTwo.playerName !== undefined) {

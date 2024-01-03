@@ -137,12 +137,12 @@ function enterEditor() {
 	}
 }
 
-function changeToOtherDeck(selectedValue) {
-	if (selectedValue !== '') {
-		if (selectedValue === 'new') {
+function changeToOtherDeck(deckId) {
+	if (deckId !== '') {
+		if (deckId === 'new') {
 			promptNewDeckCreation();
 		} else {
-			editorLoadSelectedDeck(selectedValue);
+			editorLoadSelectedDeck(deckId);
 		}
 	}
 }
@@ -162,8 +162,8 @@ function createNewDeck() {
 	}
 }
 
-function editorLoadSelectedDeck(deckName) {
-	socket.emit('loadSelectedDeck', deckName);
+function editorLoadSelectedDeck(deckId) {
+	socket.emit('loadSelectedDeck', deckId);
 
 	deckAdditions = [];
 	deckSubtractions = [];

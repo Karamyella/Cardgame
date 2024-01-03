@@ -48,7 +48,7 @@
             <span class="info"> Please enter your name to continue</span>
             <br/><br/>
             <!-- Der Button bekommt sein onclick durch JS, da die Box für den Namesubmit für Arena und Editor genutzt wird. -->
-            <button type="button" class="start-game-button">Start</button>
+            <button type="button" class="start-game-button">Continue</button>
         </div>
 
         <div id="choose-deck-menu">
@@ -100,10 +100,10 @@
             <button id="deck-submit-button" type="button" onclick="submitNameAndDeck()" disabled>Choose Deck</button>
         </div>
 
-        <div class="waiting-menu">
+        <div id="waiting-menu">
             <div id="waitingGrid">
                 <div class="leftGrid">
-                    <br/>Player 1:
+                    <br/><br/>Player 1:
                     <br/><br/><i class="pOneName"></i>
                     <br/><br/><i id="pOneDeck"></i>
                 </div>
@@ -113,8 +113,8 @@
                     <button id="enter-arena-btn" onclick="enterArena();">Enter the Arena</button>
                 </div>
                 <div class="rightGrid">
-                    <br/>Player 2:
-                    <br/><br/><i class="pTwoName">Waiting for second player</i>
+                    <br/><br/>Player 2:
+                    <br/><br/><i class="pTwoName"></i>
                     <br/><br/><i id="pTwoDeck"></i>
                 </div>
             </div>
@@ -240,7 +240,7 @@
         <input id="deck-name" type="text"/>
         <span class="info">Please enter your deck name to continue</span>
         <br/><br/>
-        <button id="submit-deck-name" type="button" onclick="createNewDeck();">Start</button>
+        <button id="submit-deck-name" type="button" onclick="createNewDeck();">Continue</button>
     </div>
 </div>
 

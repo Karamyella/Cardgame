@@ -207,7 +207,7 @@ button:hover {
     left: 80%;
 }
 
-#start-game-menu, #choose-deck-menu, #new-deck-menu {
+#start-game-menu, #choose-deck-menu, #new-deck-menu, #waiting-menu {
     background-image: url(../Images/Textbox.png);
     position: fixed;
     padding-top: 1em;
@@ -262,22 +262,6 @@ button:hover {
     background-color: black;
 }
 
-.waiting-menu {
-    position: fixed;
-    display: none;
-    width: 170%;
-    text-align: center;
-    background-color: #e14a3b;
-    border-radius: 10px;
-    font-size: 20px;
-    height: 70%;
-    transition: opacity .2s ease-out;
-    left: -35%;
-    top: 20%;
-    color: white;
-    font-weight: bold;
-}
-
 .middleGrid > * {
     display: none;
 }
@@ -293,14 +277,14 @@ button:hover {
 
 #enemy-ready-text {
     position: absolute;
-    top: 73%;
+    top: 70%;
     transform: translate(-20px);
 }
 
 #enter-arena-btn, #player-ready-text {
     position: relative;
-    top: 80%;
-    height: 4em;
+    top: 75%;
+    height: 3.5em;
     width: 10em;
     border-radius: 8px;
     border-style: none;
