@@ -134,7 +134,7 @@ function initSocketEvents() {
 				landPlayedThisTurn = false;
 
 				// Der Spieler der dran ist, enttappt seine Karten.
-				untapCards(forPOne);
+				untapCards(forPOne, newGameState);
 
 				// Der Spieler der dran ist, zieht eine Karte.
 				drawCard(forPOne);
@@ -145,7 +145,7 @@ function initSocketEvents() {
 				}, 1000);
 				break;
 			/*case 'Mainphase 1':
-				# Unused #
+				# isSkipped #
 				break;*/
 			case 'Combatphase - Declare Attackers':
 				/*

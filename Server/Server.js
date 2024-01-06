@@ -23,14 +23,6 @@ app.use(express.static(join(__dirname, '/../public')));
 app.get('/', (req, res) => {
 	res.sendFile(join(__dirname, '/../public/Global.html'));
 });
-// DEBUG
-app.get('/deckEditor', (req, res) => {
-	res.sendFile(join(__dirname, '/../public/DeckEditor.html'));
-});
-// DEBUG
-app.get('/arena', (req, res) => {
-	res.sendFile(join(__dirname, '/../public/Arena.html'));
-});
 
 /**
  * Aufführung aller Räume, die Spieler zusammen paart.
@@ -425,35 +417,16 @@ io.on('connection', (socket) => {
 				break;*/
 			case 'Mainphase 1':
 				gameState.currentPhase = 'Combatphase - Declare Attackers';
-
 				break;
 			case 'Combatphase - Declare Attackers':
-				// Wenn keine Kreaturen angreifen, wird der Rest der Combat-Phase übersprungen.
-				// TODO Überlegen, wie man an die zum Angriff deklarierten Kreaturen kommt.
-				if (gameState.attackingCreatures !== undefined) {
-					// Sendet dem anderen Spieler, welche Kreaturen zum Angriff deklariert wurden.
-					// TODO [^]..
-					sendDataToOtherPlayer(socket, 'attackersDeclared', gameState.attackingCreatures);
-					gameState.currentPhase = 'Combatphase - Declare Blockers';
-					// Der andere Spieler ist jetzt mit Blockern dran.
-					gameState.whosTurn === 'Player 1' ? gameState.whosTurn = 'Player 2' : gameState.whosTurn = "Player 1";
-				} else {
-					gameState.currentPhase = 'Mainphase 2';
-				}
+				gameState.currentPhase = 'Mainphase 2';
 				break;
 			case 'Combatphase - Declare Blockers':
-				// "OtherPlayer" ist in dem Falle der Spieler dessen Zug eigentlich gerade ist..!
-				// Sendet dem anderen Spieler, welche Kreaturen zum Blocken deklariert wurden.
-				// TODO Überlegen, wie man an die zum Blocken deklarierten Kreaturen kommt.
-				sendDataToOtherPlayer(socket, 'blockersDeclared', gameState.blockingCreatures);
+				// TODO
 				gameState.currentPhase = 'Combatphase - Damage Step';
-				// Der andere Spieler hat reagiert, also bekommt der "aktuelle" Spieler wieder Kontrolle.
-				gameState.whosTurn === 'Player 1' ? gameState.whosTurn = 'Player 2' : gameState.whosTurn = "Player 1";
 				break;
 			case 'Combatphase - Damage Step':
-				resolveDamageStep(gameState.boardState, gameState.attackingCreatures)
-				let newBoardState; // TODO = resolveDamageStep(gameState.boardState, gameState.attackingCreatures, gameState.blockingCreatures);
-				gameState.boardState = newBoardState;
+				// TODO Rework, wenn Blocken geht, da der Damage-Step aktuell im Declare-Step abgehandelt wird.
 				gameState.currentPhase = 'Mainphase 2';
 				break;
 			case 'Mainphase 2':

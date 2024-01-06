@@ -11,16 +11,6 @@ function drawCard(forPOne) {
 	}
 }
 
-function discardCard(forPOne, cardPosition) {
-	if (forPOne) {
-		// Wirft ausgewählte Karte d. Spielers ab.
-		pOneGraveyard.push(pOneHand.splice(cardPosition, 1)[0]);
-	} else {
-		// Wirft automatisch die 1. Karte d. Bots ab.
-		pTwoGraveyard.push(pTwoHand.splice(cardPosition, 1)[0]);
-	}
-}
-
 /**
  * Im ersten Zug des gradigen Spielers werden 7 Karten gezogen. Wenn er seine Hand nicht behalten möchte, zieht er 7 neue Karten.
  * @param forPOne Gibt an, für wen die Karten gezogen werden sollen.
@@ -59,12 +49,21 @@ function putHandBackIntoDeck(forPOne) {
 		pOneHand = [];
 	} else {
 		pTwoDeck = pTwoDeck.concat(pTwoHand);
-		pOneHand = [];
+		pTwoHand = [];
 	}
 }
 
-// TODO (cardCount wäre eine mögliche Erweiterung, falls mehrere Karten abgeworfen werden müssen.. aber idk obs dazu kommen würde^^)
 // Spieler wird aufgefordert Karten abzuwerfen. (Bsp.: Spieler hat zu viele Karten am Ende des Zugs.
-function promptDiscard(/*cardCount*/) {
+function promptDiscard(cardCount) {
 
+}
+
+function discardCard(forPOne, cardPosition) {
+	if (forPOne) {
+		// Wirft ausgewählte Karte d. Spielers ab.
+		pOneGraveyard.push(pOneHand.splice(cardPosition, 1)[0]);
+	} else {
+		// Wirft automatisch die 1. Karte d. Bots ab.
+		pTwoGraveyard.push(pTwoHand.splice(cardPosition, 1)[0]);
+	}
 }

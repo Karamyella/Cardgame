@@ -381,27 +381,28 @@ hr {
     color: white;
     position: absolute;
     height: 10em;
-    width: 15em;
-    margin: 0 1em;
+    width: 242px;
+    margin: 0 13px;
     padding: 1em;
-    top: 38%;
     z-index: 4;
 }
 
-.pOneInfo {
-    left: 0;
+.pOneInfo, .pTwoInfo {
+    right: 0;
+    top: 71%;
 }
 
-.pTwoInfo {
-    right: 0;
+.pOneInfo.enemyInfo, .pTwoInfo.enemyInfo {
+    left: 0;
+    top: 1%;
 }
 
 .currentPhase {
     position: absolute;
     top: 47%;
-    left: 41%;
-    height: 3.2%;
-    width: 16em;
+    left: 40%;
+    height: 2.2%;
+    width: 23em;
     padding: 10px 0;
     color: white;
     background-color: black;
@@ -416,17 +417,18 @@ hr {
     position: absolute;
     border-radius: 0.6em;
     height: 5em;
-    width: 10em;
-    margin-right: 1em;
-    top: 90%;
+    width: 140px;
+    top: 92%;
 }
 
 .nextPhaseButton {
     right: 0;
+    margin-right: 13px;
 }
 
 .hideHandButton {
     right: 11em;
+    margin-right: 6px;
 }
 
 .showHand {
@@ -446,27 +448,16 @@ hr {
     height: 110%;
     width: 9%;
     margin: 0 3px;
-    border-bottom: 2px solid black;
+    border: 1px solid black;
     background-color: black;
 }
 
-#pOneHand {
+#pOneHand, #pTwoHand {
     bottom: 3%;
     left: 0;
 }
 
-#pOneHand.enemyHand {
-    top: 3%;
-    left: 0%;
-    transform: rotate(180deg);
-}
-
-#pTwoHand {
-    bottom: 3%;
-    left: 0;
-}
-
-#pTwoHand.enemyHand {
+#pOneHand.enemyHand, #pTwoHand.enemyHand {
     top: 3%;
     left: 0;
     transform: rotate(180deg);
@@ -476,38 +467,30 @@ hr {
     filter: brightness(0);
 }
 
-
 .playerField {
     position: absolute;
-    height: 50%;
+    height: 49%;
     z-index: 2;
 }
 
-#pOneField {  
+#pOneField, #pTwoField {
     bottom: 0;
-    left: 0;
-    width: 100%;
 }
+
+#pOneField.enemyField, #pTwoField.enemyField {
+    top: 26%;
+    right: 0;
+}
+
 #pOneField > img, #pTwoField > img {
     height: 170px;
     margin: 15px 10px;
+    border: 1px solid black;
 }
 
-#pOneField.enemyField {
-    top: 0;
-    transform: rotate(180deg);
+.tapped {
+    transform: rotate(270deg);
 }
-
-#pTwoField {  
-    bottom: 0;
-    left: 1em;
-}
-
-#pTwoField.enemyField {
-    top: 0;
-    transform: rotate(180deg);
-}
-
 
 ul {
     list-style: none;
@@ -765,6 +748,6 @@ ul {
     padding: 7px;
 }
 
-.played {  
+.played {
     height: 60%;
 }

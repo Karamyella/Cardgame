@@ -33,6 +33,7 @@ function initGame(room) {
 	if (isPOne) {
 		$('#pTwoHand').addClass('enemyHand');
 		$('#pTwoField').addClass('enemyField');
+		$('.pTwoInfo').addClass('enemyInfo');
 		$(document).on('contextmenu', '#pOneHand > img', (event) => {
 			rightClickHandCard(event);
 		});
@@ -43,6 +44,7 @@ function initGame(room) {
 	} else {
 		$('#pOneHand').addClass('enemyHand');
 		$('#pOneField').addClass('enemyField');
+		$('.pOneInfo').addClass('enemyInfo');
 		$(document).on('contextmenu', '#pTwoHand > img', (event) => {
 			rightClickHandCard(event);
 		});
@@ -51,42 +53,21 @@ function initGame(room) {
 		});
 	}
 
-	// TODO Onclick-Events für die UI/Buttons (Erst wenn HTML steht.)
 	document.onclick = hideMenu;
-	$(document).on('click', '#contextMenu > ul > .play', () => {
-		/*let targetCardElement = $('#contextMenu').data('targetCard');
-		let manaCost = targetCardElement.data('manaCost');
-		if (isPOne && pOneMana >= manaCost) {
 
-		} else if (!isPOne && pTwoMana >= manaCost) {
-			socket.emit('playCard', {})
-		}*/
+	$(document).on('click', '#playCard-action', () => {
+		playCard();
 	});
-	$(document).on('click', '#contextMenu > ul > .attack', () => {
-
+	$(document).on('click', '#attack-action', () => {
+		declareAttacker();
 	});
-	$(document).on('click', '#contextMenu > ul > .block', () => {
-
-	});
-	$(document).on('click', '#contextMenu > ul > .effect', () => {
-
+	$(document).on('click', '#block-action', () => {
+		// TODO IMPL. Blocken.
 	});
 
 	// Startet die PreGame-Phase 1.
 	initPreGamePhaseOne(room);
 }
-
-/*
-// Könnte man vllt. noch gebrauchen..
-function determineStartingPlayer() {
-    drawStartHand(true);
-    drawStartHand(false);
-
-    // Generiert wer anfängt. (Math.round(Math.random()) generiert "1" oder "0", wobei 1 = true & 0 = false ist.)
-    let doesPOneStart = Math.round(Math.random()) === true;
-    startNextPlayerTurn(doesPOneStart);
-}
-*/
 
 function initPreGamePhaseOne(room) {
 	setTimeout(() => {
@@ -109,27 +90,26 @@ function rightClickHandCard(e) {
 	// Wenn man Spieler 1 und an der Reihe ist ODER man Spieler 2 und an der Reihe ist..
 	if ((whosTurn === 'Player 1' && isPOne) || (whosTurn === 'Player 2' && !isPOne)) {
 		rightClick(e);
-		// Fügt die Action zum Dialog hinzu.
-		$('#contextMenu > *').html('').append($('<li><button onclick="playCard();">Play Card</button></li>'));
+		// Fügt die Aktion zum Dialog hinzu.
+		$('#contextMenu > *').html('').append($('<li><button id="playCard-action">Play Card</button></li>'));
 	}
 }
 
 function rightClickValidFieldCard(e) {
 	// Wenn man Spieler 1 und an der Reihe ist ODER man Spieler 2 und an der Reihe ist..
 	if ((whosTurn === 'Player 1' && isPOne) || (whosTurn === 'Player 2' && !isPOne)) {
-		rightClick(e);
-
+		let contextMenu = $('#contextMenu > *').html('');
 		let currentPhase = $('#currentPhase').html();
 
-		// Fügt die Action zum Dialog hinzu.
+		rightClick(e);
+
+		// Fügt die Aktion zum Dialog hinzu.
 		if (currentPhase === 'Combatphase - Declare Attackers') {
-			// TODO SET ATTACKACTION
 			// Attack-Option nur möglich, wenn 'Declare Attackers'-Phase ist.
-			$('#contextMenu > *').html('').append($('<li><button onclick="TODO">Attack</button></li>'));
+			contextMenu.append($('<li><button id="attack-action">Attack</button></li>'));
 		} else if (currentPhase === 'Combatphase - Declare Blockers') {
-			// TODO SET BLOCKACTION
 			// Block-Option nur möglich, wenn 'Declare Blockers'-Phase ist.
-			$('#contextMenu > *').html('').append($('<li><button onclick="TODO">Block</button></li>'));
+			contextMenu.append($('<li><button id="block-action">Block</button></li>'));
 		}
 	}
 }
@@ -332,6 +312,18 @@ function buildBoardElements(boardData, container) {
 		}
 		if (card.justPlayed !== undefined) {
 			img.addClass('played');
+		}
+		if (card.tapped !== undefined) {
+			img.addClass('tapped');
+		}
+		if (card.vigilance !== undefined) {
+			img.addClass('vigilance');
+		}
+		if (card.flying !== undefined) {
+			img.addClass('flying');
+		}
+		if (card.lifelink !== undefined) {
+			img.addClass('lifelink');
 		}
 
 		img.appendTo(container);
