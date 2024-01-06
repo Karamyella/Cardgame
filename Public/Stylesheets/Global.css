@@ -480,7 +480,7 @@ hr {
     left: 16%;
     width: 69%;
 }
-#pOneField > img {
+#pOneField > img, #pTwoField > img {
     height: 170px;
     margin: 15px 10px;
 }

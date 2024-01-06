@@ -15,11 +15,13 @@ function playCard() {
 
 					// ..wird dem Spieler die Karte auf Feld gesetzt und das Mana um 1 erhöht.
 					if (whosTurn === 'Player 1') {
+						pOneField.push(playerHand[i]);
 						pOneMana++;
 						pOneMaxMana++;
 						$('#pOneMana').html(pOneMana + '/' + pOneMaxMana);
 						$('#pOneField').append(cardElement);
 					} else {
+						pTwoField.push(playerHand[i]);
 						pTwoMana++;
 						pTwoMaxMana++;
 						$('#pTwoMana').html(pTwoMana + '/' + pTwoMaxMana);
@@ -70,8 +72,10 @@ function playCard() {
 					// ..kommen alle Kartentypen außer "Sorceries" aufs Feld.
 					if (!cardElement.hasClass('sorcery')) {
 						if (forPOne) {
+							pOneField.push(playerHand[i]);
 							$('#pOneField').append(cardElement);
 						} else {
+							pTwoField.push(playerHand[i]);
 							$('#pTwoField').append(cardElement);
 						}
 					} else {
@@ -116,9 +120,7 @@ function handleCardEffects(cardElement, handCard) {
 		let forPOne = whosTurn === 'Player 1';
 		let playerBoard = forPOne ? $('#pOneField') : $('#pTwoField');
 		let value;
-
-		// Achtung: Horrible Code.. Finde aber echt keine bessere Lösung mehr, bzw. keine Zeit mehr, lol.
-		// TODO REWORK
+		let effectSplit = currentCardEffect.split('(')[1];
 		switch (currentCardEffect) {
 			case 'vigilance()':
 				cardElement.addClass('vigilance');
@@ -129,7 +131,7 @@ function handleCardEffects(cardElement, handCard) {
 			case 'lifelink()':
 				cardElement.addClass('lifelink');
 				break;
-			case currentCardEffect.match('drawCards[(]\\d[)]'):
+			case `drawCards(${effectSplit}`:
 				value = Number(getEffectValue(currentCardEffect));
 
 				// Der, der dran ist, zieht x Karten.
@@ -137,7 +139,7 @@ function handleCardEffects(cardElement, handCard) {
 					drawCard(forPOne);
 				}
 				break;
-			case currentCardEffect.match('gainLife[(]\\d[)]') !== null:
+			case `gainLife(${effectSplit}`:
 				value = Number(getEffectValue(currentCardEffect));
 
 				if (forPOne) {
@@ -148,13 +150,15 @@ function handleCardEffects(cardElement, handCard) {
 					$('#pTwoHP').html(pTwoHP);
 				}
 				break;
-			case currentCardEffect.match('createToken*.*.') !== null:
+			case `createToken(${effectSplit}`:
 				let tokenAttributes = currentCardEffect.split('`')[1].split(',');
-				value = Number(tokenAttributes[5]);
+				let board = forPOne ? pOneField : pTwoField;
+				value = Number(tokenAttributes[4]);
 
 				// Baut den createToken-String auseinander und baut daraus Creature-Tokens.
 				for (let i = 0; i < value; i++) {
-					$('<img>').attr('src', tokenAttributes[3].substring(2, tokenAttributes[3].length - 1))
+					let src = tokenAttributes[3].substring(2, tokenAttributes[3].length - 1);
+					$('<img>').attr('src', src)
 						.addClass('creature')
 						.addClass('token')
 						.addClass('played')
@@ -163,10 +167,19 @@ function handleCardEffects(cardElement, handCard) {
 							'hp': tokenAttributes[2].trim()
 						})
 						.appendTo(playerBoard);
+
+					board.push({
+						attack: tokenAttributes[1].trim(),
+						hp: tokenAttributes[2].trim(),
+						image: src,
+						type: 'creature',
+						token: true,
+						justPlayed: true
+					})
 				}
 
 				break;
-			case currentCardEffect.match('gainLifePerCardInHand[(]\\d[)]') !== null:
+			case `gainLifePerCardInHand(${effectSplit}`:
 				value = Number(getEffectValue(currentCardEffect));
 
 				// Fügt pro Kartenhand x HP hinzu.
@@ -179,7 +192,7 @@ function handleCardEffects(cardElement, handCard) {
 				}
 
 				break;
-			case currentCardEffect.match('enemyDrawsCards[(]\\d[)]') !== null:
+			case `enemyDrawsCards(${effectSplit}`:
 				value = Number(getEffectValue(currentCardEffect));
 
 				// Der "Gegner" zieht x Karten.
@@ -188,7 +201,7 @@ function handleCardEffects(cardElement, handCard) {
 				}
 
 				break;
-			case currentCardEffect.match('millCards[(]\\d[)]') !== null:
+			case `millCards(${effectSplit}`:
 				value = Number(getEffectValue(currentCardEffect));
 
 				// Holt aus dem Deck des Spielers x Karten raus und tut diese in den Graveyard. Updated auch die UI.
@@ -207,7 +220,7 @@ function handleCardEffects(cardElement, handCard) {
 				}
 
 				break;
-			case currentCardEffect.match('destoryAll[(]*.*.') !== null:
+			case `destoryAll(${effectSplit}`:
 				value = getEffectValue(currentCardEffect);
 
 				// Zerstört alles vom Typen in value auf beiden Feldern.
@@ -227,11 +240,6 @@ function handleCardEffects(cardElement, handCard) {
 		}
 	}
 
-	// Kreaturen kommen "schlafend" rein.
-	if (cardElement.hasClass('creature')) {
-		cardElement.addClass('played');
-	}
-
 	return cardElement;
 }
 
@@ -239,18 +247,6 @@ function getEffectValue(effect) {
 	return effect.split('(')[1].substring(0, 1);
 }
 
-function tapCard(context, effect) {
-	if (context === 'Attack') {
-		socket.emit('attack', effect);
-	} else if (context === 'Effect') {
-		socket.emit('effect', effect);
-	} else /* if (context === 'Mana') */ {
-		socket.emit('mana', effect);
-		updatePlayerMana(pOneTurn, true, 0);
-	}
-}
-
-// TODO
 function untapCards(forPOne) {
 	if (forPOne) {
 		$('#pOneField > img').each((index, element) => {
