@@ -476,7 +476,13 @@ hr {
 }
 
 #pOneField {
-    top: -94%;
+    top: -92%;
+    left: 16%;
+    width: 69%;
+}
+#pOneField > img {
+    height: 170px;
+    margin: 15px 10px;
 }
 
 #pOneField.enemyField {

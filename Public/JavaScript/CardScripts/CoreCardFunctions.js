@@ -48,6 +48,7 @@ function playCard() {
 		if (currentManaPool >= manaCost) {
 			// Wenn Spieler 1 dran ist, wird aus dessen Hand die gespielte Karte gesucht, sonst Spieler 2.
 			let playerHand = whosTurn === 'Player 1' ? pOneHand : pTwoHand;
+			let forPOne = whosTurn === 'Player 1';
 
 			// Geht durch die Hand und sucht die gespielte Karte.
 			for (let i = 0; i < playerHand.length; i++) {
@@ -55,20 +56,27 @@ function playCard() {
 				if (playerHand[i].id === cardElement.data('data').id) {
 					currentManaPool -= manaCost;
 
+					if (forPOne) {
+						$('#pOneMana').html(currentManaPool + '/' + pOneMaxMana);
+					} else {
+						$('#pTwoMana').html(currentManaPool + '/' + pTwoMaxMana);
+					}
+
+					cardElement = handleCardEffects(cardElement, playerHand[i]);
+
 					// ..auf der Oberfläche aus der Hand entfernt.
 					cardElement.remove();
-					cardElement = handleCardEffects(cardElement, playerHand[i]);
 
 					// ..kommen alle Kartentypen außer "Sorceries" aufs Feld.
 					if (!cardElement.hasClass('sorcery')) {
-						if (whosTurn === 'Player 1') {
+						if (forPOne) {
 							$('#pOneField').append(cardElement);
 						} else {
 							$('#pTwoField').append(cardElement);
 						}
 					} else {
 						// Bei Sorceries kommen die Karten dann in den Graveyard.
-						if (whosTurn === 'Player 1') {
+						if (forPOne) {
 							pOneGraveyard.push(playerHand[i]);
 							$('#pOneGraveyard').html('[' + pOneGraveyard.length + ']').data('content', pOneGraveyard);
 						} else {
@@ -129,7 +137,7 @@ function handleCardEffects(cardElement, handCard) {
 					drawCard(forPOne);
 				}
 				break;
-			case currentCardEffect.match('gainLife[(]\\d[)]'):
+			case currentCardEffect.match('gainLife[(]\\d[)]') !== null:
 				value = Number(getEffectValue(currentCardEffect));
 
 				if (forPOne) {
@@ -140,7 +148,7 @@ function handleCardEffects(cardElement, handCard) {
 					$('#pTwoHP').html(pTwoHP);
 				}
 				break;
-			case currentCardEffect.match('createToken*.*.'):
+			case currentCardEffect.match('createToken*.*.') !== null:
 				let tokenAttributes = currentCardEffect.split('`')[1].split(',');
 				value = Number(tokenAttributes[5]);
 
@@ -158,7 +166,7 @@ function handleCardEffects(cardElement, handCard) {
 				}
 
 				break;
-			case currentCardEffect.match('gainLifePerCardInHand[(]\\d[)]'):
+			case currentCardEffect.match('gainLifePerCardInHand[(]\\d[)]') !== null:
 				value = Number(getEffectValue(currentCardEffect));
 
 				// Fügt pro Kartenhand x HP hinzu.
@@ -171,7 +179,7 @@ function handleCardEffects(cardElement, handCard) {
 				}
 
 				break;
-			case currentCardEffect.match('enemyDrawsCards[(]\\d[)]'):
+			case currentCardEffect.match('enemyDrawsCards[(]\\d[)]') !== null:
 				value = Number(getEffectValue(currentCardEffect));
 
 				// Der "Gegner" zieht x Karten.
@@ -180,7 +188,7 @@ function handleCardEffects(cardElement, handCard) {
 				}
 
 				break;
-			case currentCardEffect.match('millCards[(]\\d[)]'):
+			case currentCardEffect.match('millCards[(]\\d[)]') !== null:
 				value = Number(getEffectValue(currentCardEffect));
 
 				// Holt aus dem Deck des Spielers x Karten raus und tut diese in den Graveyard. Updated auch die UI.
@@ -199,7 +207,7 @@ function handleCardEffects(cardElement, handCard) {
 				}
 
 				break;
-			case currentCardEffect.match('destoryAll[(]*.*.'):
+			case currentCardEffect.match('destoryAll[(]*.*.') !== null:
 				value = getEffectValue(currentCardEffect);
 
 				// Zerstört alles vom Typen in value auf beiden Feldern.
@@ -210,7 +218,7 @@ function handleCardEffects(cardElement, handCard) {
 
 						// Alles außer Tokens kommen in den Graveyard.
 						if (!$e.hasClass('token')) {
-
+							// TODO
 						}
 					}
 				});
