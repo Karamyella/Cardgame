@@ -358,7 +358,8 @@ hr {
 
 #arena-ui-elements {
     height: 100%;
-    position: relative;
+    width: 100%;
+    position: absolute;
 }
 
 #arena-ui-elements > button {
@@ -378,7 +379,7 @@ hr {
     border-radius: 10px;
     border: 3px solid black;
     color: white;
-    position: relative;
+    position: absolute;
     height: 10em;
     width: 15em;
     margin: 0 1em;
@@ -388,11 +389,11 @@ hr {
 }
 
 .pOneInfo {
-    float: left;
+    left: 0;
 }
 
 .pTwoInfo {
-    float: right;
+    right: 0;
 }
 
 .currentPhase {
@@ -412,14 +413,20 @@ hr {
 .buttons {
     background-color: black;
     color: white;
-    position: relative;
+    position: absolute;
     border-radius: 0.6em;
     height: 5em;
     width: 10em;
     margin-right: 1em;
-    float: right;
     top: 90%;
-    right: -15%;
+}
+
+.nextPhaseButton {
+    right: 0;
+}
+
+.hideHandButton {
+    right: 11em;
 }
 
 .showHand {
@@ -428,9 +435,10 @@ hr {
 
 
 .playerHand {
-    position: relative;
-    height: 22%;
+    position: absolute;
+    height: 12em;
     z-index: 3;
+    width: 100%;
 }
 
 .playerHand > img {
@@ -443,24 +451,24 @@ hr {
 }
 
 #pOneHand {
-    top: -24%;
-    left: 18%;
+    bottom: 3%;
+    left: 0;
 }
 
 #pOneHand.enemyHand {
-    top: -112%;
-    left: -22%;
+    top: 3%;
+    left: 0%;
     transform: rotate(180deg);
 }
 
 #pTwoHand {
-    top: -46%;
-    left: 18%;
+    bottom: 3%;
+    left: 0;
 }
 
 #pTwoHand.enemyHand {
-    top: -134%;
-    left: -22%;
+    top: 3%;
+    left: 0;
     transform: rotate(180deg);
 }
 
@@ -470,32 +478,33 @@ hr {
 
 
 .playerField {
-    position: relative;
+    position: absolute;
     height: 50%;
     z-index: 2;
 }
 
-#pOneField {
-    top: -92%;
-    left: 16%;
-    width: 69%;
+#pOneField {  
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
-#pOneField > img {
+#pOneField > img, #pTwoField > img {
     height: 170px;
     margin: 15px 10px;
 }
 
 #pOneField.enemyField {
-    top: -145%;
+    top: 0;
     transform: rotate(180deg);
 }
 
-#pTwoField {
-    top: -144%;
+#pTwoField {  
+    bottom: 0;
+    left: 1em;
 }
 
 #pTwoField.enemyField {
-    top: -195%;
+    top: 0;
     transform: rotate(180deg);
 }
 
@@ -754,4 +763,8 @@ ul {
 #editor-deck-container > img {
     height: 216px;
     padding: 7px;
+}
+
+.played {  
+    height: 60%;
 }
