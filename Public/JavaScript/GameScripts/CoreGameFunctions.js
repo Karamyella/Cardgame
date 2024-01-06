@@ -331,5 +331,5 @@ function buildBoardElements(boardData, container) {
 }
 
 function promptWin() {
-	// TODO
+	prompt('You have won the game! Congratulations ^-^');
 }
