@@ -330,10 +330,14 @@ function buildBoardElements(boardData, container) {
 	}
 }
 
-function promptWin() {
-	prompt('You have won the game! Congratulations ^-^');
-	pageTransition($('#arena'), $('#empty-page'), '');
-	setTimeout(() => {
-		window.location.reload();
-	}, 500);
+function promptWin(forPOne) {
+	// Wenn Spieler 1 gewinnt wirds für ihn ausgelöst, für Spieler 2, wenn er gewinnt.
+	if ((isPOne && forPOne) || (!isPOne && !forPOne)) {
+		if (confirm('You have won the game! Congratulations ^-^\nDo you want to start a new match? :)')) {
+			pageTransition($('#arena'), $('#empty-page'), '');
+			setTimeout(() => {
+				window.location.reload();
+			}, 500);
+		}
+	}
 }
