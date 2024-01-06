@@ -36,7 +36,7 @@ function initGame(room) {
 		$(document).on('contextmenu', '#pOneHand > img', (event) => {
 			rightClickHandCard(event);
 		});
-		$(document).on('contextmenu', '#pOneField > img:not(.played):not(.tapped)', (event) => {
+		$(document).on('contextmenu', '#pOneField > img:not(.land):not(.played):not(.tapped)', (event) => {
 			rightClickValidFieldCard(event);
 		});
 		$('.border-div').show();
@@ -46,7 +46,7 @@ function initGame(room) {
 		$(document).on('contextmenu', '#pTwoHand > img', (event) => {
 			rightClickHandCard(event);
 		});
-		$(document).on('contextmenu', '#pTwoField > img:not(.played):not(.tapped)', (event) => {
+		$(document).on('contextmenu', '#pTwoField > img:not(.land):not(.played):not(.tapped)', (event) => {
 			rightClickValidFieldCard(event);
 		});
 	}
@@ -321,12 +321,20 @@ function buildBoardElements(boardData, container) {
 
 	for (let i = 0; i < boardData.length; i++) {
 		let card = boardData[i];
-		$('<img>').addClass(card.type)
+		let img = $('<img>').addClass(card.type)
 			.attr('src', card.image)
 			.data('manaCost', card.mana)
 			.data('effect', card.effect)
-			.data('data', card)
-			.appendTo(container);
+			.data('data', card);
+
+		if (card.token !== undefined) {
+			img.addClass('token');
+		}
+		if (card.justPlayed !== undefined) {
+			img.addClass('played');
+		}
+
+		img.appendTo(container);
 	}
 }
 
