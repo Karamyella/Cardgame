@@ -27,8 +27,8 @@ $(() => {
 			}
 
 			// Jede Karte darf nur 4x im Deck sein, außer es sind Basic-Lands.
-			if (amountOfTimesInDeck >= 4 && (cardName !== 'Plains' || cardName !== 'Island' ||
-				cardName !== 'Forest' || cardName !== 'Mountain' || cardName !== 'Swamp')) {
+			if (amountOfTimesInDeck >= 4 && (cardName !== 'Plains' && cardName !== 'Island' &&
+				cardName !== 'Forest' && cardName !== 'Mountain' && cardName !== 'Swamp')) {
 				alert('You can only select this card up to 4 times.');
 			} else {
 				let subtractionFound = false;

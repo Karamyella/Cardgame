@@ -4,7 +4,7 @@ body {
     background-color: black;
 }
 
-html, #empty-page ,#index, #arena, #editor {
+html, #empty-page, #index, #arena, #editor {
     overflow: hidden;
     height: 100%;
     width: 100%;
@@ -137,12 +137,17 @@ button:hover {
     filter: brightness(100%);
 }
 
+.basic-deck-menu > label > [type=radio]:disabled:hover + img {
+    cursor: not-allowed;
+}
+
 .own-deck-menu {
     position: relative;
     height: 75%;
     width: 86%;
     padding-top: 53px;
 }
+
 .no-own-deck {
     position: relative;
     width: 92%;
@@ -312,8 +317,34 @@ button:hover {
     content: "";
 }
 
-#arena > * {
-    z-index: 1;
+.border-div {
+    position: absolute;
+    z-index: 10;
+    background: #ffd600;
+    filter: blur(4px);
+}
+
+#border-top {
+    height: 8px;
+    width: 100%;
+    top: 0;
+}
+
+#border-left {
+    height: 100%;
+    width: 8px;
+    left: 0;
+}
+
+#border-right {
+    height: 100%;
+    width: 8px;
+    right: 0;
+}
+
+#border-bottom {
+    height: 8px;
+    width: 100%;
 }
 
 hr {
@@ -322,17 +353,30 @@ hr {
     top: 48%;
     position: absolute;
     background-color: black;
+    z-index: 1;
 }
 
 #arena-ui-elements {
     height: 100%;
-    z-index: 2;
     position: relative;
+}
+
+#arena-ui-elements > button {
+    z-index: 4;
+}
+
+#freeze-game {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #f3f3f375;
+    z-index: 15;
 }
 
 .pOneInfo, .pTwoInfo {
     background-color: black;
     border-radius: 10px;
+    border: 3px solid black;
     color: white;
     position: relative;
     height: 10em;
@@ -340,7 +384,7 @@ hr {
     margin: 0 1em;
     padding: 1em;
     top: 38%;
-    z-index: 2;
+    z-index: 4;
 }
 
 .pOneInfo {
@@ -362,6 +406,7 @@ hr {
     background-color: black;
     border-radius: 0.6em;
     text-align: center;
+    z-index: 4;
 }
 
 .buttons {
@@ -381,20 +426,73 @@ hr {
     display: none;
 }
 
-.demoCard {
-    display: block;
-    background-color: black;
-    height: 15%;
-    width: 10%;
-    position: relative;
-}
 
 .playerHand {
-    top: 70%;
     position: relative;
-    height: 20%;
-    left: 30%;
+    height: 22%;
+    z-index: 3;
 }
+
+.playerHand > img {
+    position: relative;
+    height: 110%;
+    width: 9%;
+    margin: 0 3px;
+    border-bottom: 2px solid black;
+    background-color: black;
+}
+
+#pOneHand {
+    top: -24%;
+    left: 18%;
+}
+
+#pOneHand.enemyHand {
+    top: -112%;
+    left: -22%;
+    transform: rotate(180deg);
+}
+
+#pTwoHand {
+    top: -46%;
+    left: 18%;
+}
+
+#pTwoHand.enemyHand {
+    top: -134%;
+    left: -22%;
+    transform: rotate(180deg);
+}
+
+.enemyHand > img {
+    filter: brightness(0);
+}
+
+
+.playerField {
+    position: relative;
+    height: 50%;
+    z-index: 2;
+}
+
+#pOneField {
+    top: -94%;
+}
+
+#pOneField.enemyField {
+    top: -145%;
+    transform: rotate(180deg);
+}
+
+#pTwoField {
+    top: -144%;
+}
+
+#pTwoField.enemyField {
+    top: -195%;
+    transform: rotate(180deg);
+}
+
 
 ul {
     list-style: none;
@@ -414,7 +512,8 @@ ul {
     padding: 10px 0;
 }
 
-.menu > li > a {
+.menu > li > button {
+    all: unset;
     font: inherit;
     border: 0;
     padding: 10px 30px 10px 15px;
@@ -431,7 +530,7 @@ ul {
     -o-transition: 0.5s linear;
 }
 
-.menu > li > a:hover {
+.menu > li > button:hover {
     background: #f1f3f7;
     color: red;
 }
@@ -499,7 +598,7 @@ ul {
     margin: 1em 1em 1em 0;
     float: right;
     position: relative;
-
+    overflow: hidden;
 }
 
 .color {
@@ -525,6 +624,14 @@ ul {
     width: 85%;
     float: right;
     position: relative;
+}
+
+#card-result-container {
+    width: 104%;
+    height: 91%;
+    overflow-y: scroll;
+    padding-right: 17px;
+    box-sizing: content-box;
 }
 
 #card-result-container > img {
@@ -574,9 +681,11 @@ ul {
     background: none;
     z-index: 1;
 }
+
 #editor-deck-selector > option {
     color: black;
 }
+
 #editor-deck-selector-addition {
     width: 25px;
     float: right;
@@ -605,6 +714,7 @@ ul {
     float: right;
     right: 5px;
 }
+
 #editor-save-button:hover, #search-input:hover, #search-input:focus, #editor-search-card:hover {
     background-color: #1e3d2d;
 }
@@ -622,13 +732,19 @@ ul {
     padding: 0 5px;
     margin: 14px 14px 0;
 }
+
 #editor-color-picker > option {
     color: black;
 }
 
 #editor-deck-container {
-    padding: 0 1em;
+    width: 104%;
+    height: 89%;
+    overflow-y: scroll;
+    padding: 0 17px 0 1em;
+    box-sizing: content-box;
 }
+
 #editor-deck-container > img {
     height: 216px;
     padding: 7px;

@@ -84,8 +84,12 @@ function sendCardRequest() {
 	socket.emit('cardRequest', cardData);
 }
 
+// Sendet den jetzigen GameState zum Server für den Phasenwechsel. Darf nur vom aktuellen Spieler genutzt werden.
 function nextPhase() {
-	socket.emit('phaseChange');
+	// Wenn man Spieler 1 und an der Reihe ist ODER man Spieler 2 und an der Reihe ist..
+	if ((whosTurn === 'Player 1' && isPOne) || (whosTurn === 'Player 2' && !isPOne)) {
+		socket.emit('phaseChange', collectGameData());
+	}
 }
 
 // Handler für den Übergang zwischen Index und Arena.
@@ -95,6 +99,7 @@ function pageTransition(hideElement, showElement, toWhatPage) {
 		$('#enemy-ready-text').hide();
 		$('#player-ready-text').hide();
 
+		$('#border-bottom').css('top', document.body.clientHeight - 8);
 		document.title = 'Cardgame Arena';
 	} else if (toWhatPage === 'Editor') {
 		document.title = 'Cardgame Deckeditor';

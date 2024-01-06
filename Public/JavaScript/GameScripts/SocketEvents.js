@@ -24,7 +24,11 @@ function initSocketEvents() {
 			$('#enter-arena-btn').hide();
 		}
 	});
-	// ### Index -> Lobby-Events ###
+
+
+	// ### INDEX-Events ###
+
+
 	socket.on('isPOne', (bool) => {
 		isPOne = bool;
 	});
@@ -72,7 +76,6 @@ function initSocketEvents() {
 	// Hängt Spielerdecks und Events an Elemente, damit die Deckauswahl reibungslos funktioniert.
 	socket.on('receivePlayerDecks', (decks) => {
 		// Wenn für den Spieler eigene Decks gefunden wurden, werden diese als weitere <Option> in "Meine Decks" hinzugefügt.
-			console.log(decks);
 		if (decks.length > 0) {
 			let standardOption = $('#own-deck-selector option');
 			for (let i = 0; i < decks.length; i++) {
@@ -113,6 +116,86 @@ function initSocketEvents() {
 		$('#choose-deck-menu').show();
 	});
 
+
+	// ### ARENA-Events ###
+
+
+	//
+	socket.on('phaseChange', (newGameState) => {
+		// true, wenn Spieler 1 dran ist | false, wenn Spieler 2 dran ist.
+		let forPOne = newGameState.whosTurn === 'Player 1';
+		updateGameState(newGameState);
+
+		switch (newGameState.currentPhase) {
+			case 'Upkeep':
+				whosTurn = newGameState.whosTurn;
+
+				// Darf wieder eine neue Land-Karte spielen.
+				landPlayedThisTurn = false;
+
+				// Der Spieler der dran ist, enttappt seine Karten.
+				untapCards(forPOne);
+
+				// Der Spieler der dran ist, zieht eine Karte.
+				drawCard(forPOne);
+
+				// Setzt lokal automtatisch die Phase auf "MainPhase 1", da aktuell Serverseitig der "Mainphase 1"-Trigger nutzlos ist.
+				setTimeout(() => {
+					$('#currentPhase').html('Mainphase 1');
+				}, 1000);
+				break;
+			/*case 'Mainphase 1':
+				# Unused #
+				break;*/
+			case 'Combatphase - Declare Attackers':
+				/*
+					- Handkarten dürfen nicht mehr gespielt werden.
+				 */
+				break;
+			case 'Combatphase - Declare Blockers':
+				/*
+					- Kontrolle an anderen Spieler abgeben
+				 */
+				break;
+			case 'Combatphase - Damage Step':
+				/*
+					-
+				 */
+				break;
+			case 'Mainphase 2':
+				/*
+					- Handkarten dürfen wieder gespielt werden.
+					- Generelle Kontrolle wieder bekommen.
+				 */
+				break;
+			case 'Endstep':
+				/*
+					- Discard-Prompt.
+					- Kontrolle wieder abgeben.
+				 */
+				break;
+			case 'PreGame - Player 2':
+				drawStartHand(forPOne);
+				break;
+		}
+	});
+
+	socket.on('showSorcery', (htmlElement) => {
+		// TODO Animation, die die gespielte Sorcery anzeigt.
+	});
+
+	socket.on('loadGameState', (gameState) => {
+		updateGameState(gameState);
+	})
+
+	socket.on('resumeGame', (phaseName) => {
+		$('#currentPhase').html(phaseName);
+		$('#freeze-game').hide();
+	});
+
+	// ### EDITOR-Events ###
+
+
 	// Fügt der Deckauswahl im Editor alle Decks des Spielers als Option hinzu, wobei die Deck-ID das Value ist.
 	socket.on('editorDeckResults', (decks) => {
 		let lastDeckSelectorOption = $('#editor-deck-selector').children().last();
@@ -147,7 +230,7 @@ function initSocketEvents() {
 				.data('cardID', cards[i].id)
 				.data('cardName', cards[i].name)
 				.appendTo(mainDiv);
-		};
+		}
 	});
 
 	// Wird ausgeführt, wenn man sein Deck wechseln wollte, aber seine Änderungen aber erst per Prompt speichern lässt.
@@ -178,6 +261,6 @@ function initSocketEvents() {
 				.data('cardID', cards[i].id)
 				.data('cardName', cards[i].name)
 				.appendTo(mainDiv);
-		};
+		}
 	});
 }

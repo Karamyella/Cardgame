@@ -1,11 +1,11 @@
 // isPOne ist, dass der Client weiß, ob er Spieler 1 oder 2 ist.
 let isPOne;
 // Für den Client, welcher Spieler gerade am Zug ist.
-let pOneTurn = true;
+let whosTurn = 'Player 1';
 let pOneHP;
 let pTwoHP;
-let pOneDeck = [];
-let pTwoDeck = [];
+let pOneDeck;
+let pTwoDeck;
 let pOneHand = [];
 let pTwoHand = [];
 let pOneField = [];
@@ -14,24 +14,66 @@ let pOneGraveyard = [];
 let pTwoGraveyard = [];
 let pOneMana = 0;
 let pTwoMana = 0;
+let pOneMaxMana = 0;
+let pTwoMaxMana = 0;
+let landPlayedThisTurn = false;
 
 function initGame(room) {
-    let pOne = room.gameState.boardState.p1Data;
-    let pTwo = room.gameState.boardState.p2Data;
+	let pOne = room.gameState.boardState.p1Data;
+	let pTwo = room.gameState.boardState.p2Data;
 
-    // Setzt alle globalen Variablen/Daten die für das Spiel benötigt wurden und noch nicht gesetzt wurden.
-    pOneHP = pOne.life;
-    pTwoHP = pTwo.life;
-    pOneDeck = pOne.library; // TODO Nicht den Namen des Decks, sondern nur die Karten..
-    pTwoDeck = pTwo.library; // ^
-    $('#currentPhase').html(room.gameState.currentPhase);
+	// Setzt alle globalen Variablen/Daten die für das Spiel benötigt wurden und noch nicht gesetzt wurden.
+	pOneHP = pOne.life;
+	pTwoHP = pTwo.life;
+	pOneDeck = pOne.library;
+	pTwoDeck = pTwo.library;
 
-    // TODO Onclick-Events für die UI/Buttons (Erst wenn HTML steht.)
-    document.onclick = hideMenu;
-    document.oncontextmenu = rightClick;
+	$('#currentPhase').html(room.gameState.currentPhase);
 
-    // Startet die PreGame-Phase 1.
-    initPreGamePhaseOne(room);
+	if (isPOne) {
+		$('#pTwoHand').addClass('enemyHand');
+		$('#pTwoField').addClass('enemyField');
+		$(document).on('contextmenu', '#pOneHand > img', (event) => {
+			rightClickHandCard(event);
+		});
+		$(document).on('contextmenu', '#pOneField > img:not(.played):not(.tapped)', (event) => {
+			rightClickValidFieldCard(event);
+		});
+		$('.border-div').show();
+	} else {
+		$('#pOneHand').addClass('enemyHand');
+		$('#pOneField').addClass('enemyField');
+		$(document).on('contextmenu', '#pTwoHand > img', (event) => {
+			rightClickHandCard(event);
+		});
+		$(document).on('contextmenu', '#pTwoField > img:not(.played):not(.tapped)', (event) => {
+			rightClickValidFieldCard(event);
+		});
+	}
+
+	// TODO Onclick-Events für die UI/Buttons (Erst wenn HTML steht.)
+	document.onclick = hideMenu;
+	$(document).on('click', '#contextMenu > ul > .play', () => {
+		/*let targetCardElement = $('#contextMenu').data('targetCard');
+		let manaCost = targetCardElement.data('manaCost');
+		if (isPOne && pOneMana >= manaCost) {
+
+		} else if (!isPOne && pTwoMana >= manaCost) {
+			socket.emit('playCard', {})
+		}*/
+	});
+	$(document).on('click', '#contextMenu > ul > .attack', () => {
+
+	});
+	$(document).on('click', '#contextMenu > ul > .block', () => {
+
+	});
+	$(document).on('click', '#contextMenu > ul > .effect', () => {
+
+	});
+
+	// Startet die PreGame-Phase 1.
+	initPreGamePhaseOne(room);
 }
 
 /*
@@ -47,27 +89,247 @@ function determineStartingPlayer() {
 */
 
 function initPreGamePhaseOne(room) {
-    drawStartHand(isPOne, room);
+	setTimeout(() => {
+		drawStartHand(isPOne, room);
+	}, 1000);
 }
 
 function toggleHand() {
-    $('.showHand').toggle();
-    $('.hideHand').toggle();
-    $('.playerHand').toggle();
+	$('.showHand').toggle();
+	$('.hideHand').toggle();
+
+	$('.playerHand:not(.enemyHand)').toggle();
 }
 
 function hideMenu() {
-    document.getElementById("contextMenu").style.display = "none";
+	document.getElementById("contextMenu").style.display = "none";
+}
+
+function rightClickHandCard(e) {
+	// Wenn man Spieler 1 und an der Reihe ist ODER man Spieler 2 und an der Reihe ist..
+	if ((whosTurn === 'Player 1' && isPOne) || (whosTurn === 'Player 2' && !isPOne)) {
+		rightClick(e);
+		// Fügt die Action zum Dialog hinzu.
+		$('#contextMenu > *').html('').append($('<li><button onclick="playCard();">Play Card</button></li>'));
+	}
+}
+
+function rightClickValidFieldCard(e) {
+	// Wenn man Spieler 1 und an der Reihe ist ODER man Spieler 2 und an der Reihe ist..
+	if ((whosTurn === 'Player 1' && isPOne) || (whosTurn === 'Player 2' && !isPOne)) {
+		rightClick(e);
+
+		let currentPhase = $('#currentPhase').html();
+
+		// Fügt die Action zum Dialog hinzu.
+		if (currentPhase === 'Combatphase - Declare Attackers') {
+			// TODO SET ATTACKACTION
+			// Attack-Option nur möglich, wenn 'Declare Attackers'-Phase ist.
+			$('#contextMenu > *').html('').append($('<li><button onclick="TODO">Attack</button></li>'));
+		} else if (currentPhase === 'Combatphase - Declare Blockers') {
+			// TODO SET BLOCKACTION
+			// Block-Option nur möglich, wenn 'Declare Blockers'-Phase ist.
+			$('#contextMenu > *').html('').append($('<li><button onclick="TODO">Block</button></li>'));
+		}
+	}
 }
 
 function rightClick(e) {
-    e.preventDefault();
-    if (document.getElementById("contextMenu").style.display === "block") {
-        hideMenu();
-    } else {
-        let menu = document.getElementById("contextMenu");
-        menu.style.display = 'block';
-        menu.style.left = e.pageX + "px";
-        menu.style.top = e.pageY + "px";
-    }
+	e.preventDefault();
+	if (document.getElementById("contextMenu").style.display === "block") {
+		hideMenu();
+	} else {
+		let menu = document.getElementById("contextMenu");
+		menu.style.display = 'block';
+		menu.style.left = e.pageX + "px";
+		menu.style.top = e.pageY + "px";
+
+		$(menu).data('targetCard', $(e.currentTarget));
+	}
+}
+
+// TODO Kommentare
+function shuffleDeck(array) {
+	let currentIndex = array.length;
+	let randomIndex;
+
+	// While there remain elements to shuffle.
+	while (currentIndex > 0) {
+
+		// Pick a remaining element.
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
+
+		// And swap it with the current element.
+		[array[currentIndex], array[randomIndex]] = [
+			array[randomIndex], array[currentIndex]];
+	}
+
+	return array;
+}
+
+// Nimmt alle aktuellen Spieldaten auf und gibt diese zurück.
+function collectGameData() {
+	return {
+		currentPhase: $('#currentPhase').html(),
+		whosTurn: whosTurn,
+		lastPhase: undefined,
+		boardState: {
+			p1Data: {
+				playerName: $('#pOneName').html(),
+				life: pOneHP,
+				currentMana: pOneMana,
+				maxMana: pOneMaxMana,
+				library: pOneDeck,
+				hand: pOneHand,
+				board: pOneField,
+				graveyard: pOneGraveyard
+			},
+			p2Data: {
+				playerName: $('pTwoName').html(),
+				life: pTwoHP,
+				currentMana: pTwoMana,
+				maxMana: pTwoMaxMana,
+				library: pTwoDeck,
+				hand: pTwoHand,
+				board: pTwoField,
+				graveyard: pTwoGraveyard
+			}
+		}
+	}
+}
+
+// Übernimmt alle mitgegebenen Änderungen und baut ggf. alles nochmals neu auf. (Sehr resourcenintensiv, aber zeitlich keine bessere Lösung gefunden..!)
+function updateGameState(newGameState) {
+	if (newGameState !== undefined) {
+
+		// Welche Phase dran ist.
+		if (newGameState.currentPhase !== undefined) {
+			$('#currentPhase').html(newGameState.currentPhase);
+
+			if (newGameState.currentPhase === 'PAUSED') {
+				$('#freeze-game').show();
+			}
+		}
+
+		// Wer dran ist.
+		if (whosTurn !== undefined) {
+			whosTurn = newGameState.whosTurn;
+			// Highlighted die Border um den Screen für den Spieler der grade dran ist.
+			if ((isPOne && whosTurn === 'Player 1') || (!isPOne && whosTurn === 'Player 2')) {
+				$('.border-div').show();
+			} else {
+				$('.border-div').hide();
+			}
+			// Highlighted den Border um die Spielerinfo des Spielers der grade dran ist..
+			if (whosTurn === 'Player 1') {
+				$('.pOneInfo').css('border-color', 'white');
+				$('.pTwoInfo').css('border-color', 'black');
+			} else {
+				$('.pTwoInfo').css('border-color', 'white');
+				$('.pOneInfo').css('border-color', 'black');
+			}
+		}
+
+		let pOneData = newGameState.boardState.p1Data;
+		let pTwoData = newGameState.boardState.p2Data;
+
+		if (pOneData.life !== undefined) {
+			pOneHP = pOneData.life;
+			$('#pOneHP').html(pOneData.life);
+
+			if (pOneHP <= 0) {
+				promptWin(false);
+				return;
+			}
+		}
+		if (pTwoData.life !== undefined) {
+			pTwoHP = pTwoData.life;
+			$('#pTwoHP').html(pTwoData.life);
+
+			if (pTwoHP <= 0) {
+				promptWin(true);
+				return;
+			}
+		}
+
+		if (pOneData.currentMana !== undefined && pOneData.maxMana !== undefined) {
+			pOneMana = pOneData.currentMana;
+			pOneMaxMana = pOneData.maxMana;
+			$('#pOneMana').html(pOneData.currentMana + '/' + pOneData.maxMana);
+		}
+		if (pTwoData.currentMana !== undefined && pTwoData.maxMana !== undefined) {
+			pTwoMana = pTwoData.currentMana;
+			pTwoMaxMana = pTwoData.maxMana;
+			$('#pTwoMana').html(pTwoData.currentMana + '/' + pTwoData.maxMana);
+		}
+
+		if (pOneData.library !== undefined) {
+			pOneDeck = pOneData.library;
+			$('#pOneLibrary').html('[' + pOneData.library.length + ']');
+		}
+		if (pTwoData.library !== undefined) {
+			pTwoDeck = pTwoData.library;
+			$('#pTwoLibrary').html('[' + pTwoData.library.length + ']');
+		}
+
+		if (pOneData.graveyard !== undefined) {
+			pOneGraveyard = pOneData.graveyard;
+			$('#pOneGraveyard').html('[' + pOneData.graveyard.length + ']').data('content', pOneData.graveyard);
+		}
+		if (pTwoData.graveyard !== undefined) {
+			pTwoGraveyard = pTwoData.graveyard;
+			$('#pTwoGraveyard').html('[' + pTwoData.graveyard.length + ']').data('content', pTwoData.graveyard);
+		}
+
+		if (pOneData.hand !== undefined) {
+			pOneHand = pOneData.hand;
+			buildHandElements(pOneData.hand, $('#pOneHand'));
+		}
+		if (pTwoData.hand !== undefined) {
+			pTwoHand = pTwoData.hand;
+			buildHandElements(pTwoData.hand, $('#pTwoHand'));
+		}
+
+		if (pOneData.board !== undefined) {
+			pOneField = pOneData.board;
+			buildBoardElements(pOneData.board, $('#pOneField'));
+		}
+		if (pTwoData.board !== undefined) {
+			pTwoField = pTwoData.board;
+			buildBoardElements(pTwoData.board, $('#pTwoField'));
+		}
+	}
+}
+
+function buildHandElements(handData, container) {
+	container.html('');
+
+	for (let i = 0; i < handData.length; i++) {
+		let card = handData[i];
+		$('<img>').addClass(card.type)
+			.attr('src', card.image)
+			.data('manaCost', card.mana)
+			.data('effect', card.effect)
+			.data('data', card)
+			.appendTo(container);
+	}
+}
+
+function buildBoardElements(boardData, container) {
+	container.html('');
+
+	for (let i = 0; i < boardData.length; i++) {
+		let card = boardData[i];
+		$('<img>').addClass(card.type)
+			.attr('src', card.image)
+			.data('manaCost', card.mana)
+			.data('effect', card.effect)
+			.data('data', card)
+			.appendTo(container);
+	}
+}
+
+function promptWin() {
+	// TODO
 }

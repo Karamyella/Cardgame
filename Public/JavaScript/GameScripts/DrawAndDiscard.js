@@ -1,11 +1,13 @@
 function drawCard(forPOne) {
-	// Zufällige Zahl zwischen [0 - Decksize], die bestimmt, welche Karte aus dem Deck gezogen wird.
-	let drawPosition = Math.floor(Math.random() * pOneDeck.length);
 	if (forPOne) {
 		// .splice entfernt die Karte aus dem Deck und .push fügt diese der Hand hinzu.
-		pOneHand.push(pOneDeck.splice(drawPosition, 1)[0]);
+		pOneHand.push(pOneDeck.splice(0, 1)[0]);
+		$('#pOneLibrary').html('[' + pOneDeck.length + ']');
+		buildHandElements(pOneHand, $('#pOneHand'));
 	} else {
-		pTwoHand.push(pTwoDeck.splice(drawPosition, 1)[0]);
+		pTwoHand.push(pTwoDeck.splice(0, 1)[0]);
+		$('#pTwoLibrary').html('[' + pTwoDeck.length + ']');
+		buildHandElements(pTwoHand, $('#pTwoHand'));
 	}
 }
 
@@ -24,26 +26,34 @@ function discardCard(forPOne, cardPosition) {
  * @param forPOne Gibt an, für wen die Karten gezogen werden sollen.
  * */
 function drawStartHand(forPOne) {
-	for (let i = 0; i < 7; i++) {
-		drawCard(forPOne);
-	}
-
-	// Wenn man Spieler 1 ist und Spieler 1 am Zug ist, wird man gefragt, ob man die Hand behalten will. (Gilt auch für Spieler 2!)
-	if (forPOne === isPOne) {
-		if (!confirm('Do you want to keep your starting-hand?')) {
-			redrawStartHand(forPOne);
-
-			// Teilt dem Gegner mit, dass man eine neue Hand zieht.
-			socket.emit('enemyDrawsNewHand');
-
-			// Startet Funktion von vorne.
-			drawStartHand(forPOne);
+	// Wenn man Spieler 1 ist und Spieler 1 am Zug ist, werden Karten gezogen und gefragt, ob man die Hand behalten will. (Gilt auch für Spieler 2!)
+	if ((isPOne && whosTurn === 'Player 1') || (!isPOne && whosTurn === 'Player 2')) {
+		if (forPOne) {
+			pOneDeck = shuffleDeck(pOneDeck);
+		} else {
+			pTwoDeck = shuffleDeck(pTwoDeck);
 		}
+
+		for (let i = 0; i < 7; i++) {
+			drawCard(forPOne);
+		}
+
+		setTimeout(() => {
+			if (!confirm('Do you want to keep your starting-hand?')) {
+				putHandBackIntoDeck(forPOne);
+
+				// Startet Funktion von vorne.
+				drawStartHand(forPOne);
+			} else {
+				// Wenn zufrieden, wird die nächste Phase eingeleitet.
+				nextPhase();
+			}
+		}, 1500);
 	}
 }
 
 // Wenn Spieler nicht halten will, fügt es die aktuelle Hand wieder dem Deck hinzu und leert die Hand.
-function redrawStartHand(forPOne) {
+function putHandBackIntoDeck(forPOne) {
 	if (forPOne) {
 		pOneDeck = pOneDeck.concat(pOneHand);
 		pOneHand = [];

@@ -1,18 +1,7 @@
-- Fehlende Funktionen im Editor fertig stellen.
-    -> Vorhandene Decks laden, auswählen und editieren können.
-    -> Decks in die Datenbank speichern.
-
-- Mehr passende Karten raussuchen.
-
 - Arena-Page umsetzen..
-    -> Karten spielen + Mana/- & Overall-management.
-    -> Alle Kartenfunktionen umsetzen (Siehe Word-Dokument).
     -> Combat-Step lösen (declaring, blocking, correctly calculating everything).
-    -> Alles synchron halten bei beiden Spielern (Alle Aktionen als User an den Server anfragen, der Server sendet alle Events an beide Spieler).
     -> Pausing the game (blocking all actions a player could make) when one player disconnects.
     -> Resuming the game, when the other player reconnects.
     -> Finishing the Game, if a player wins (a Result-Screen maybe? Or smth., idk. lol).
 
 - Auf der Index-Page ein Reconnect-Feature für die Arena einbauen (Der Servercode dafür ist schon bereits "größtenteils" geschrieben..).
-
-- Standart-Decks erstellen und deren Ids in die Basic-Deck-Auswahl eintragen.

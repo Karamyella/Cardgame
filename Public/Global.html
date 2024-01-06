@@ -57,28 +57,26 @@
                 <div class="basic-deck-menu">
                     <span>Standarddecks</span><br/><br/><br/>
                     <label class="basic-deck-selector">
-                        <!-- TODO value="[standardDeckID]" -->
-                        <input value="" name="deck" type="radio">
+                        <input value="241bd559-14f7-4a58-91a8-23ed56efa471" name="deck" type="radio">
                         <img src="/Images/white.png" alt="Weiß">
                     </label>
                     <label class="basic-deck-selector">
-                        <!-- TODO value="[standardDeckID]" -->
-                        <input value="" name="deck" type="radio">
+                        <input value="8345603e-b593-43db-9d76-e06c0f69b417" name="deck" type="radio">
                         <img src="/Images/blue.png" alt="Blau">
                     </label>
                     <label class="basic-deck-selector">
                         <!-- TODO value="[standardDeckID]" -->
-                        <input value="" name="deck" type="radio">
+                        <input value="" name="deck" type="radio" disabled>
                         <img src="/Images/red.png" alt="Rot">
                     </label>
                     <label class="basic-deck-selector">
                         <!-- TODO value="[standardDeckID]" -->
-                        <input value="" name="deck" type="radio">
+                        <input value="" name="deck" type="radio" disabled>
                         <img src="/Images/green.png" alt="Grün">
                     </label>
                     <label class="basic-deck-selector">
                         <!-- TODO value="[standardDeckID]" -->
-                        <input value="" name="deck" type="radio">
+                        <input value="" name="deck" type="radio" disabled>
                         <img src="/Images/black.png" alt="Schwarz">
                     </label>
                 </div>
@@ -145,17 +143,28 @@
 </div>
 
 <div id="arena" style="display: none">
+    <div id="border-top" class="border-div" style="display: none"></div>
+    <div id="border-left" class="border-div" style="display: none"></div>
+    <div id="border-right" class="border-div" style="display: none"></div>
+    <div id="border-bottom" class="border-div" style="display: none"></div>
     <hr/>
     <div id="arena-ui-elements">
+        <div id="freeze-game" style="display: none"></div>
         <div class="pOneInfo">
-            <h4>Player: <i class="pOneName"></i></h4>
+            <h4>Player 1: <i class="pOneName"></i></h4>
             HP: <i id="pOneHP"></i><br/>
-            Mana: <i id="pOneMana"></i>
+            Mana: <i id="pOneMana">0/0</i><br/>
+            <br/>
+            Library: <i id="pOneLibrary">[60]</i><br/>
+            Graveyard: <i id="pOneGraveyard">[0]</i> <button style="all: unset;">[show]</button>
         </div>
         <div class="pTwoInfo">
-            <h4>Player: <i class="pTwoName"></i></h4>
+            <h4>Player 2: <i class="pTwoName"></i></h4>
             HP: <i id="pTwoHP"></i><br/>
-            Mana: <i id="pTwoMana"></i>
+            Mana: <i id="pTwoMana">0/0</i><br/>
+            <br/>
+            Library: <i id="pTwoLibrary">[60]</i><br/>
+            Graveyard: <i id="pTwoGraveyard">[0]</i> <button style="all: unset;">[show]</button>
         </div>
         <div class="currentPhase">
             Current Phase: <i id="currentPhase"></i>
@@ -177,15 +186,7 @@
 
     <!-- TODO -->
     <div id="pOneField" class="playerField"></div>
-    <div id="pTwoField" class="playerName"></div>
-
-    <!-- TODO -->
-    <div id="pOneLibrary" class="playerLibrary"></div>
-    <div id="pTwoLibrary" class="playerLibrary"></div>
-
-    <!-- TODO -->
-    <div id="pOneGraveyard" class="playerGraveyard"></div>
-    <div id="pTwoGraveyard" class="playerGraveyard"></div>
+    <div id="pTwoField" class="playerField"></div>
 
     <!-- TODO -->
     <div id="contextMenu" class="context-menu" style="display: none">
@@ -209,9 +210,9 @@
             <span id="editor-deck-selector-addition"></span>
             <select id="editor-deck-selector" name="editor-deck-selector">
                 <option value="-">[No Deck]</option>
-                <option value="">---------</option>
+                <option value="" disabled></option>
                 <option value="new">New Deck</option>
-                <option value="">---------</option>
+                <option value="" disabled></option>
             </select>
             <button id="editor-save-button" onclick="saveDeck(true);" type="button">Save Deck</button>
         </div>

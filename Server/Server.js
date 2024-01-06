@@ -1,8 +1,8 @@
 // Imports
 const express = require('express');
-const { createServer } = require('node:http');
-const { join } = require('node:path');
-const { Server } = require('socket.io');
+const {createServer} = require('node:http');
+const {join} = require('node:path');
+const {Server} = require('socket.io');
 const crypto = require('crypto');
 
 // Initialisierung d. Servers
@@ -12,7 +12,8 @@ const io = new Server(server);
 const port = process.env.PORT || 8080;
 
 // Öffnet Server-Port.
-server.listen(port, () => { });
+server.listen(port, () => {
+});
 
 // Filepath für Html-Datei.
 app.use(express.static(join(__dirname, '/../public')));
@@ -43,13 +44,14 @@ app.get('/arena', (req, res) => {
  *         playerReady: boolean,
  *         gameState: {
  * 				currentPhase: string,
- * 				isP1Turn: boolean,
+ * 				whosTurn: string,
  * 				lastPhase: string,
  * 				boardState: {
  * 					p1Data: {
  * 						playerName: string,
  * 						life: number,
- * 						mana: number,
+ * 						currentMana: number,
+ * 						maxMana: number,
  * 						library: Array,
  * 						hand: Array,
  * 						board: Array,
@@ -58,7 +60,8 @@ app.get('/arena', (req, res) => {
  * 					p2Data: {
  * 						playerName: string,
  * 						life: number,
- * 						mana: number,
+ * 						currentMana: number,
+ * 						maxMana: number,
  * 						library: Array,
  * 						hand: Array,
  * 						board: Array,
@@ -118,14 +121,14 @@ function findAvailableRoom() {
 			playerReady: false,
 			gameState: {
 				currentPhase: 'PreGame - Player 1',
-				isP1Turn: true,
+				whosTurn: 'Player 1',
 				lastPhase: undefined,
 				boardState: {
 					p1Data: {
 						playerName: undefined,
 						life: 20,
-						maxMana: 0,
 						currentMana: 0,
+						maxMana: 0,
 						library: undefined,
 						hand: [],
 						board: [],
@@ -134,8 +137,8 @@ function findAvailableRoom() {
 					p2Data: {
 						playerName: undefined,
 						life: 20,
-						maxMana: 0,
 						currentMana: 0,
+						maxMana: 0,
 						library: undefined,
 						hand: [],
 						board: [],
@@ -228,21 +231,25 @@ io.on('connection', (socket) => {
 		if (room.playerOne === undefined) {
 			room.playerOne = socket.id;
 			room.gameState.boardState.p1Data.playerName = player.playerName;
-			room.gameState.boardState.p1Data.library = getPlayerDeck(playerInfo.deckID);
+			getPlayerDeck(playerInfo.playerDeck).then((result) => {
+				room.gameState.boardState.p1Data.library = result;
 
-			socket.emit('isPOne', true);
-			if (room.playerTwo === undefined) {
-				socket.emit('roomData', room);
-			} else {
-				sendDataToBothPlayers(socket, 'roomData', room);
-			}
+				socket.emit('isPOne', true);
+				if (room.playerTwo === undefined) {
+					socket.emit('roomData', room);
+				} else {
+					sendDataToBothPlayers(socket, 'roomData', room);
+				}
+			});
 		} else if (room.playerTwo === undefined) {
 			room.playerTwo = socket.id;
 			room.gameState.boardState.p2Data.playerName = player.playerName;
-			room.gameState.boardState.p2Data.library = getPlayerDeck(playerInfo.deckID);
+			getPlayerDeck(playerInfo.playerDeck).then((result) => {
+				room.gameState.boardState.p2Data.library = result;
 
-			socket.emit('isPOne', false);
-			sendDataToBothPlayers(socket, 'roomData', room);
+				socket.emit('isPOne', false);
+				sendDataToBothPlayers(socket, 'roomData', room);
+			});
 		} else {
 			// Errorhandler.
 			socket.emit('roomIsFull');
@@ -312,7 +319,7 @@ io.on('connection', (socket) => {
 				let roomPlayers = currentRoom.gameState.boardState;
 				// Der Spieler muss nur noch die Namen beider Spieler richtig eingeben, dann darf er beitreten.
 				if ((authorizationInfo.myName === roomPlayers.p1Data.playerName ||
-					authorizationInfo.myName === roomPlayers.p2Data.playerName) &&
+						authorizationInfo.myName === roomPlayers.p2Data.playerName) &&
 					(authorizationInfo.enemyName === roomPlayers.p1Data.playerName ||
 						authorizationInfo.enemyName === roomPlayers.p2Data.playerName)) {
 					foundRoom = currentRoom;
@@ -324,16 +331,20 @@ io.on('connection', (socket) => {
 			// .. ein das Spieler-Objekt (wieder) erstellt werden,..
 			playerList.push(createPlayerObject(socket.id, foundRoom.roomID, authorizationInfo.myName));
 			// .. die fehlende Spielerinfo des Raum geupdatet werden,..
-			foundRoom.playerOne === undefined ? foundRoom.playerOne = socket.id : foundRoom.playerTwo = socket.id;
+			if (foundRoom.playerOne === undefined) {
+				foundRoom.playerOne = socket.id;
+			} else if (foundRoom.playerTwo === undefined) {
+				foundRoom.playerTwo = socket.id;
+			}
 			// .. und das Spiel an der letzten Stelle fortgesetzt werden.
 			foundRoom.gameState.currentPhase = foundRoom.gameState.lastPhase;
 			foundRoom.gameState.lastPhase = undefined;
 
 			// Der beigetretende Spieler muss das komplette Board laden.
-			socket.emit('loadGameState', foundRoom);
+			socket.emit('loadGameState', foundRoom.gameState);
 
 			// Der andere Spieler bekommt nur die Info, dass sein Spiel wieder vorgesetzt wird.
-			sendDataToOtherPlayer(socket, 'resumeGame');
+			sendDataToOtherPlayer(socket, 'resumeGame', foundRoom.gameState.currentPhase);
 		} else {
 			socket.emit('roomNotFound');
 		}
@@ -393,41 +404,28 @@ io.on('connection', (socket) => {
 		});
 	});
 
+	socket.on('playSorcery', (htmlElement) => {
+		sendDataToBothPlayers(socket, 'showSorcery', htmlElement);
+	})
+
+	socket.on('playerAction', (gameState) => {
+		sendDataToOtherPlayer(socket, 'loadGameState', gameState);
+	});
+
 	/* TODO Testen, ob Änderungen am Raum per REF bereits übernommen werden oder ob manuelles Speichern erforderlich ist.
 	 * TODO Muss dann ggf. den Code an jeder Stelle nochmals anpassen.. */
-	socket.on('phaseChange', () => {
-		let room = findRoomByPlayerID(socket.id);
-		let gameState = room.gameState;
-		// Optimierung, dass nicht mit jeder Änderungen der ganzen Raum ständig hin und her gesendet werden muss..
-		let updateInfo = {
-			gameState: {
-				currentPhase: undefined
-			}
-		}
+	socket.on('phaseChange', (gameState) => {
+		let roomData = findRoomByPlayerID(socket.id);
+
+		saveRoomChanges(roomData, gameState);
 
 		switch (gameState.currentPhase) {
-			case 'Upkeep':
-				if (gameState.isP1Turn) {
-					// TODO Alle Karten für den Spieler untappen..
-					gameState.boardState.p1Data.currentMana = gameState.boardState.p1Data.maxMana;
-					updateInfo.gameState.boardState.p1Data.currentMana = gameState.boardState.p1Data.maxMana;
-				} else {
-					// TODO [^]..
-					gameState.boardState.p2Data.currentMana = gameState.boardState.p2Data.maxMana;
-					updateInfo.gameState.boardState.p2Data.currentMana = gameState.boardState.p2Data.maxMana;
-				}
-
-				// TODO Schaut durch den Boardstate nach Upkeep-Triggern..
-				// ...
-
-				// Aktueller Spieler zieht am Ende des Upkeeps "immer" eine Karte.
-				socket.emit('drawCard');
-				gameState.currentPhase = 'Mainphase 1';
-				updateInfo.gameState.currentPhase = 'Mainphase 1';
-				break;
+			/*case 'Upkeep':
+				// Currently Skipped!
+				break;*/
 			case 'Mainphase 1':
 				gameState.currentPhase = 'Combatphase - Declare Attackers';
-				updateInfo.gameState.currentPhase = 'Combatphase - Declare Attackers';
+
 				break;
 			case 'Combatphase - Declare Attackers':
 				// Wenn keine Kreaturen angreifen, wird der Rest der Combat-Phase übersprungen.
@@ -437,13 +435,10 @@ io.on('connection', (socket) => {
 					// TODO [^]..
 					sendDataToOtherPlayer(socket, 'attackersDeclared', gameState.attackingCreatures);
 					gameState.currentPhase = 'Combatphase - Declare Blockers';
-					updateInfo.gameState.currentPhase = 'Combatphase - Declare Blockers';
 					// Der andere Spieler ist jetzt mit Blockern dran.
-					gameState.isP1Turn = !gameState.isP1Turn;
-					updateInfo.gameState.isP1Turn = !gameState.isP1Turn;
+					gameState.whosTurn === 'Player 1' ? gameState.whosTurn = 'Player 2' : gameState.whosTurn = "Player 1";
 				} else {
 					gameState.currentPhase = 'Mainphase 2';
-					updateInfo.gameState.currentPhase = 'Mainphase 2';
 				}
 				break;
 			case 'Combatphase - Declare Blockers':
@@ -452,48 +447,43 @@ io.on('connection', (socket) => {
 				// TODO Überlegen, wie man an die zum Blocken deklarierten Kreaturen kommt.
 				sendDataToOtherPlayer(socket, 'blockersDeclared', gameState.blockingCreatures);
 				gameState.currentPhase = 'Combatphase - Damage Step';
-				updateInfo.gameState.currentPhase = 'Combatphase - Damage Step';
 				// Der andere Spieler hat reagiert, also bekommt der "aktuelle" Spieler wieder Kontrolle.
-				gameState.isP1Turn = !gameState.isP1Turn;
-				updateInfo.gameState.isP1Turn = !gameState.isP1Turn;
+				gameState.whosTurn === 'Player 1' ? gameState.whosTurn = 'Player 2' : gameState.whosTurn = "Player 1";
 				break;
 			case 'Combatphase - Damage Step':
 				resolveDamageStep(gameState.boardState, gameState.attackingCreatures)
 				let newBoardState; // TODO = resolveDamageStep(gameState.boardState, gameState.attackingCreatures, gameState.blockingCreatures);
 				gameState.boardState = newBoardState;
-				updateInfo.gameState.boardState = newBoardState;
 				gameState.currentPhase = 'Mainphase 2';
-				updateInfo.gameState.currentPhase = 'Mainphase 2';
 				break;
 			case 'Mainphase 2':
 				// Fordert den Spieler dazu auf, Karten abzuwerfen, wenn seine Hand zu voll ist.
 				socket.emit('discardStep');
 				gameState.currentPhase = 'Endstep';
-				updateInfo.gameState.currentPhase = 'Endstep';
 				break;
 			case 'Endstep':
 				gameState.currentPhase = 'Upkeep';
-				updateInfo.gameState.currentPhase = 'Upkeep';
-				gameState.isP1Turn = !gameState.isP1Turn;
-				updateInfo.gameState.isP1Turn = !gameState.isP1Turn;
+				gameState.whosTurn === 'Player 1' ? gameState.whosTurn = 'Player 2' : gameState.whosTurn = "Player 1";
+
+				// Der Spieler der jetzt dran ist, bekommt sein volles Mana.
+				if (gameState.whosTurn === 'Player 1') {
+					gameState.boardState.p1Data.currentMana = gameState.boardState.p1Data.maxMana;
+				} else {
+					gameState.boardState.p2Data.currentMana = gameState.boardState.p2Data.maxMana;
+				}
 				break;
 			case 'PreGame - Player 1':
-				socket.emit('drawStarthand');
 				gameState.currentPhase = 'PreGame - Player 2';
-				updateInfo.gameState.currentPhase = 'PreGame - Player 2';
-				gameState.isP1Turn = !gameState.isP1Turn;
-				updateInfo.gameState.isP1Turn = !gameState.isP1Turn;
+				gameState.whosTurn = 'Player 2';
 				break;
 			case 'PreGame - Player 2':
-				socket.emit('drawStarthand');
 				gameState.currentPhase = 'Upkeep';
-				updateInfo.gameState.currentPhase = 'Upkeep';
-				gameState.isP1Turn = !gameState.isP1Turn;
-				updateInfo.gameState.isP1Turn = !gameState.isP1Turn;
+				gameState.whosTurn = 'Player 1';
 				break;
 		}
+
 		// Sendet beiden Spielern alle Änderungen.
-		sendDataToBothPlayers(socket, 'phaseChange', updateInfo);
+		sendDataToBothPlayers(socket, 'phaseChange', gameState);
 	});
 
 	/**
@@ -503,7 +493,7 @@ io.on('connection', (socket) => {
 	 * 		action: 'Effect' | 'Attack',
 	 *		effect: '(cardEffect)' | undefined,
 	 *		cardID: 'UUID',
-	 *		isP1Turn: true | false
+	 *		whosTurn: 'Player 1' | 'Player 2'
 	 * }
 	 * */
 	socket.on('resolveCard', (eventData) => {
@@ -511,11 +501,16 @@ io.on('connection', (socket) => {
 	});
 });
 
+// Übernimmt alle 'gameState'-Veränderungen und speichert diese im Raum ab.
+function saveRoomChanges(roomData, gameState) {
+	roomData.gameState
+}
+
 
 // Baut Verbindung zur Datenbank auf.
 const mysql = require('mysql');
 // FIXME Was ist das?^^
-const { rejects } = require('node:assert');
+const {rejects} = require('node:assert');
 const connection = mysql.createConnection({
 	host: '127.0.0.1',
 	user: 'root',
@@ -567,7 +562,7 @@ function saveDeckToDatabase(deckData) {
 			return queryResolver(query).then(() => {
 				return saveDeckChanges(deckData);
 			}).catch((err) => {
-				return(err);
+				return (err);
 			})
 				;
 		} else {
