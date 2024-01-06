@@ -332,4 +332,8 @@ function buildBoardElements(boardData, container) {
 
 function promptWin() {
 	prompt('You have won the game! Congratulations ^-^');
+	pageTransition($('#arena'), $('#empty-page'), '');
+	setTimeout(() => {
+		window.location.reload();
+	}, 500);
 }

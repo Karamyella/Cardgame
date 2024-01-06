@@ -9,7 +9,6 @@
 <body>
 <div id="empty-page"></div>
 <div id="index" style="display: none">
-    <button onclick="testArena();">TEST-ARENA-PAGE</button>
     <div id="index-bg"></div>
     <div id="index-menu-container">
         <div class="menu-top">
@@ -244,15 +243,6 @@
         <button id="submit-deck-name" type="button" onclick="createNewDeck();">Continue</button>
     </div>
 </div>
-
-<script>
-    // DEBUG
-    function testArena() {
-		// Man könnte noch mehr Tests, wie Starthand ziehen einfügen..
-		pageTransition($('#index'), $('#arena'), 'Arena');
-		$('#currentPhase').html('PreGame - Player 1');
-    }
-</script>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/JavaScript/Client.js"></script>
